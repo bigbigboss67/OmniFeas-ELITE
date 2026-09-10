@@ -228,9 +228,10 @@
             <svg class="w-5 h-5 text-brand-gold flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
             </svg>
-            <input 
+                        <input 
               id="prompt-input" 
               type="text" 
+              onkeydown="if(event.key==='Enter') executePromptGeneration()" 
               placeholder="e.g., Establish a 500kW rooftop Solar EPC company in Dammam with $2.5M CAPEX and 60% SIDF debt financing..."
               class="w-full bg-transparent text-sm text-white placeholder-slate-500 focus:outline-none"
               value="500kW Commercial Solar Cleantech EPC in Dammam, $2.5M CAPEX, 60% SIDF Soft-Loan"
@@ -297,6 +298,38 @@
         </span>
         <span>🎙️ Open Live Credit Committee Room</span>
       </button>
+    </div>
+
+    <!-- ======================================================================= -->
+    <!-- ACTIVE FEASIBILITY STUDY IDENTIFIER BANNER                               -->
+    <!-- ======================================================================= -->
+    <div id="active-study-banner" class="concentric-card rounded-2xl p-5 border-brand-cyan/40 bg-gradient-to-r from-surface-950 via-surface-900 to-surface-950 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      <div class="flex items-center gap-4">
+        <div id="active-study-icon" class="w-14 h-14 rounded-2xl bg-brand-cyan/15 border border-brand-cyan/40 flex items-center justify-center text-3xl shadow-lg shadow-cyan-500/10 flex-shrink-0">
+          ☀️
+        </div>
+        <div>
+          <div class="flex flex-wrap items-center gap-2">
+            <h2 id="active-study-name" class="text-lg sm:text-xl font-extrabold text-white tracking-tight">Solar Cleantech EPC Project</h2>
+            <span id="active-study-badge" class="text-[10px] px-2 py-0.5 rounded-full font-mono font-bold bg-brand-cyan/15 text-brand-cyan border border-brand-cyan/30">UNIDO VOL. I–III AUDITED</span>
+            <span id="active-study-jurisdiction" class="text-[10px] px-2 py-0.5 rounded-full font-mono font-bold bg-white/10 text-slate-300 border border-white/10">🇸🇦 Saudi Arabia (Vision 2030)</span>
+          </div>
+          <p id="active-study-desc" class="text-xs text-slate-400 mt-1 max-w-2xl">
+            Deterministic UNIDO feasibility appraisal, debt service coverage analysis, and technical CAPEX schedule calibrated to international banking standards.
+          </p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2 w-full md:w-auto justify-end flex-wrap">
+        <button onclick="openQuestionsModal(true)" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-surface-850 hover:bg-surface-800 text-brand-gold border border-brand-gold/40 hover:border-brand-gold transition-all flex items-center gap-1.5 shadow-sm">
+          <span>⚙️</span>
+          <span>Edit Parameters</span>
+        </button>
+        <button onclick="openAvatarRoom()" class="px-4 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-brand-emerald via-teal-500 to-emerald-600 text-black shadow-lg shadow-emerald-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center gap-1.5">
+          <span>🎙️</span>
+          <span>Defend in Committee</span>
+        </button>
+      </div>
     </div>
 
     <!-- ======================================================================= -->
@@ -1081,9 +1114,25 @@ Content-Type: application/json
 
     function selectSector(sectorId) {
       currentSector = SECTORS.find(s => s.id === sectorId) || SECTORS[0];
+      currentSector.debtPercent = 60;
+      currentSector.equityPercent = 40;
+      currentSector.gracePeriod = 12;
+      currentSector.jurisdiction = currentFramework === 'gcc' ? '🇸🇦 Saudi Arabia (Vision 2030)' : '🌐 Global UNIDO Standard';
+
       document.getElementById('prompt-input').value = `${currentSector.name} Project, $${(currentSector.capex/1000000).toFixed(1)}M CAPEX, UNIDO Framework`;
       renderSectors();
+      
+      // Update Banner
+      const banner = document.getElementById('active-study-banner');
+      if (banner) {
+        document.getElementById('active-study-name').innerText = currentSector.name;
+        document.getElementById('active-study-icon').innerText = currentSector.icon;
+        document.getElementById('active-study-jurisdiction').innerText = currentSector.jurisdiction;
+        document.getElementById('active-study-desc').innerText = `Appraised initial CAPEX of $${(currentSector.capex/1000000).toFixed(2)}M with 60% debt and 40% equity. Minimum DSCR is ${currentSector.dscr.toFixed(2)}x.`;
+      }
+
       recalculateAndRender();
+      renderUNIDOChapters();
       
       // Update Avatar Dialogue Context
       const activeText = document.getElementById('transcript-active-text');
@@ -1093,59 +1142,227 @@ Content-Type: application/json
     }
 
     /* =======================================================================
-       5. STEP 1: PROMPT EXECUTION
+       5. STEP 1: PROMPT EXECUTION & INTERACTIVE FEASIBILITY QUESTIONNAIRE
        ======================================================================= */
-    function executePromptGeneration() {
-      const spinner = document.getElementById('gen-spinner');
-      spinner.classList.remove('hidden');
+    let selectedQuestionJurisdiction = 'sa';
+    let selectedQuestionCapex = 2500000;
+    let selectedQuestionDebt = 60;
 
-      setTimeout(() => {
-        spinner.classList.add('hidden');
-        recalculateAndRender();
+    function openQuestionsModal(isEdit = false) {
+      const promptInput = document.getElementById('prompt-input');
+      const promptText = promptInput.value.trim() || 'Custom Business Enterprise';
+      
+      document.getElementById('q-parsed-prompt').innerText = promptText;
+      
+      if (!isEdit) {
+        // Extract project name suggestion
+        let suggestedName = promptText.split(',')[0].replace(/establish|launch|create|build|open|start/gi, '').trim();
+        if (suggestedName.length > 50) suggestedName = suggestedName.substring(0, 50);
+        document.getElementById('q-project-name').value = suggestedName || promptText;
 
-        // Update avatar transcript with personalized response
-        const promptVal = document.getElementById('prompt-input').value;
-        const activeText = document.getElementById('transcript-active-text');
-        if (activeText) {
-          activeText.innerText = `"Study generated successfully for: '${promptVal}'. All 10 UNIDO modules, debt amortizations, and sensitivity thresholds have been refreshed and audited."`;
+        // Auto-detect jurisdiction
+        if (/uae|dubai|abu dhabi|sharjah|ded/i.test(promptText)) {
+          selectJurisdiction('uae');
+        } else if (/global|international|us|usa|europe|uk/i.test(promptText)) {
+          selectJurisdiction('global');
+        } else {
+          selectJurisdiction('sa');
         }
 
-        // Trigger brief confirmation speech if audio initialized
-        speakText(`UNIDO feasibility study refreshed for ${currentSector.name}.`);
-      }, 350);
-    }
+        // Auto-detect CAPEX if mentioned in prompt (e.g. $3M, 5M, 500k)
+        const capexMatchM = promptText.match(/\$?(\d+(?:\.\d+)?)\s*(?:m|million)/i);
+        const capexMatchK = promptText.match(/\$?(\d+(?:\.\d+)?)\s*(?:k|thousand)/i);
+        if (capexMatchM) {
+          const val = Math.round(parseFloat(capexMatchM[1]) * 1000000);
+          setQuestionCapex(val);
+        } else if (capexMatchK) {
+          const val = Math.round(parseFloat(capexMatchK[1]) * 1000);
+          setQuestionCapex(val);
+        }
 
-    function toggleVoiceInputPrompt() {
-      const btn = document.getElementById('mic-prompt-btn');
-      const icon = document.getElementById('mic-prompt-icon');
-
-      if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-        alert("Web Speech API is not supported in this browser. Please type your prompt.");
-        return;
+        // Auto-detect industry margin
+        const marginSelect = document.getElementById('q-margin-select');
+        if (/coffee|cafe|restaurant|burger|food|f&b|kitchen|bakery/i.test(promptText)) {
+          marginSelect.value = "0.42";
+        } else if (/clinic|surgery|hospital|medical|pharma|health/i.test(promptText)) {
+          marginSelect.value = "0.38";
+        } else if (/saas|software|app|cloud|ai|fintech|platform/i.test(promptText)) {
+          marginSelect.value = "0.70";
+        } else if (/logistics|cold|warehouse|delivery|fleet/i.test(promptText)) {
+          marginSelect.value = "0.28";
+        } else if (/solar|energy|factory|plant|concrete|manufacturing|industrial/i.test(promptText)) {
+          marginSelect.value = "0.34";
+        }
       }
 
-      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-      const recognition = new SpeechRecognition();
-      recognition.lang = currentLanguage === 'ar' ? 'ar-SA' : 'en-US';
-      recognition.interimResults = false;
+      document.getElementById('feasibility-questions-modal').classList.remove('hidden');
 
-      btn.classList.add('bg-brand-emerald/30', 'border-brand-emerald');
-      icon.classList.add('text-brand-emerald', 'animate-pulse');
+      // Dr. Sarah Sterling speaks intake guidance
+      speakText("Please confirm these 5 underwriting parameters so I can finalize your UNIDO feasibility model.");
+    }
 
-      recognition.onresult = (event) => {
-        const transcript = event.results[0][0].transcript;
-        document.getElementById('prompt-input').value = transcript;
-        btn.classList.remove('bg-brand-emerald/30', 'border-brand-emerald');
-        icon.classList.remove('text-brand-emerald', 'animate-pulse');
-        executePromptGeneration();
+    function closeQuestionsModal() {
+      document.getElementById('feasibility-questions-modal').classList.add('hidden');
+    }
+
+    function selectJurisdiction(j) {
+      selectedQuestionJurisdiction = j;
+      ['sa', 'uae', 'global'].forEach(id => {
+        const btn = document.getElementById(`j-btn-${id}`);
+        if (btn) {
+          if (id === j) {
+            btn.className = 'p-3 rounded-xl border text-left transition-all bg-brand-gold/20 border-brand-gold text-brand-gold font-bold';
+          } else {
+            btn.className = 'p-3 rounded-xl border text-left transition-all bg-surface-850 hover:bg-surface-800 border-white/10 text-slate-300';
+          }
+        }
+      });
+    }
+
+    function setQuestionCapex(val) {
+      selectedQuestionCapex = val;
+      document.getElementById('q-capex-display').innerText = `$${val.toLocaleString()}`;
+      document.getElementById('q-capex-input').value = val;
+      
+      document.querySelectorAll('.capex-pill').forEach(btn => {
+        if (btn.innerText.includes(val >= 1000000 ? `$${(val/1000000).toFixed(1)}M`.replace('.0M', 'M') : `$${Math.round(val/1000)}K`)) {
+          btn.className = 'px-3 py-2 rounded-xl border border-brand-gold bg-brand-gold/20 text-brand-gold font-mono text-xs capex-pill active-capex';
+        } else {
+          btn.className = 'px-3 py-2 rounded-xl border border-white/10 bg-surface-850 hover:bg-surface-800 text-slate-300 font-mono text-xs capex-pill';
+        }
+      });
+    }
+
+    function handleCustomCapexInput(val) {
+      const num = parseInt(val, 10) || 0;
+      selectedQuestionCapex = num;
+      document.getElementById('q-capex-display').innerText = `$${num.toLocaleString()}`;
+      document.querySelectorAll('.capex-pill').forEach(btn => {
+        btn.className = 'px-3 py-2 rounded-xl border border-white/10 bg-surface-850 hover:bg-surface-800 text-slate-300 font-mono text-xs capex-pill';
+      });
+    }
+
+    function setQuestionDebt(ratio) {
+      selectedQuestionDebt = ratio;
+      document.querySelectorAll('.debt-pill').forEach(btn => {
+        if (btn.innerText.includes(`${ratio}%`)) {
+          btn.className = 'p-2.5 rounded-xl border border-brand-gold bg-brand-gold/20 text-brand-gold font-bold debt-pill active-debt';
+        } else {
+          btn.className = 'p-2.5 rounded-xl border border-white/10 bg-surface-850 hover:bg-surface-800 text-slate-300 font-bold debt-pill';
+        }
+      });
+    }
+
+    /* Triggered when user clicks "⚡ Generate UNIDO Study" */
+    function executePromptGeneration() {
+      const promptInput = document.getElementById('prompt-input');
+      const val = promptInput.value.trim();
+      if (!val) {
+        alert("Please describe your business concept or project parameters.");
+        return;
+      }
+      openQuestionsModal(false);
+    }
+
+    /* Triggered when user confirms answers in the Questionnaire Modal */
+    function submitFeasibilityQuestions() {
+      closeQuestionsModal();
+
+      const spinner = document.getElementById('gen-spinner');
+      if (spinner) spinner.classList.remove('hidden');
+
+      const projectName = document.getElementById('q-project-name').value.trim() || 'Custom UNIDO Venture';
+      const promptText = document.getElementById('prompt-input').value;
+      const capex = selectedQuestionCapex;
+      const debtPercent = selectedQuestionDebt;
+      const gracePeriod = parseInt(document.getElementById('q-grace-period').value, 10);
+      const margin = parseFloat(document.getElementById('q-margin-select').value);
+
+      // Determine Icon
+      let icon = '⚡';
+      if (/coffee|cafe|barista/i.test(projectName + promptText)) icon = '☕';
+      else if (/burger|food|restaurant|kitchen|dine|culinary/i.test(projectName + promptText)) icon = '🍔';
+      else if (/solar|cleantech|energy|panel|renew/i.test(projectName + promptText)) icon = '☀️';
+      else if (/clinic|surgery|health|hospital|medical|pharma/i.test(projectName + promptText)) icon = '🏥';
+      else if (/saas|software|tech|ai|cloud|digital/i.test(projectName + promptText)) icon = '💻';
+      else if (/cold|logistics|warehous|freight|supply/i.test(projectName + promptText)) icon = '❄️';
+      else if (/farm|agri|greenhouse|hydro/i.test(projectName + promptText)) icon = '🌿';
+      else if (/recycl|waste|pet/i.test(projectName + promptText)) icon = '♻️';
+      else if (/hotel|resort|glamp/i.test(projectName + promptText)) icon = '🏨';
+      else if (/ev|charg/i.test(projectName + promptText)) icon = '⚡';
+      else if (/school|academy|k-12|edu/i.test(projectName + promptText)) icon = '🎓';
+      else if (/fintech|pay|bank/i.test(projectName + promptText)) icon = '💳';
+      else if (/data|gpu|center/i.test(projectName + promptText)) icon = '🤖';
+
+      // Jurisdiction details
+      let jurisdictionText = '🇸🇦 Saudi Arabia (Vision 2030)';
+      if (selectedQuestionJurisdiction === 'uae') {
+        jurisdictionText = '🇦🇪 UAE / GCC Freezone';
+        currentFramework = 'gcc';
+      } else if (selectedQuestionJurisdiction === 'global') {
+        jurisdictionText = '🌐 Global UNIDO Standard';
+        currentFramework = 'unido';
+      } else {
+        jurisdictionText = '🇸🇦 Saudi Arabia (Vision 2030)';
+        currentFramework = 'gcc';
+      }
+
+      // Financial Calculation
+      const debtAmount = capex * (debtPercent / 100);
+      const equityAmount = capex - debtAmount;
+      const year1Rev = capex * 0.92;
+      const year1Ebitda = year1Rev * margin * 0.65;
+      const debtService = debtAmount > 0 ? (debtAmount * 0.16) : 0;
+      const dscr = debtService > 0 ? (year1Ebitda / debtService) : 3.85;
+      const irr = 0.19 + (margin * 0.22);
+      const payback = (capex / (year1Ebitda > 0 ? year1Ebitda : 100000)).toFixed(1);
+
+      // Create Active Study Object
+      currentSector = {
+        id: 'custom_study_' + Date.now(),
+        name: projectName,
+        icon: icon,
+        jurisdiction: jurisdictionText,
+        capex: capex,
+        margin: margin,
+        dscr: parseFloat(dscr.toFixed(2)),
+        irr: parseFloat(irr.toFixed(3)),
+        payback: parseFloat(payback),
+        debtPercent: debtPercent,
+        equityPercent: 100 - debtPercent,
+        gracePeriod: gracePeriod,
+        desc: `UNIDO-compliant investment appraisal for ${projectName} in ${jurisdictionText} with $${(capex/1000000).toFixed(2)}M CAPEX.`
       };
 
-      recognition.onerror = () => {
-        btn.classList.remove('bg-brand-emerald/30', 'border-brand-emerald');
-        icon.classList.remove('text-brand-emerald', 'animate-pulse');
-      };
+      setTimeout(() => {
+        if (spinner) spinner.classList.add('hidden');
 
-      recognition.start();
+        // Update Active Study Banner
+        const banner = document.getElementById('active-study-banner');
+        if (banner) {
+          banner.classList.remove('hidden');
+          document.getElementById('active-study-name').innerText = currentSector.name;
+          document.getElementById('active-study-icon').innerText = currentSector.icon;
+          document.getElementById('active-study-jurisdiction').innerText = currentSector.jurisdiction;
+          document.getElementById('active-study-desc').innerText = `Appraised initial CAPEX of $${(currentSector.capex/1000000).toFixed(2)}M with ${currentSector.debtPercent}% debt and ${currentSector.equityPercent}% equity. Minimum DSCR is ${currentSector.dscr.toFixed(2)}x.`;
+        }
+
+        // Recalculate statements, cockpit metrics and visualizer
+        recalculateAndRender();
+        renderUNIDOChapters();
+
+        // Update Avatar In-Room dialogue
+        const activeText = document.getElementById('transcript-active-text');
+        if (activeText) {
+          activeText.innerText = `"I have finalized the underwriting study for ${currentSector.name}. With an initial investment of $${(currentSector.capex/1000000).toFixed(2)}M and ${currentSector.debtPercent}% debt financing, the modeled Year 1 DSCR is ${currentSector.dscr.toFixed(2)}x. What sensitivity scenario shall we test?"`;
+        }
+
+        // Auto-scroll down smoothly so user immediately sees the active study result
+        banner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+        // Audible confirmation
+        speakText(`UNIDO feasibility study successfully compiled for ${currentSector.name}. Results are now live on your dashboard.`);
+      }, 400);
     }
 
     /* =======================================================================
@@ -1352,39 +1569,178 @@ Content-Type: application/json
     /* =======================================================================
        7. UNIDO 10-CHAPTER DOSSIER RENDERING
        ======================================================================= */
+    function getChapterData(cNum) {
+      const name = currentSector.name;
+      const capexM = (currentSector.capex / 1000000).toFixed(2);
+      const jur = currentSector.jurisdiction || 'Saudi Arabia (Vision 2030)';
+      const debtP = currentSector.debtPercent || 60;
+      const eqP = currentSector.equityPercent || 40;
+
+      const chaptersData = {
+        '01': {
+          title: 'Executive Summary & Institutional Background',
+          icon: '📑',
+          desc: `Project vision for ${name}, institutional sponsor profiling, and alignment with national industrial policy (${jur}).`,
+          sections: [
+            { h: '1.1 Project Identity & Commercial Purpose', body: `Establishment of <strong>${name}</strong> as an institutional-grade enterprise in ${jur}. The project addresses unmet regional demand with a certified initial investment of <strong>$${capexM}M USD</strong>.` },
+            { h: '1.2 Total Capitalization & Sponsor Equity', body: `The project is structured under an institutional <strong>${debtP}% Debt / ${eqP}% Equity</strong> capital matrix. Modeled 5-year equity IRR exceeds hurdle rates at <strong>${(currentSector.irr * 100).toFixed(1)}%</strong>.` },
+            { h: '1.3 Regulatory & Policy Alignment', body: `Fully compliant with UNIDO Volumes I–III criteria, national environmental standards, and development fund underwriting criteria.` }
+          ]
+        },
+        '02': {
+          title: 'Market Analysis & Commercial Demand',
+          icon: '📊',
+          desc: `TAM, SAM, and SOM addressable market sizing, pricing power, and 5-year demand forecasts.`,
+          sections: [
+            { h: '2.1 Addressable Market Sizing', body: `Total Addressable Market (TAM) for ${name} within the regional trade basin is estimated at $840M, with a Serviceable Obtainable Market (SOM) targeted at $${(capexM * 2.8).toFixed(1)}M by Year 3.` },
+            { h: '2.2 Pricing Elasticity & Competitive Advantage', body: `Tiered pricing strategy benchmarking prime regional competitors, securing an average operating gross margin of <strong>${(currentSector.margin * 100).toFixed(0)}%</strong>.` },
+            { h: '2.3 5-Year Volume Projection', body: `Commercial volume begins at 65% utilization during Year 1, ramping up to 88% by Year 3 and 94% at steady state in Year 5.` }
+          ]
+        },
+        '03': {
+          title: 'Raw Materials & Procurement Logistics',
+          icon: '📦',
+          desc: `Bill of materials, key feedstock suppliers, utility consumption tariffs, and buffer inventory.`,
+          sections: [
+            { h: '3.1 Material Specification & Sourcing', body: `Primary operational inputs and feedstocks are secured through multi-year vendor framework contracts, with 60%+ localized supply chains.` },
+            { h: '3.2 Utility Infrastructure', body: `Electrical demand modeled at continuous load factor with subsidized industrial industrial power rates ($0.048/kWh equivalent).` },
+            { h: '3.3 Working Capital Buffer', body: `90-day critical spares inventory and 60-day receivables financing reserve baked into pre-operating capitalization.` }
+          ]
+        },
+        '04': {
+          title: 'Location, Site Selection & Environmental Clearance',
+          icon: '📍',
+          desc: `Logistics connectivity, land lease agreements, soil mechanics, and EIA compliance.`,
+          sections: [
+            { h: '4.1 Geographic Siting & Connectivity', body: `Site situated within a designated industrial / commercial cluster with direct highway logistics corridors and intermodal port connectivity.` },
+            { h: '4.2 Environmental Impact Assessment (EIA)', body: `Category B environmental screening completed. Zero hazardous effluent discharge protocols and ISO 14001 compliance roadmap.` }
+          ]
+        },
+        '05': {
+          title: 'Engineering & Technology Specifications',
+          icon: '⚙️',
+          desc: `Detailed plant capacity sizing, Tier-1 machinery procurement, civil works, and CAPEX schedule.`,
+          sections: [
+            { h: '5.1 Equipment & Machinery Schedule', body: `Core production and technological assets budgeted at <strong>$${(capexM * 0.58).toFixed(2)}M</strong>, supplied by certified Tier-1 OEM manufacturers.` },
+            { h: '5.2 Civil & Architectural Works', body: `Facility construction, specialized floor loadings, clean zones, and administrative quarters budgeted at <strong>$${(capexM * 0.28).toFixed(2)}M</strong>.` },
+            { h: '5.3 Pre-Operating & Trial Run Budget', body: `Engineering commissioning, staff trial runs, and certification expenses budgeted at <strong>$${(capexM * 0.14).toFixed(2)}M</strong>.` }
+          ]
+        },
+        '06': {
+          title: 'Organization & Human Capital Structure',
+          icon: '👥',
+          desc: `Management organizational hierarchy, Saudization / local employment quotas, and labor reserves.`,
+          sections: [
+            { h: '6.1 Headcount Plan & Grading', body: `Executive team, technical operators, and support personnel scaled across a 3-tier organizational structure.` },
+            { h: '6.2 National Localization Quotas', body: `Exceeds Platinum / Tier-1 national workforce ratios (Saudization / Emiratization) with dedicated continuous training budgets.` },
+            { h: '6.3 End of Service Benefits (EOSB)', body: `Actuarially sound severance reserves accrued annually pursuant to regional labor statutes.` }
+          ]
+        },
+        '07': {
+          title: 'Implementation Scheduling & Milestone Gantt',
+          icon: '⏱️',
+          desc: `Licensing, civil engineering, machinery installation, trial run, and commercial COD date.`,
+          sections: [
+            { h: '7.1 Milestone Critical Path', body: `Total execution timeline structured over <strong>${currentSector.gracePeriod || 12} Months</strong> from financial closing to Commercial Operation Date (COD).` },
+            { h: '7.2 Construction & Commissioning', body: `Civil works completed in Month 6, machinery installation and dry testing in Month 9, trial production in Month 11.` }
+          ]
+        },
+        '08': {
+          title: 'Financial Appraisal & Bank Debt Schedules',
+          icon: '💰',
+          desc: `5-Year audited income statements, cash flows, debt amortizations, and DSCR/LLCR covenants.`,
+          sections: [
+            { h: '8.1 Debt Service Coverage Ratio (DSCR)', body: `Minimum modeled DSCR is <strong>${currentSector.dscr.toFixed(2)}x</strong>, maintaining a secure safety margin above the 1.35x bank committee covenant floor.` },
+            { h: '8.2 Equity Yield & Hurdle Metrics', body: `Project Net Present Value (NPV) stands at <strong>$${((currentSector.capex * 0.74) / 1000000).toFixed(2)}M</strong> at a 10.5% WACC, with an equity IRR of <strong>${(currentSector.irr * 100).toFixed(1)}%</strong>.` },
+            { h: '8.3 Payback Velocity', body: `Full capital payback achieved within <strong>${currentSector.payback} Years</strong> of commercial operation.` }
+          ]
+        },
+        '09': {
+          title: 'National & Socioeconomic Impact Matrix',
+          icon: '🏛️',
+          desc: `Local content score (Iktva), GDP multiplier, job creation, and foreign exchange displacement.`,
+          sections: [
+            { h: '9.1 Local Content Contribution', body: `Estimated localized supply chain and service score exceeds 52%, qualifying for priority sovereign development fund incentives.` },
+            { h: '9.2 Foreign Currency Displacement', body: `Displaces import reliance through domestic production, retaining an estimated $${(capexM * 1.6).toFixed(1)}M annually within the domestic economy.` }
+          ]
+        },
+        '10': {
+          title: 'Downside Risk Matrix & Mitigation Safeguards',
+          icon: '🛡️',
+          desc: `Break-even capacity floor, switching value sensitivities, and debt restructuring reserves.`,
+          sections: [
+            { h: '10.1 Break-Even Capacity Utilization', body: `Break-even capacity utilization is calculated at <strong>41.8%</strong>, providing a wide operational buffer against sales downturns.` },
+            { h: '10.2 Switching Value Sensitivity', body: `Project withstands up to a -28% sustained price contraction before Year 2 DSCR reaches the 1.0x parity line.` },
+            { h: '10.3 Insurance & Collateralization', body: `All plant assets fully insured under Comprehensive Commercial Property and Business Interruption policies.` }
+          ]
+        }
+      };
+
+      return chaptersData[cNum] || chaptersData['01'];
+    }
+
     function renderUNIDOChapters() {
       const container = document.getElementById('unido-chapters-grid');
       if (!container) return;
 
-      const chapters = [
-        { num: '01', title: 'Executive Summary & Background', icon: '📑', desc: 'Project vision, national alignment (Vision 2030 / SDG), and institutional sponsors.' },
-        { num: '02', title: 'Market Analysis & Demand', icon: '📊', desc: 'TAM, SAM, SOM sizing, pricing elasticity, and 5-year demand forecasts.' },
-        { num: '03', title: 'Raw Materials & Supplies', icon: '📦', desc: 'Supply-chain resilience, utility requirements (power, water), and import tariffs.' },
-        { num: '04', title: 'Location, Site & Environment', icon: '📍', desc: 'Geographic log-odds, environmental EIA clearance, logistics connectivity.' },
-        { num: '05', title: 'Engineering & Technology', icon: '⚙️', desc: 'Plant capacity sizing, machinery selection, vendor warranties, and CAPEX schedule.' },
-        { num: '06', title: 'Organization & Human Resources', icon: '👥', desc: 'Saudization / national quotas, payroll grading, and EOSB labor severance reserves.' },
-        { num: '07', title: 'Implementation Scheduling', icon: '⏱️', desc: 'Gantt chart, civil works critical path, pre-operating trial run period.' },
-        { num: '08', title: 'Financial Appraisal & Schedules', icon: '💰', desc: 'Working capital buffers, debt amortizations, and DSCR/LLCR covenant checks.' },
-        { num: '09', title: 'National & Economic Impact', icon: '🏛️', desc: 'Local content score (Iktva), GDP multiplier, and foreign exchange displacement.' },
-        { num: '10', title: 'Risk Matrix & Mitigation', icon: '🛡️', desc: 'Switching value sensitivities, force majeure protocols, and collateral coverage.' }
-      ];
+      const chapterNumbers = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10'];
 
-      container.innerHTML = chapters.map(c => `
-        <div class="concentric-inner rounded-2xl p-4 space-y-2 hover:border-brand-gold/30 transition-all cursor-pointer" onclick="openChapterDetails('${c.title}')">
-          <div class="flex items-center justify-between">
-            <span class="text-lg">${c.icon}</span>
-            <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-surface-950 text-brand-gold border border-white/10">
-              MODULE ${c.num}
-            </span>
+      container.innerHTML = chapterNumbers.map(num => {
+        const c = getChapterData(num);
+        return `
+          <div class="concentric-inner rounded-2xl p-4 space-y-2 hover:border-brand-gold/40 hover:bg-surface-800/80 transition-all cursor-pointer group" onclick="openChapterDetails('${num}')">
+            <div class="flex items-center justify-between">
+              <span class="text-xl group-hover:scale-110 transition-transform">${c.icon}</span>
+              <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-surface-950 text-brand-gold border border-brand-gold/20">
+                MODULE ${num}
+              </span>
+            </div>
+            <div class="text-xs font-bold text-white group-hover:text-brand-gold transition-colors">${c.title}</div>
+            <p class="text-[11px] text-slate-400 leading-relaxed">${c.desc}</p>
+            <div class="pt-2 flex items-center justify-between text-[10px] font-mono text-slate-500 border-t border-white/5">
+              <span>UNIDO Vol. I–III</span>
+              <span class="text-brand-cyan group-hover:underline">Inspect Dossier →</span>
+            </div>
           </div>
-          <div class="text-xs font-bold text-white">${c.title}</div>
-          <p class="text-[11px] text-slate-400 leading-relaxed">${c.desc}</p>
-        </div>
-      `).join('');
+        `;
+      }).join('');
     }
 
-    function openChapterDetails(chapterTitle) {
-      alert(`[UNIDO Chapter Inspection]\nOpening formal appraisal dossier for: ${chapterTitle}\nAll data fields verified against UNIDO Volume I–III standards.`);
+    function openChapterDetails(chapterNum) {
+      const data = getChapterData(chapterNum);
+      document.getElementById('modal-chapter-module').innerText = `MODULE ${chapterNum}`;
+      document.getElementById('modal-chapter-icon').innerText = data.icon;
+      document.getElementById('modal-chapter-title').innerText = data.title;
+
+      const body = document.getElementById('modal-chapter-body');
+      body.innerHTML = `
+        <div class="concentric-inner rounded-2xl p-4 border-brand-gold/20 bg-surface-950/60 flex items-center justify-between gap-4">
+          <div>
+            <span class="text-[10px] font-mono uppercase tracking-wider text-brand-gold font-bold">Appraised Venture</span>
+            <div class="text-sm font-extrabold text-white">${currentSector.name}</div>
+            <div class="text-xs text-slate-400">${currentSector.jurisdiction} • Initial CAPEX: $${(currentSector.capex/1000000).toFixed(2)}M</div>
+          </div>
+          <div class="text-right">
+            <span class="text-[10px] font-mono uppercase tracking-wider text-slate-500 font-bold">Audit Status</span>
+            <div class="text-xs font-bold text-brand-emerald">CREDIT COMMITTEE READY</div>
+          </div>
+        </div>
+
+        <div class="space-y-4">
+          ${data.sections.map(sec => `
+            <div class="p-4 rounded-xl bg-surface-900 border border-white/10 space-y-1.5">
+              <h4 class="text-xs font-bold text-white uppercase tracking-wider text-brand-gold">${sec.h}</h4>
+              <p class="text-xs text-slate-300 leading-relaxed">${sec.body}</p>
+            </div>
+          `).join('')}
+        </div>
+      `;
+
+      document.getElementById('chapter-inspection-modal').classList.remove('hidden');
+    }
+
+    function closeChapterModal() {
+      document.getElementById('chapter-inspection-modal').classList.add('hidden');
     }
 
     /* =======================================================================
@@ -1901,5 +2257,240 @@ Content-Type: application/json
       sim.classList.add('hidden');
     }
   </script>
+  <!-- ========================================================================= -->
+  <!-- MODAL: INTERACTIVE FEASIBILITY STUDY DISCOVERY & CALIBRATION             -->
+  <!-- ========================================================================= -->
+  <div id="feasibility-questions-modal" class="fixed inset-0 z-50 bg-black/95 backdrop-blur-2xl flex items-center justify-center p-3 sm:p-6 hidden transition-all duration-300">
+    <div class="w-full max-w-3xl max-h-[92vh] concentric-card rounded-[2rem] flex flex-col overflow-hidden border border-brand-gold/30 shadow-2xl relative gold-glow">
+      
+      <!-- Modal Header -->
+      <div class="px-6 py-4 border-b border-white/10 flex items-center justify-between bg-surface-950/90">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-brand-gold/15 border border-brand-gold/30 flex items-center justify-center text-brand-gold font-bold text-lg">
+            ⚡
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-sm font-extrabold text-white">OmniFeas AI Feasibility Calibration</span>
+              <span class="px-2 py-0.5 text-[10px] font-bold rounded-full bg-brand-gold/15 text-brand-gold border border-brand-gold/30">
+                UNIDO VOL. I–III
+              </span>
+            </div>
+            <p class="text-xs text-slate-400">Dr. Sarah Sterling — Underwriting Intake Questionnaire to finalize your study</p>
+          </div>
+        </div>
+
+        <button onclick="closeQuestionsModal()" class="w-8 h-8 rounded-xl bg-surface-900 hover:bg-surface-850 border border-white/10 text-slate-400 hover:text-white flex items-center justify-center transition-all">
+          ✕
+        </button>
+      </div>
+
+      <!-- Modal Body (Scrollable Form) -->
+      <div class="p-6 overflow-y-auto space-y-6 text-xs text-slate-300">
+        
+        <!-- Detected Prompt Box -->
+        <div class="concentric-inner rounded-2xl p-4 border-white/10 flex items-start gap-3">
+          <span class="text-xl mt-0.5">💡</span>
+          <div class="flex-1">
+            <div class="text-[11px] uppercase tracking-wider text-slate-400 font-bold">Project Concept Parsed</div>
+            <div id="q-parsed-prompt" class="text-sm font-bold text-white mt-0.5">Commercial Solar EPC Company</div>
+            <p class="text-[11px] text-slate-400 mt-1">Please confirm these parameters to calibrate your 5-year financial model, CAPEX schedule, and loan debt covenants.</p>
+          </div>
+        </div>
+
+        <!-- Question 1: Project Name -->
+        <div class="space-y-2">
+          <label class="block text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
+            <span class="w-5 h-5 rounded-full bg-brand-gold/20 text-brand-gold text-[11px] flex items-center justify-center font-mono">1</span>
+            Official Project Title / Enterprise Name
+          </label>
+          <input 
+            id="q-project-name" 
+            type="text" 
+            class="w-full bg-surface-950 border border-white/10 rounded-xl px-4 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:border-brand-gold font-bold"
+            value="Solar Cleantech EPC Enterprise"
+          />
+        </div>
+
+        <!-- Question 2: Target Jurisdiction & Framework -->
+        <div class="space-y-2">
+          <label class="block text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
+            <span class="w-5 h-5 rounded-full bg-brand-gold/20 text-brand-gold text-[11px] flex items-center justify-center font-mono">2</span>
+            Location & Regulatory Jurisdiction
+          </label>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5" id="q-jurisdiction-options">
+            <button type="button" onclick="selectJurisdiction('sa')" id="j-btn-sa" class="p-3 rounded-xl border text-left transition-all bg-brand-gold/20 border-brand-gold text-brand-gold font-bold">
+              <div class="text-sm">🇸🇦 Saudi Arabia</div>
+              <div class="text-[10px] font-normal text-slate-400 mt-1">SIDF / Kafalah / Vision 2030 (2.5% Zakat)</div>
+            </button>
+            <button type="button" onclick="selectJurisdiction('uae')" id="j-btn-uae" class="p-3 rounded-xl border text-left transition-all bg-surface-850 hover:bg-surface-800 border-white/10 text-slate-300">
+              <div class="text-sm">🇦🇪 UAE / GCC</div>
+              <div class="text-[10px] font-normal text-slate-400 mt-1">ADQ / DED Freezone (9% Corp Tax)</div>
+            </button>
+            <button type="button" onclick="selectJurisdiction('global')" id="j-btn-global" class="p-3 rounded-xl border text-left transition-all bg-surface-850 hover:bg-surface-800 border-white/10 text-slate-300">
+              <div class="text-sm">🌐 Global / International</div>
+              <div class="text-[10px] font-normal text-slate-400 mt-1">UNIDO Industrial Standard (20% Tax)</div>
+            </button>
+          </div>
+        </div>
+
+        <!-- Question 3: Total Capital Expenditure (CAPEX) -->
+        <div class="space-y-2">
+          <div class="flex items-center justify-between">
+            <label class="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
+              <span class="w-5 h-5 rounded-full bg-brand-gold/20 text-brand-gold text-[11px] flex items-center justify-center font-mono">3</span>
+              Total Initial CAPEX Investment (USD)
+            </label>
+            <span id="q-capex-display" class="font-mono text-sm font-extrabold text-brand-gold">$2,500,000</span>
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-5 gap-2">
+            <button type="button" onclick="setQuestionCapex(500000)" class="px-3 py-2 rounded-xl border border-white/10 bg-surface-850 hover:bg-surface-800 text-slate-300 font-mono text-xs capex-pill">$500K</button>
+            <button type="button" onclick="setQuestionCapex(1500000)" class="px-3 py-2 rounded-xl border border-white/10 bg-surface-850 hover:bg-surface-800 text-slate-300 font-mono text-xs capex-pill">$1.5M</button>
+            <button type="button" onclick="setQuestionCapex(2500000)" class="px-3 py-2 rounded-xl border border-brand-gold bg-brand-gold/20 text-brand-gold font-mono text-xs capex-pill active-capex">$2.5M</button>
+            <button type="button" onclick="setQuestionCapex(5000000)" class="px-3 py-2 rounded-xl border border-white/10 bg-surface-850 hover:bg-surface-800 text-slate-300 font-mono text-xs capex-pill">$5.0M</button>
+            <button type="button" onclick="setQuestionCapex(10000000)" class="px-3 py-2 rounded-xl border border-white/10 bg-surface-850 hover:bg-surface-800 text-slate-300 font-mono text-xs capex-pill">$10.0M</button>
+          </div>
+          <div class="flex items-center gap-2 pt-1">
+            <span class="text-slate-500 text-[11px]">Or custom amount:</span>
+            <input 
+              id="q-capex-input" 
+              type="number" 
+              value="2500000" 
+              step="50000"
+              oninput="handleCustomCapexInput(this.value)"
+              class="w-48 bg-surface-950 border border-white/10 rounded-lg px-3 py-1 text-white font-mono text-xs focus:outline-none focus:border-brand-gold"
+            />
+          </div>
+        </div>
+
+        <!-- Question 4: Capital Structure & Debt Financing Ratio -->
+        <div class="space-y-2">
+          <label class="block text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
+            <span class="w-5 h-5 rounded-full bg-brand-gold/20 text-brand-gold text-[11px] flex items-center justify-center font-mono">4</span>
+            Financing Structure (Debt vs Equity)
+          </label>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2" id="q-debt-options">
+            <button type="button" onclick="setQuestionDebt(60)" class="p-2.5 rounded-xl border border-brand-gold bg-brand-gold/20 text-brand-gold font-bold debt-pill active-debt">
+              <div class="text-xs">60% Debt / 40% Eq</div>
+              <div class="text-[10px] text-slate-400 font-normal mt-0.5">SIDF / Bank Standard</div>
+            </button>
+            <button type="button" onclick="setQuestionDebt(70)" class="p-2.5 rounded-xl border border-white/10 bg-surface-850 hover:bg-surface-800 text-slate-300 font-bold debt-pill">
+              <div class="text-xs">70% Debt / 30% Eq</div>
+              <div class="text-[10px] text-slate-400 font-normal mt-0.5">High Leverage</div>
+            </button>
+            <button type="button" onclick="setQuestionDebt(50)" class="p-2.5 rounded-xl border border-white/10 bg-surface-850 hover:bg-surface-800 text-slate-300 font-bold debt-pill">
+              <div class="text-xs">50% Debt / 50% Eq</div>
+              <div class="text-[10px] text-slate-400 font-normal mt-0.5">Conservative Bank</div>
+            </button>
+            <button type="button" onclick="setQuestionDebt(0)" class="p-2.5 rounded-xl border border-white/10 bg-surface-850 hover:bg-surface-800 text-slate-300 font-bold debt-pill">
+              <div class="text-xs">100% Equity</div>
+              <div class="text-[10px] text-slate-400 font-normal mt-0.5">Zero Debt / Self-Funded</div>
+            </button>
+          </div>
+        </div>
+
+        <!-- Question 5: Timeline & Operating Margins -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="space-y-2">
+            <label class="block text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
+              <span class="w-5 h-5 rounded-full bg-brand-gold/20 text-brand-gold text-[11px] flex items-center justify-center font-mono">5</span>
+              Construction & Grace Period
+            </label>
+            <select id="q-grace-period" class="w-full bg-surface-950 border border-white/10 rounded-xl px-3 py-2 text-white text-xs focus:outline-none focus:border-brand-gold">
+              <option value="6">6 Months Setup (6 Mo Principal Grace)</option>
+              <option value="12" selected>12 Months Commercial Trial (12 Mo Grace)</option>
+              <option value="18">18 Months Heavy Industrial Commissioning</option>
+            </select>
+          </div>
+
+          <div class="space-y-2">
+            <label class="block text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
+              <span class="w-5 h-5 rounded-full bg-brand-gold/20 text-brand-gold text-[11px] flex items-center justify-center font-mono">6</span>
+              Industry Operational Margin
+            </label>
+            <select id="q-margin-select" class="w-full bg-surface-950 border border-white/10 rounded-xl px-3 py-2 text-white text-xs focus:outline-none focus:border-brand-gold">
+              <option value="0.34">Commercial & Industrial EPC (~34% Margin)</option>
+              <option value="0.42">Specialty Food, Beverage & Retail (~42% Margin)</option>
+              <option value="0.38">Healthcare, Clinic & Medical (~38% Margin)</option>
+              <option value="0.70">Software, Digital Cloud & Tech (~70% Margin)</option>
+              <option value="0.28">Logistics, Warehousing & Fleet (~28% Margin)</option>
+              <option value="0.25">Manufacturing, Heavy Fabrication (~25% Margin)</option>
+            </select>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="px-6 py-4 border-t border-white/10 bg-surface-950/90 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div class="flex items-center gap-2 text-[11px] text-slate-400">
+          <span class="w-2 h-2 rounded-full bg-brand-emerald animate-pulse"></span>
+          <span>Deterministic UNIDO financial modeling ready</span>
+        </div>
+
+        <div class="flex items-center gap-2 w-full sm:w-auto">
+          <button type="button" onclick="closeQuestionsModal()" class="px-4 py-2.5 rounded-xl bg-surface-850 hover:bg-surface-800 text-slate-300 text-xs font-semibold">
+            Cancel
+          </button>
+          <button type="button" onclick="submitFeasibilityQuestions()" class="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-gradient-to-r from-brand-gold via-amber-500 to-amber-600 text-black font-extrabold text-xs uppercase tracking-wider shadow-lg shadow-amber-500/25 hover:shadow-amber-500/40 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2">
+            <span>🚀 Finalize & Generate Feasibility Study</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL: UNIDO CHAPTER FULL DOSSIER INSPECTOR                              -->
+  <!-- ========================================================================= -->
+  <div id="chapter-inspection-modal" class="fixed inset-0 z-50 bg-black/95 backdrop-blur-2xl flex items-center justify-center p-3 sm:p-6 hidden transition-all duration-300">
+    <div class="w-full max-w-4xl max-h-[92vh] concentric-card rounded-[2rem] flex flex-col overflow-hidden border border-white/20 shadow-2xl relative">
+      
+      <!-- Header -->
+      <div class="px-6 py-4 border-b border-white/10 flex items-center justify-between bg-surface-950/90">
+        <div class="flex items-center gap-3">
+          <div id="modal-chapter-icon" class="w-10 h-10 rounded-2xl bg-brand-gold/15 border border-brand-gold/30 flex items-center justify-center text-xl">
+            📑
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span id="modal-chapter-module" class="px-2 py-0.5 text-[10px] font-mono font-bold rounded-full bg-brand-gold/15 text-brand-gold border border-brand-gold/30">
+                MODULE 01
+              </span>
+              <span class="text-xs text-slate-400">UNIDO Feasibility Manual (Vols. I–III)</span>
+            </div>
+            <h3 id="modal-chapter-title" class="text-base font-extrabold text-white mt-0.5">
+              Executive Summary & Project Background
+            </h3>
+          </div>
+        </div>
+
+        <button onclick="closeChapterModal()" class="w-8 h-8 rounded-xl bg-surface-900 hover:bg-surface-850 border border-white/10 text-slate-400 hover:text-white flex items-center justify-center transition-all">
+          ✕
+        </button>
+      </div>
+
+      <!-- Dossier Content -->
+      <div id="modal-chapter-body" class="p-6 overflow-y-auto space-y-6 text-slate-300 text-xs leading-relaxed">
+        <!-- Populated dynamically based on current study -->
+      </div>
+
+      <!-- Footer -->
+      <div class="px-6 py-3.5 border-t border-white/10 bg-surface-950/90 flex items-center justify-between">
+        <span class="text-[11px] text-slate-500 font-mono">UNIDO Form ID: FEAS-APPRAISAL-2026</span>
+        <div class="flex items-center gap-2">
+          <button onclick="window.print()" class="px-3.5 py-1.5 rounded-xl bg-surface-850 hover:bg-surface-800 border border-white/10 text-slate-300 text-xs font-semibold flex items-center gap-1.5">
+            <span>🖨️ Print Module</span>
+          </button>
+          <button onclick="closeChapterModal()" class="px-4 py-1.5 rounded-xl bg-brand-gold/20 border border-brand-gold/40 text-brand-gold font-bold text-xs">
+            Close
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
 </body>
 </html>
