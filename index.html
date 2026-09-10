@@ -156,6 +156,24 @@
         </button>
       </div>
 
+      <!-- Currency Switcher (Auto & Manual Input) -->
+      <div class="flex items-center gap-1.5 p-1 rounded-2xl bg-surface-900 border border-white/10 shadow-inner">
+        <span class="text-xs pl-2 text-brand-gold font-mono">💱</span>
+        <select id="header-currency-select" onchange="changeGlobalCurrency(this.value)" class="bg-transparent text-xs font-bold text-white focus:outline-none pr-2 py-1.5 cursor-pointer">
+          <option value="SAR" class="bg-surface-950 text-white">🇸🇦 SAR (﷼)</option>
+          <option value="AED" class="bg-surface-950 text-white">🇦🇪 AED (د.إ)</option>
+          <option value="USD" class="bg-surface-950 text-white">🇺🇸 USD ($)</option>
+          <option value="EUR" class="bg-surface-950 text-white">🇪🇺 EUR (€)</option>
+          <option value="GBP" class="bg-surface-950 text-white">🇬🇧 GBP (£)</option>
+          <option value="KWD" class="bg-surface-950 text-white">🇰🇼 KWD (د.ك)</option>
+          <option value="QAR" class="bg-surface-950 text-white">🇶🇦 QAR (ر.ق)</option>
+          <option value="BHD" class="bg-surface-950 text-white">🇧🇭 BHD (.د.ب)</option>
+          <option value="OMR" class="bg-surface-950 text-white">🇴🇲 OMR (ر.ع)</option>
+          <option value="EGP" class="bg-surface-950 text-white">🇪🇬 EGP (ج.م)</option>
+          <option value="CUSTOM" class="bg-surface-950 text-white">✏️ Custom Manual...</option>
+        </select>
+      </div>
+
       <!-- Right Actions: Embed, Language & CTA -->
       <div class="flex items-center gap-2.5">
         <button onclick="openEmbedModal()" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-surface-850 border border-white/10 hover:border-brand-cyan/40 text-slate-300 hover:text-brand-cyan transition-all flex items-center gap-1.5">
@@ -501,7 +519,7 @@
           <table class="w-full text-left text-xs text-slate-300 font-mono">
             <thead class="text-[11px] uppercase bg-surface-950 text-slate-400 border-b border-white/10">
               <tr>
-                <th class="px-4 py-3">Line Item (USD)</th>
+                <th class="px-4 py-3" id="fin-table-currency-header">Line Item (SAR)</th>
                 <th class="px-4 py-3 text-right">Year 1</th>
                 <th class="px-4 py-3 text-right">Year 2</th>
                 <th class="px-4 py-3 text-right">Year 3</th>
@@ -521,22 +539,22 @@
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div class="concentric-inner rounded-2xl p-4">
             <div class="text-xs text-slate-400 uppercase font-bold">1. Discounted Cash Flow</div>
-            <div class="text-xl font-extrabold text-brand-gold mt-1">$12.8M</div>
+            <div class="text-xl font-extrabold text-brand-gold mt-1" id="val-dcf">SAR 12.8M</div>
             <div class="text-[11px] text-slate-400 mt-2">WACC 10.5%, Terminal Growth 2.5%</div>
           </div>
           <div class="concentric-inner rounded-2xl p-4">
             <div class="text-xs text-slate-400 uppercase font-bold">2. EV / EBITDA Multiple</div>
-            <div class="text-xl font-extrabold text-brand-cyan mt-1">$13.4M</div>
+            <div class="text-xl font-extrabold text-brand-cyan mt-1" id="val-ebitda">SAR 13.4M</div>
             <div class="text-[11px] text-slate-400 mt-2">7.5x Sector Median</div>
           </div>
           <div class="concentric-inner rounded-2xl p-4">
             <div class="text-xs text-slate-400 uppercase font-bold">3. Capitalized Earnings</div>
-            <div class="text-xl font-extrabold text-purple-400 mt-1">$11.9M</div>
+            <div class="text-xl font-extrabold text-purple-400 mt-1" id="val-cap">SAR 11.9M</div>
             <div class="text-[11px] text-slate-400 mt-2">Normalized Cap Rate 11.2%</div>
           </div>
           <div class="concentric-inner rounded-2xl p-4">
             <div class="text-xs text-slate-400 uppercase font-bold">4. Net Asset Value (NAV)</div>
-            <div class="text-xl font-extrabold text-brand-emerald mt-1">$8.2M</div>
+            <div class="text-xl font-extrabold text-brand-emerald mt-1" id="val-nav">SAR 8.2M</div>
             <div class="text-[11px] text-slate-400 mt-2">Adjusted Liquidation Floor</div>
           </div>
         </div>
@@ -1004,6 +1022,136 @@ Content-Type: application/json
     ];
 
     /* =======================================================================
+       2. COUNTRY & CURRENCY DATABASE & STATE
+       ======================================================================= */
+    const COUNTRIES = {
+      sa: { id: 'sa', name: 'Saudi Arabia', flag: '🇸🇦', currency: 'SAR', framework: 'gcc', taxRate: 0.025, taxLabel: 'Zakat Reserve (2.5%)', desc: 'SIDF / Kafalah / Vision 2030 (2.5% Zakat)' },
+      uae: { id: 'uae', name: 'UAE / Dubai', flag: '🇦🇪', currency: 'AED', framework: 'gcc', taxRate: 0.09, taxLabel: 'Corporate Tax (9%)', desc: 'ADQ / DED Freezone (9% Corp Tax)' },
+      qa: { id: 'qa', name: 'Qatar', flag: '🇶🇦', currency: 'QAR', framework: 'gcc', taxRate: 0.10, taxLabel: 'Corporate Tax (10%)', desc: 'QDB / Qatar Vision (10% Tax)' },
+      kw: { id: 'kw', name: 'Kuwait', flag: '🇰🇼', currency: 'KWD', framework: 'gcc', taxRate: 0.15, taxLabel: 'Corporate Tax (15%)', desc: 'KDIPA / National Fund (15% Tax)' },
+      bh: { id: 'bh', name: 'Bahrain', flag: '🇧🇭', currency: 'BHD', framework: 'gcc', taxRate: 0.00, taxLabel: 'Municipal Tax (0%)', desc: 'EDB / Tamkeen (0% Tax)' },
+      om: { id: 'om', name: 'Oman', flag: '🇴🇲', currency: 'OMR', framework: 'gcc', taxRate: 0.15, taxLabel: 'Corporate Tax (15%)', desc: 'Oman Vision 2040 (15% Tax)' },
+      eg: { id: 'eg', name: 'Egypt', flag: '🇪🇬', currency: 'EGP', framework: 'unido', taxRate: 0.225, taxLabel: 'Corporate Tax (22.5%)', desc: 'IDA / GAFI Industrial (22.5% Tax)' },
+      us: { id: 'us', name: 'United States', flag: '🇺🇸', currency: 'USD', framework: 'unido', taxRate: 0.21, taxLabel: 'Corporate Tax (21%)', desc: 'SBA / US Commercial (21% Tax)' },
+      eu: { id: 'eu', name: 'European Union', flag: '🇪🇺', currency: 'EUR', framework: 'unido', taxRate: 0.20, taxLabel: 'Corporate Tax (20%)', desc: 'EIB / UNIDO Europe (20% Tax)' },
+      uk: { id: 'uk', name: 'United Kingdom', flag: '🇬🇧', currency: 'GBP', framework: 'unido', taxRate: 0.25, taxLabel: 'Corporation Tax (25%)', desc: 'British Business Bank (25% Tax)' },
+      global: { id: 'global', name: 'Global / International', flag: '🌐', currency: 'USD', framework: 'unido', taxRate: 0.20, taxLabel: 'Corporate Tax (20%)', desc: 'UNIDO Industrial Standard (20% Tax)' }
+    };
+
+    const CURRENCIES = {
+      SAR: { code: 'SAR', symbol: 'SAR ', flag: '🇸🇦', name: 'Saudi Riyal (SAR)' },
+      AED: { code: 'AED', symbol: 'AED ', flag: '🇦🇪', name: 'UAE Dirham (AED)' },
+      USD: { code: 'USD', symbol: '$', flag: '🇺🇸', name: 'US Dollar (USD)' },
+      EUR: { code: 'EUR', symbol: '€', flag: '🇪🇺', name: 'Euro (EUR)' },
+      GBP: { code: 'GBP', symbol: '£', flag: '🇬🇧', name: 'British Pound (GBP)' },
+      KWD: { code: 'KWD', symbol: 'KWD ', flag: '🇰🇼', name: 'Kuwaiti Dinar (KWD)' },
+      QAR: { code: 'QAR', symbol: 'QAR ', flag: '🇶🇦', name: 'Qatari Riyal (QAR)' },
+      BHD: { code: 'BHD', symbol: 'BHD ', flag: '🇧🇭', name: 'Bahraini Dinar (BHD)' },
+      OMR: { code: 'OMR', symbol: 'OMR ', flag: '🇴🇲', name: 'Omani Rial (OMR)' },
+      EGP: { code: 'EGP', symbol: 'EGP ', flag: '🇪🇬', name: 'Egyptian Pound (EGP)' },
+      CUSTOM: { code: 'CUSTOM', symbol: '', flag: '🌐', name: 'Custom Currency' }
+    };
+
+    let currentCountry = COUNTRIES.sa;
+    let currentCurrency = CURRENCIES.SAR;
+
+    function formatMoney(amount, isNeg = false) {
+      const sym = currentCurrency.symbol || (currentCurrency.code ? currentCurrency.code + ' ' : '');
+      const num = Math.abs(Math.round(amount));
+      const sign = (amount < 0 || isNeg) ? '-' : '';
+      return `${sign}${sym}${num.toLocaleString()}`;
+    }
+
+    function formatMoneyShort(amount) {
+      const sym = currentCurrency.symbol || (currentCurrency.code ? currentCurrency.code + ' ' : '');
+      const abs = Math.abs(amount);
+      const sign = amount < 0 ? '-' : '';
+      if (abs >= 1000000000) {
+        return `${sign}${sym}${(abs / 1000000000).toFixed(2)}B`;
+      } else if (abs >= 1000000) {
+        return `${sign}${sym}${(abs / 1000000).toFixed(2)}M`;
+      } else if (abs >= 1000) {
+        return `${sign}${sym}${(abs / 1000).toFixed(0)}K`;
+      }
+      return `${sign}${sym}${Math.round(abs)}`;
+    }
+
+    function changeGlobalCurrency(currKey, customCode = null, customSym = null) {
+      if (currKey === 'CUSTOM') {
+        const code = customCode || document.getElementById('q-manual-curr-code')?.value || 'USD';
+        const sym = customSym !== null ? customSym : (document.getElementById('q-manual-curr-sym')?.value || (code + ' '));
+        currentCurrency = { code: code.toUpperCase().trim(), symbol: sym, flag: '🌐', name: `${code} (Custom)` };
+      } else if (CURRENCIES[currKey]) {
+        currentCurrency = CURRENCIES[currKey];
+      }
+
+      // Sync header select
+      const headerSel = document.getElementById('header-currency-select');
+      if (headerSel) {
+        if (CURRENCIES[currKey]) headerSel.value = currKey;
+        else headerSel.value = 'CUSTOM';
+      }
+
+      // Sync modal controls if open
+      const qSel = document.getElementById('q-currency-select');
+      if (qSel) {
+        if (CURRENCIES[currKey]) qSel.value = currKey;
+        else qSel.value = 'CUSTOM';
+      }
+      const qCode = document.getElementById('q-manual-curr-code');
+      const qSym = document.getElementById('q-manual-curr-sym');
+      if (qCode) qCode.value = currentCurrency.code;
+      if (qSym) qSym.value = currentCurrency.symbol;
+
+      const activeBadge = document.getElementById('active-currency-badge');
+      if (activeBadge) activeBadge.innerText = `Active: ${currentCurrency.code} (${currentCurrency.symbol.trim() || currentCurrency.code})`;
+
+      // Update cockpit currency label
+      const currLabel = document.getElementById('metric-currency-label');
+      if (currLabel) currLabel.innerText = currentCurrency.code;
+
+      // Update table header
+      const tableHead = document.getElementById('fin-table-currency-header');
+      if (tableHead) tableHead.innerText = `Line Item (${currentCurrency.code})`;
+
+      // Re-render everything with new currency
+      updateCapexPills();
+      recalculateAndRender();
+      renderUNIDOChapters();
+    }
+
+    function handleQuestionCurrencyChange(currKey) {
+      if (currKey === 'CUSTOM') {
+        const code = document.getElementById('q-manual-curr-code').value.trim() || 'CAD';
+        const sym = document.getElementById('q-manual-curr-sym').value || (code + ' ');
+        changeGlobalCurrency('CUSTOM', code, sym);
+      } else {
+        changeGlobalCurrency(currKey);
+      }
+    }
+
+    function handleManualCurrencyInput() {
+      const code = document.getElementById('q-manual-curr-code').value.trim() || 'USD';
+      const sym = document.getElementById('q-manual-curr-sym').value;
+      const qSel = document.getElementById('q-currency-select');
+      if (qSel) qSel.value = 'CUSTOM';
+      changeGlobalCurrency('CUSTOM', code, sym);
+    }
+
+    function updateCapexPills() {
+      const sym = currentCurrency.symbol || (currentCurrency.code + ' ');
+      const pills = document.querySelectorAll('.capex-pill');
+      const amounts = [500000, 1500000, 2500000, 5000000, 10000000];
+      pills.forEach((p, idx) => {
+        if (amounts[idx]) {
+          p.innerText = amounts[idx] >= 1000000 ? `${sym}${(amounts[idx]/1000000).toFixed(1)}M`.replace('.0M', 'M') : `${sym}${Math.round(amounts[idx]/1000)}K`;
+        }
+      });
+      const disp = document.getElementById('q-capex-display');
+      if (disp) disp.innerText = formatMoney(selectedQuestionCapex);
+    }
+
+    /* =======================================================================
        2. STATE VARIABLES
        ======================================================================= */
     let currentSector = SECTORS[0];
@@ -1128,7 +1276,7 @@ Content-Type: application/json
         document.getElementById('active-study-name').innerText = currentSector.name;
         document.getElementById('active-study-icon').innerText = currentSector.icon;
         document.getElementById('active-study-jurisdiction').innerText = currentSector.jurisdiction;
-        document.getElementById('active-study-desc').innerText = `Appraised initial CAPEX of $${(currentSector.capex/1000000).toFixed(2)}M with 60% debt and 40% equity. Minimum DSCR is ${currentSector.dscr.toFixed(2)}x.`;
+        document.getElementById('active-study-desc').innerText = `Appraised initial CAPEX of ${formatMoneyShort(currentSector.capex)} with 60% debt and 40% equity. Minimum DSCR is ${currentSector.dscr.toFixed(2)}x.`;
       }
 
       recalculateAndRender();
@@ -1160,14 +1308,41 @@ Content-Type: application/json
         if (suggestedName.length > 50) suggestedName = suggestedName.substring(0, 50);
         document.getElementById('q-project-name').value = suggestedName || promptText;
 
-        // Auto-detect jurisdiction
-        if (/uae|dubai|abu dhabi|sharjah|ded/i.test(promptText)) {
+        // Auto-detect country & currency from prompt keywords
+        if (/saudi|riyadh|jeddah|dammam|khobar|sidf|kafalah|ksa/i.test(promptText)) {
+          selectJurisdiction('sa');
+        } else if (/uae|dubai|abu dhabi|sharjah|adq|ded/i.test(promptText)) {
           selectJurisdiction('uae');
-        } else if (/global|international|us|usa|europe|uk/i.test(promptText)) {
+        } else if (/qatar|doha|qdb/i.test(promptText)) {
+          selectJurisdiction('qa');
+        } else if (/kuwait|kwd|kdipa/i.test(promptText)) {
+          selectJurisdiction('kw');
+        } else if (/bahrain|manama|edb/i.test(promptText)) {
+          selectJurisdiction('bh');
+        } else if (/oman|muscat|odb/i.test(promptText)) {
+          selectJurisdiction('om');
+        } else if (/egypt|cairo|alexandria|gafi/i.test(promptText)) {
+          selectJurisdiction('eg');
+        } else if (/london|uk|britain|england|pound/i.test(promptText)) {
+          selectJurisdiction('uk');
+        } else if (/europe|germany|france|euro/i.test(promptText)) {
+          selectJurisdiction('eu');
+        } else if (/us|usa|america|dollar|new york|california/i.test(promptText)) {
+          selectJurisdiction('us');
+        } else if (/global|international/i.test(promptText)) {
           selectJurisdiction('global');
         } else {
           selectJurisdiction('sa');
         }
+
+        // Auto-detect explicit currency mentions in prompt (e.g., "in SAR", "in AED", "in EUR", "in USD", "EGP")
+        if (/\b(sar|riyal|ريال)\b/i.test(promptText)) changeGlobalCurrency('SAR');
+        else if (/\b(aed|dirham|درهم)\b/i.test(promptText)) changeGlobalCurrency('AED');
+        else if (/\b(usd|dollar|\$)\b/i.test(promptText)) changeGlobalCurrency('USD');
+        else if (/\b(eur|euro|€)\b/i.test(promptText)) changeGlobalCurrency('EUR');
+        else if (/\b(gbp|pound|£)\b/i.test(promptText)) changeGlobalCurrency('GBP');
+        else if (/\b(kwd|dinar)\b/i.test(promptText)) changeGlobalCurrency('KWD');
+        else if (/\b(egp|جنيه)\b/i.test(promptText)) changeGlobalCurrency('EGP');
 
         // Auto-detect CAPEX if mentioned in prompt (e.g. $3M, 5M, 500k)
         const capexMatchM = promptText.match(/\$?(\d+(?:\.\d+)?)\s*(?:m|million)/i);
@@ -1207,16 +1382,30 @@ Content-Type: application/json
 
     function selectJurisdiction(j) {
       selectedQuestionJurisdiction = j;
-      ['sa', 'uae', 'global'].forEach(id => {
+      currentCountry = COUNTRIES[j] || COUNTRIES.sa;
+
+      // Update country buttons active state
+      Object.keys(COUNTRIES).forEach(id => {
         const btn = document.getElementById(`j-btn-${id}`);
         if (btn) {
           if (id === j) {
-            btn.className = 'p-3 rounded-xl border text-left transition-all bg-brand-gold/20 border-brand-gold text-brand-gold font-bold';
+            btn.className = 'p-2.5 rounded-xl border text-left transition-all bg-brand-gold/20 border-brand-gold text-brand-gold font-bold scale-[1.02] shadow-sm';
           } else {
-            btn.className = 'p-3 rounded-xl border text-left transition-all bg-surface-850 hover:bg-surface-800 border-white/10 text-slate-300';
+            btn.className = 'p-2.5 rounded-xl border text-left transition-all bg-surface-850 hover:bg-surface-800 border-white/10 text-slate-300';
           }
         }
       });
+
+      // Update badge
+      const badge = document.getElementById('q-country-badge');
+      if (badge) badge.innerText = `Auto-sets Currency: ${currentCountry.currency}`;
+
+      // Automatically switch currency to country's official currency!
+      changeGlobalCurrency(currentCountry.currency);
+
+      // Auto-set framework (GCC vs UNIDO)
+      currentFramework = currentCountry.framework;
+      switchFramework(currentFramework);
     }
 
     function setQuestionCapex(val) {
@@ -1344,7 +1533,7 @@ Content-Type: application/json
           document.getElementById('active-study-name').innerText = currentSector.name;
           document.getElementById('active-study-icon').innerText = currentSector.icon;
           document.getElementById('active-study-jurisdiction').innerText = currentSector.jurisdiction;
-          document.getElementById('active-study-desc').innerText = `Appraised initial CAPEX of $${(currentSector.capex/1000000).toFixed(2)}M with ${currentSector.debtPercent}% debt and ${currentSector.equityPercent}% equity. Minimum DSCR is ${currentSector.dscr.toFixed(2)}x.`;
+          document.getElementById('active-study-desc').innerText = `Appraised initial CAPEX of ${formatMoneyShort(currentSector.capex)} with ${currentSector.debtPercent}% debt and ${currentSector.equityPercent}% equity. Minimum DSCR is ${currentSector.dscr.toFixed(2)}x.`;
         }
 
         // Recalculate statements, cockpit metrics and visualizer
@@ -1375,8 +1564,7 @@ Content-Type: application/json
       // Dynamic metric adjustments
       const adjustedDSCR = (currentSector.dscr * (0.6 + 0.4 * shockFactor)).toFixed(2);
       const adjustedIRR = ((currentSector.irr * shockFactor) * 100).toFixed(1);
-      const baseNPV = currentSector.capex * 0.74;
-      const adjustedNPV = ((baseNPV * shockFactor) / 1000000).toFixed(2);
+      const baseNPV = currentSector.capex * 0.74 * shockFactor;
       const adjustedPayback = (currentSector.payback / (shockFactor > 0.5 ? shockFactor : 0.5)).toFixed(1);
 
       // Render Top Metrics
@@ -1386,7 +1574,7 @@ Content-Type: application/json
 
       dscrElem.innerText = `${adjustedDSCR}x`;
       document.getElementById('metric-irr').innerText = `${adjustedIRR}%`;
-      document.getElementById('metric-npv').innerText = `$${adjustedNPV}M`;
+      document.getElementById('metric-npv').innerText = formatMoneyShort(baseNPV);
       document.getElementById('metric-payback').innerText = `${adjustedPayback} Yrs`;
 
       // Update In-Room Metrics
@@ -1418,6 +1606,16 @@ Content-Type: application/json
       }
 
       renderFinancialStatements(shockFactor, taxRate);
+      
+      // Update IVS valuation metrics
+      const dcfEl = document.getElementById('val-dcf');
+      const ebitdaEl = document.getElementById('val-ebitda');
+      const capEl = document.getElementById('val-cap');
+      const navEl = document.getElementById('val-nav');
+      if (dcfEl) dcfEl.innerText = formatMoneyShort(currentSector.capex * 5.12 * shockFactor);
+      if (ebitdaEl) ebitdaEl.innerText = formatMoneyShort(currentSector.capex * 5.36 * shockFactor);
+      if (capEl) capEl.innerText = formatMoneyShort(currentSector.capex * 4.76 * shockFactor);
+      if (navEl) navEl.innerText = formatMoneyShort(currentSector.capex * 3.28 * shockFactor);
       drawFinancialChart(shockFactor);
     }
 
@@ -1461,7 +1659,7 @@ Content-Type: application/json
         c.fillStyle = '#64748b';
         c.font = '10px monospace';
         c.textAlign = 'right';
-        c.fillText(`$${labelVal}M`, paddingLeft - 8, y + 3);
+        c.fillText(`${currentCurrency.symbol || (currentCurrency.code + ' ')}${labelVal}M`, paddingLeft - 8, y + 3);
       }
 
       const getX = (idx) => paddingLeft + (graphW / 4) * idx;
@@ -1558,7 +1756,7 @@ Content-Type: application/json
             <td class="px-4 py-2.5">${r.name}</td>
             ${growth.map(g => {
               const val = Math.round(baseRev * g * r.mult);
-              const formatted = (r.isNeg ? '-' : '') + '$' + Math.abs(val).toLocaleString();
+              const formatted = formatMoney(val, r.isNeg);
               return `<td class="px-4 py-2.5 text-right">${formatted}</td>`;
             }).join('')}
           </tr>
@@ -1582,7 +1780,7 @@ Content-Type: application/json
           icon: '📑',
           desc: `Project vision for ${name}, institutional sponsor profiling, and alignment with national industrial policy (${jur}).`,
           sections: [
-            { h: '1.1 Project Identity & Commercial Purpose', body: `Establishment of <strong>${name}</strong> as an institutional-grade enterprise in ${jur}. The project addresses unmet regional demand with a certified initial investment of <strong>$${capexM}M USD</strong>.` },
+            { h: '1.1 Project Identity & Commercial Purpose', body: `Establishment of <strong>${name}</strong> as an institutional-grade enterprise in ${jur}. The project addresses unmet regional demand with a certified initial investment of <strong>$${formatMoneyShort(currentSector.capex)}</strong>.` },
             { h: '1.2 Total Capitalization & Sponsor Equity', body: `The project is structured under an institutional <strong>${debtP}% Debt / ${eqP}% Equity</strong> capital matrix. Modeled 5-year equity IRR exceeds hurdle rates at <strong>${(currentSector.irr * 100).toFixed(1)}%</strong>.` },
             { h: '1.3 Regulatory & Policy Alignment', body: `Fully compliant with UNIDO Volumes I–III criteria, national environmental standards, and development fund underwriting criteria.` }
           ]
@@ -1592,7 +1790,7 @@ Content-Type: application/json
           icon: '📊',
           desc: `TAM, SAM, and SOM addressable market sizing, pricing power, and 5-year demand forecasts.`,
           sections: [
-            { h: '2.1 Addressable Market Sizing', body: `Total Addressable Market (TAM) for ${name} within the regional trade basin is estimated at $840M, with a Serviceable Obtainable Market (SOM) targeted at $${(capexM * 2.8).toFixed(1)}M by Year 3.` },
+            { h: '2.1 Addressable Market Sizing', body: `Total Addressable Market (TAM) for ${name} within the regional trade basin is estimated at $840M, with a Serviceable Obtainable Market (SOM) targeted at ${formatMoneyShort(currentSector.capex * 2.8)} by Year 3.` },
             { h: '2.2 Pricing Elasticity & Competitive Advantage', body: `Tiered pricing strategy benchmarking prime regional competitors, securing an average operating gross margin of <strong>${(currentSector.margin * 100).toFixed(0)}%</strong>.` },
             { h: '2.3 5-Year Volume Projection', body: `Commercial volume begins at 65% utilization during Year 1, ramping up to 88% by Year 3 and 94% at steady state in Year 5.` }
           ]
@@ -1621,9 +1819,9 @@ Content-Type: application/json
           icon: '⚙️',
           desc: `Detailed plant capacity sizing, Tier-1 machinery procurement, civil works, and CAPEX schedule.`,
           sections: [
-            { h: '5.1 Equipment & Machinery Schedule', body: `Core production and technological assets budgeted at <strong>$${(capexM * 0.58).toFixed(2)}M</strong>, supplied by certified Tier-1 OEM manufacturers.` },
-            { h: '5.2 Civil & Architectural Works', body: `Facility construction, specialized floor loadings, clean zones, and administrative quarters budgeted at <strong>$${(capexM * 0.28).toFixed(2)}M</strong>.` },
-            { h: '5.3 Pre-Operating & Trial Run Budget', body: `Engineering commissioning, staff trial runs, and certification expenses budgeted at <strong>$${(capexM * 0.14).toFixed(2)}M</strong>.` }
+            { h: '5.1 Equipment & Machinery Schedule', body: `Core production and technological assets budgeted at <strong>${formatMoneyShort(currentSector.capex * 0.58)}</strong>, supplied by certified Tier-1 OEM manufacturers.` },
+            { h: '5.2 Civil & Architectural Works', body: `Facility construction, specialized floor loadings, clean zones, and administrative quarters budgeted at <strong>${formatMoneyShort(currentSector.capex * 0.28)}</strong>.` },
+            { h: '5.3 Pre-Operating & Trial Run Budget', body: `Engineering commissioning, staff trial runs, and certification expenses budgeted at <strong>${formatMoneyShort(currentSector.capex * 0.14)}</strong>.` }
           ]
         },
         '06': {
@@ -1651,7 +1849,7 @@ Content-Type: application/json
           desc: `5-Year audited income statements, cash flows, debt amortizations, and DSCR/LLCR covenants.`,
           sections: [
             { h: '8.1 Debt Service Coverage Ratio (DSCR)', body: `Minimum modeled DSCR is <strong>${currentSector.dscr.toFixed(2)}x</strong>, maintaining a secure safety margin above the 1.35x bank committee covenant floor.` },
-            { h: '8.2 Equity Yield & Hurdle Metrics', body: `Project Net Present Value (NPV) stands at <strong>$${((currentSector.capex * 0.74) / 1000000).toFixed(2)}M</strong> at a 10.5% WACC, with an equity IRR of <strong>${(currentSector.irr * 100).toFixed(1)}%</strong>.` },
+            { h: '8.2 Equity Yield & Hurdle Metrics', body: `Project Net Present Value (NPV) stands at <strong>${formatMoneyShort(currentSector.capex * 0.74)}</strong> at a 10.5% WACC, with an equity IRR of <strong>${(currentSector.irr * 100).toFixed(1)}%</strong>.` },
             { h: '8.3 Payback Velocity', body: `Full capital payback achieved within <strong>${currentSector.payback} Years</strong> of commercial operation.` }
           ]
         },
@@ -1661,7 +1859,7 @@ Content-Type: application/json
           desc: `Local content score (Iktva), GDP multiplier, job creation, and foreign exchange displacement.`,
           sections: [
             { h: '9.1 Local Content Contribution', body: `Estimated localized supply chain and service score exceeds 52%, qualifying for priority sovereign development fund incentives.` },
-            { h: '9.2 Foreign Currency Displacement', body: `Displaces import reliance through domestic production, retaining an estimated $${(capexM * 1.6).toFixed(1)}M annually within the domestic economy.` }
+            { h: '9.2 Foreign Currency Displacement', body: `Displaces import reliance through domestic production, retaining an estimated ${formatMoneyShort(currentSector.capex * 1.6)} annually within the domestic economy.` }
           ]
         },
         '10': {
@@ -2175,8 +2373,10 @@ Content-Type: application/json
 
       let csv = `OmniFeas Elite — Bank-Ready Financial Model Export\n`;
       csv += `Project Name,${currentSector.name}\n`;
+      csv += `Country,${currentCountry.name} (${currentCountry.flag})\n`;
+      csv += `Currency,${currentCurrency.code} (${currentCurrency.symbol})\n`;
       csv += `Framework,${currentFramework === 'gcc' ? 'GCC SIDF & Zakat (2.5%)' : 'Global UNIDO & Corporate Tax (20%)'}\n`;
-      csv += `Total CAPEX (USD),${currentSector.capex}\n`;
+      csv += `Total CAPEX (${currentCurrency.code}),${currentSector.capex}\n`;
       csv += `Simulated Revenue Shock,${currentShock}%\n`;
       csv += `Minimum DSCR,${document.getElementById('metric-dscr').innerText}\n`;
       csv += `Equity IRR,${document.getElementById('metric-irr').innerText}\n`;
@@ -2312,25 +2512,123 @@ Content-Type: application/json
           />
         </div>
 
-        <!-- Question 2: Target Jurisdiction & Framework -->
-        <div class="space-y-2">
-          <label class="block text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
-            <span class="w-5 h-5 rounded-full bg-brand-gold/20 text-brand-gold text-[11px] flex items-center justify-center font-mono">2</span>
-            Location & Regulatory Jurisdiction
-          </label>
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5" id="q-jurisdiction-options">
-            <button type="button" onclick="selectJurisdiction('sa')" id="j-btn-sa" class="p-3 rounded-xl border text-left transition-all bg-brand-gold/20 border-brand-gold text-brand-gold font-bold">
-              <div class="text-sm">🇸🇦 Saudi Arabia</div>
-              <div class="text-[10px] font-normal text-slate-400 mt-1">SIDF / Kafalah / Vision 2030 (2.5% Zakat)</div>
+        <!-- Question 2: Target Country & Jurisdiction -->
+        <div class="space-y-2.5">
+          <div class="flex items-center justify-between">
+            <label class="block text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
+              <span class="w-5 h-5 rounded-full bg-brand-gold/20 text-brand-gold text-[11px] flex items-center justify-center font-mono">2</span>
+              Target Country & Regulatory Jurisdiction
+            </label>
+            <span id="q-country-badge" class="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-brand-gold/15 text-brand-gold border border-brand-gold/30">
+              Auto-sets Currency: SAR (﷼)
+            </span>
+          </div>
+
+          <!-- Fast Country Selection Grid -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-2" id="q-jurisdiction-options">
+            <button type="button" onclick="selectJurisdiction('sa')" id="j-btn-sa" class="p-2.5 rounded-xl border text-left transition-all bg-brand-gold/20 border-brand-gold text-brand-gold font-bold">
+              <div class="text-xs flex items-center gap-1"><span>🇸🇦</span> <span>Saudi Arabia</span></div>
+              <div class="text-[9px] font-mono text-slate-400 mt-0.5">Currency: SAR</div>
             </button>
-            <button type="button" onclick="selectJurisdiction('uae')" id="j-btn-uae" class="p-3 rounded-xl border text-left transition-all bg-surface-850 hover:bg-surface-800 border-white/10 text-slate-300">
-              <div class="text-sm">🇦🇪 UAE / GCC</div>
-              <div class="text-[10px] font-normal text-slate-400 mt-1">ADQ / DED Freezone (9% Corp Tax)</div>
+            <button type="button" onclick="selectJurisdiction('uae')" id="j-btn-uae" class="p-2.5 rounded-xl border text-left transition-all bg-surface-850 hover:bg-surface-800 border-white/10 text-slate-300">
+              <div class="text-xs flex items-center gap-1"><span>🇦🇪</span> <span>UAE / Dubai</span></div>
+              <div class="text-[9px] font-mono text-slate-400 mt-0.5">Currency: AED</div>
             </button>
-            <button type="button" onclick="selectJurisdiction('global')" id="j-btn-global" class="p-3 rounded-xl border text-left transition-all bg-surface-850 hover:bg-surface-800 border-white/10 text-slate-300">
-              <div class="text-sm">🌐 Global / International</div>
-              <div class="text-[10px] font-normal text-slate-400 mt-1">UNIDO Industrial Standard (20% Tax)</div>
+            <button type="button" onclick="selectJurisdiction('qa')" id="j-btn-qa" class="p-2.5 rounded-xl border text-left transition-all bg-surface-850 hover:bg-surface-800 border-white/10 text-slate-300">
+              <div class="text-xs flex items-center gap-1"><span>🇶🇦</span> <span>Qatar</span></div>
+              <div class="text-[9px] font-mono text-slate-400 mt-0.5">Currency: QAR</div>
             </button>
+            <button type="button" onclick="selectJurisdiction('kw')" id="j-btn-kw" class="p-2.5 rounded-xl border text-left transition-all bg-surface-850 hover:bg-surface-800 border-white/10 text-slate-300">
+              <div class="text-xs flex items-center gap-1"><span>🇰🇼</span> <span>Kuwait</span></div>
+              <div class="text-[9px] font-mono text-slate-400 mt-0.5">Currency: KWD</div>
+            </button>
+            <button type="button" onclick="selectJurisdiction('bh')" id="j-btn-bh" class="p-2.5 rounded-xl border text-left transition-all bg-surface-850 hover:bg-surface-800 border-white/10 text-slate-300">
+              <div class="text-xs flex items-center gap-1"><span>🇧🇭</span> <span>Bahrain</span></div>
+              <div class="text-[9px] font-mono text-slate-400 mt-0.5">Currency: BHD</div>
+            </button>
+            <button type="button" onclick="selectJurisdiction('om')" id="j-btn-om" class="p-2.5 rounded-xl border text-left transition-all bg-surface-850 hover:bg-surface-800 border-white/10 text-slate-300">
+              <div class="text-xs flex items-center gap-1"><span>🇴🇲</span> <span>Oman</span></div>
+              <div class="text-[9px] font-mono text-slate-400 mt-0.5">Currency: OMR</div>
+            </button>
+            <button type="button" onclick="selectJurisdiction('eg')" id="j-btn-eg" class="p-2.5 rounded-xl border text-left transition-all bg-surface-850 hover:bg-surface-800 border-white/10 text-slate-300">
+              <div class="text-xs flex items-center gap-1"><span>🇪🇬</span> <span>Egypt</span></div>
+              <div class="text-[9px] font-mono text-slate-400 mt-0.5">Currency: EGP</div>
+            </button>
+            <button type="button" onclick="selectJurisdiction('us')" id="j-btn-us" class="p-2.5 rounded-xl border text-left transition-all bg-surface-850 hover:bg-surface-800 border-white/10 text-slate-300">
+              <div class="text-xs flex items-center gap-1"><span>🇺🇸</span> <span>United States</span></div>
+              <div class="text-[9px] font-mono text-slate-400 mt-0.5">Currency: USD</div>
+            </button>
+            <button type="button" onclick="selectJurisdiction('eu')" id="j-btn-eu" class="p-2.5 rounded-xl border text-left transition-all bg-surface-850 hover:bg-surface-800 border-white/10 text-slate-300">
+              <div class="text-xs flex items-center gap-1"><span>🇪🇺</span> <span>Europe (EU)</span></div>
+              <div class="text-[9px] font-mono text-slate-400 mt-0.5">Currency: EUR</div>
+            </button>
+            <button type="button" onclick="selectJurisdiction('uk')" id="j-btn-uk" class="p-2.5 rounded-xl border text-left transition-all bg-surface-850 hover:bg-surface-800 border-white/10 text-slate-300">
+              <div class="text-xs flex items-center gap-1"><span>🇬🇧</span> <span>United Kingdom</span></div>
+              <div class="text-[9px] font-mono text-slate-400 mt-0.5">Currency: GBP</div>
+            </button>
+            <button type="button" onclick="selectJurisdiction('global')" id="j-btn-global" class="p-2.5 rounded-xl border text-left transition-all bg-surface-850 hover:bg-surface-800 border-white/10 text-slate-300 col-span-2">
+              <div class="text-xs flex items-center gap-1"><span>🌐</span> <span>Global / International</span></div>
+              <div class="text-[9px] font-mono text-slate-400 mt-0.5">UNIDO IFRS Standard (USD)</div>
+            </button>
+          </div>
+        </div>
+
+        <!-- Question 2B: Currency & Manual Input Override -->
+        <div class="concentric-inner rounded-2xl p-4 border-brand-cyan/20 space-y-3 bg-surface-950/70">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+              <div class="text-xs font-bold text-brand-cyan uppercase tracking-wider flex items-center gap-1.5">
+                <span>💱</span>
+                <span>Currency & Monetary Denomination</span>
+              </div>
+              <p class="text-[11px] text-slate-400">Auto-synced to country, or choose/type any manual currency</p>
+            </div>
+            <span id="active-currency-badge" class="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-brand-cyan/15 text-brand-cyan border border-brand-cyan/30">
+              Active: SAR (﷼)
+            </span>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+            <!-- Preset Dropdown -->
+            <div class="space-y-1">
+              <label class="text-[11px] text-slate-400 font-semibold">Standard Currencies:</label>
+              <select id="q-currency-select" onchange="handleQuestionCurrencyChange(this.value)" class="w-full bg-surface-900 border border-white/10 rounded-xl px-3 py-2 text-white text-xs font-bold focus:outline-none focus:border-brand-cyan">
+                <option value="SAR">🇸🇦 SAR — Saudi Riyal (﷼)</option>
+                <option value="AED">🇦🇪 AED — UAE Dirham (د.إ)</option>
+                <option value="USD">🇺🇸 USD — US Dollar ($)</option>
+                <option value="EUR">🇪🇺 EUR — Euro (€)</option>
+                <option value="GBP">🇬🇧 GBP — British Pound (£)</option>
+                <option value="KWD">🇰🇼 KWD — Kuwaiti Dinar (د.ك)</option>
+                <option value="QAR">🇶🇦 QAR — Qatari Riyal (ر.ق)</option>
+                <option value="BHD">🇧🇭 BHD — Bahraini Dinar (.د.ب)</option>
+                <option value="OMR">🇴🇲 OMR — Omani Rial (ر.ع)</option>
+                <option value="EGP">🇪🇬 EGP — Egyptian Pound (ج.م)</option>
+                <option value="CUSTOM">✏️ Custom Manual Input...</option>
+              </select>
+            </div>
+
+            <!-- Manual Currency Inputs -->
+            <div class="space-y-1">
+              <label class="text-[11px] text-slate-400 font-semibold">Manuel Currency Input (Code & Symbol):</label>
+              <div class="flex items-center gap-2">
+                <input 
+                  id="q-manual-curr-code" 
+                  type="text" 
+                  placeholder="Code (e.g. CAD)" 
+                  value="SAR"
+                  oninput="handleManualCurrencyInput()"
+                  class="w-1/2 bg-surface-900 border border-white/10 rounded-xl px-3 py-2 text-white text-xs font-mono font-bold focus:outline-none focus:border-brand-cyan uppercase"
+                />
+                <input 
+                  id="q-manual-curr-sym" 
+                  type="text" 
+                  placeholder="Symbol (e.g. $)" 
+                  value="SAR "
+                  oninput="handleManualCurrencyInput()"
+                  class="w-1/2 bg-surface-900 border border-white/10 rounded-xl px-3 py-2 text-white text-xs font-bold focus:outline-none focus:border-brand-cyan"
+                />
+              </div>
+            </div>
           </div>
         </div>
 
