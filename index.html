@@ -217,15 +217,15 @@
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/10 pb-5">
           <div>
             <div class="flex items-center gap-2.5 mb-1.5">
-              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-brand-gold/15 text-brand-gold border border-brand-gold/30">
+              <span id="hero-step-badge" class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-brand-gold/15 text-brand-gold border border-brand-gold/30">
                 STEP 1: GENERATIVE FEASIBILITY ENGINE
               </span>
               <span class="text-xs text-slate-400">UNIDO Vol. I–III Compliant</span>
             </div>
-            <h1 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+            <h1 id="hero-title" class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
               Describe Any Business Idea or Choose an Industrial Sector
             </h1>
-            <p class="text-sm text-slate-400 max-w-3xl mt-1">
+            <p id="hero-desc" class="text-sm text-slate-400 max-w-3xl mt-1">
               Enter your project parameters or select a sector. The deterministic math engine will calculate full 5-year financials, technical CAPEX, and loan covenants in under 300ms.
             </p>
           </div>
@@ -267,7 +267,7 @@
             <!-- Generate Button -->
             <button onclick="executePromptGeneration()" class="w-full md:w-auto px-6 py-3 rounded-xl bg-gradient-to-r from-brand-gold via-amber-500 to-amber-600 text-black font-extrabold text-xs uppercase tracking-wider shadow-lg shadow-amber-500/25 hover:shadow-amber-500/40 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 flex-shrink-0">
               <span id="gen-spinner" class="hidden animate-spin h-3.5 w-3.5 border-2 border-black border-t-transparent rounded-full"></span>
-              <span>⚡ Generate UNIDO Study</span>
+              <span id="prompt-gen-btn-text">⚡ Generate UNIDO Study</span>
             </button>
           </div>
         </div>
@@ -275,7 +275,7 @@
         <!-- 16 Universal Industrial Sectors Grid -->
         <div>
           <div class="flex items-center justify-between mb-3">
-            <span class="text-xs font-bold uppercase tracking-wider text-slate-400">
+            <span id="sectors-title-text" class="text-xs font-bold uppercase tracking-wider text-slate-400">
               Universal Sector Blueprints (Click to Load)
             </span>
             <span class="text-[11px] text-slate-500 font-mono">16 of 16 Calibrated</span>
@@ -301,9 +301,9 @@
         <div>
           <div class="flex items-center gap-2">
             <span class="text-sm font-extrabold text-white">Dr. Sarah Sterling</span>
-            <span class="text-[10px] px-2 py-0.5 rounded-full bg-brand-emerald/10 text-brand-emerald border border-brand-emerald/30 font-bold">READY TO REVIEW</span>
+            <span id="sarah-ready-badge" class="text-[10px] px-2 py-0.5 rounded-full bg-brand-emerald/10 text-brand-emerald border border-brand-emerald/30 font-bold">READY TO REVIEW</span>
           </div>
-          <p class="text-xs text-slate-400 mt-0.5">
+          <p id="sarah-card-desc" class="text-xs text-slate-400 mt-0.5">
             Senior UNIDO Feasibility Partner & Institutional Credit Underwriter. Conduct an interactive oral interview with real-time lip-sync.
           </p>
         </div>
@@ -314,7 +314,7 @@
           <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
           <span class="relative inline-flex rounded-full h-2 w-2 bg-black"></span>
         </span>
-        <span>🎙️ Open Live Credit Committee Room</span>
+        <span id="sarah-open-room-btn">🎙️ Open Live Credit Committee Room</span>
       </button>
     </div>
 
@@ -358,7 +358,7 @@
       <!-- Metric 1: Minimum DSCR -->
       <div class="concentric-card rounded-2xl p-5 relative overflow-hidden">
         <div class="flex items-center justify-between text-xs text-slate-400 mb-2">
-          <span class="font-bold tracking-wider uppercase">Minimum DSCR</span>
+          <span id="cockpit-dscr-title" class="font-bold tracking-wider uppercase">Minimum DSCR</span>
           <span id="dscr-badge" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-brand-emerald/15 text-brand-emerald border border-brand-emerald/30">PASS (&ge; 1.35x)</span>
         </div>
         <div class="flex items-baseline gap-2">
@@ -374,7 +374,7 @@
       <!-- Metric 2: Net Present Value (NPV) -->
       <div class="concentric-card rounded-2xl p-5 relative overflow-hidden">
         <div class="flex items-center justify-between text-xs text-slate-400 mb-2">
-          <span class="font-bold tracking-wider uppercase">Project NPV (10.5% WACC)</span>
+          <span id="cockpit-npv-title" class="font-bold tracking-wider uppercase">Project NPV (10.5% WACC)</span>
           <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-brand-cyan/15 text-brand-cyan border border-brand-cyan/30">UNIDO Vol. III</span>
         </div>
         <div class="flex items-baseline gap-2">
@@ -387,7 +387,7 @@
       <!-- Metric 3: Internal Rate of Return (IRR) -->
       <div class="concentric-card rounded-2xl p-5 relative overflow-hidden">
         <div class="flex items-center justify-between text-xs text-slate-400 mb-2">
-          <span class="font-bold tracking-wider uppercase">Equity IRR</span>
+          <span id="cockpit-irr-title" class="font-bold tracking-wider uppercase">Equity IRR</span>
           <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-brand-gold/15 text-brand-gold border border-brand-gold/30">Hurdle: 18%</span>
         </div>
         <div class="flex items-baseline gap-2">
@@ -400,7 +400,7 @@
       <!-- Metric 4: Payback Period & Breakeven -->
       <div class="concentric-card rounded-2xl p-5 relative overflow-hidden">
         <div class="flex items-center justify-between text-xs text-slate-400 mb-2">
-          <span class="font-bold tracking-wider uppercase">Payback & Breakeven</span>
+          <span id="cockpit-payback-title" class="font-bold tracking-wider uppercase">Payback & Breakeven</span>
           <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-500/15 text-purple-400 border border-purple-500/30">Bank Covenant</span>
         </div>
         <div class="flex items-baseline gap-2">
@@ -476,11 +476,11 @@
         <div class="flex items-center gap-2">
           <button onclick="downloadFinancialModelCSV()" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-surface-850 hover:bg-surface-800 text-slate-300 hover:text-white border border-white/10 flex items-center gap-1.5 flex-shrink-0">
             <svg class="w-3.5 h-3.5 text-brand-emerald" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-            <span>Download Model (.CSV)</span>
+            <span id="btn-csv-text">Download Model (.CSV)</span>
           </button>
           <button onclick="exportSummaryPDF()" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-surface-850 hover:bg-surface-800 text-slate-300 hover:text-white border border-white/10 flex items-center gap-1.5 flex-shrink-0">
             <svg class="w-3.5 h-3.5 text-brand-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-            <span>Export UNIDO Pack</span>
+            <span id="btn-pdf-text">Export UNIDO Pack</span>
           </button>
         </div>
       </div>
@@ -1296,57 +1296,69 @@ Content-Type: application/json
     let selectedQuestionCapex = 2500000;
     let selectedQuestionDebt = 60;
 
-    function openQuestionsModal(isEdit = false) {
+        function openQuestionsModal(isEdit = false) {
       const promptInput = document.getElementById('prompt-input');
       const promptText = promptInput.value.trim() || 'Custom Business Enterprise';
       
       document.getElementById('q-parsed-prompt').innerText = promptText;
-      
+
+      // Auto-detect language (Arabic)
+      if (/[\u0600-\u06FF]/.test(promptText)) {
+        setLanguage('ar');
+      }
+
       if (!isEdit) {
-        // Extract project name suggestion
-        let suggestedName = promptText.split(',')[0].replace(/establish|launch|create|build|open|start/gi, '').trim();
+        let suggestedName = promptText.split(',')[0].replace(/establish|launch|create|build|open|start|إنشاء|تأسيس|إقامة|مشروع/gi, '').trim();
         if (suggestedName.length > 50) suggestedName = suggestedName.substring(0, 50);
         document.getElementById('q-project-name').value = suggestedName || promptText;
 
-        // Auto-detect country & currency from prompt keywords
-        if (/saudi|riyadh|jeddah|dammam|khobar|sidf|kafalah|ksa/i.test(promptText)) {
-          selectJurisdiction('sa');
-        } else if (/uae|dubai|abu dhabi|sharjah|adq|ded/i.test(promptText)) {
+        // Auto-detect country & currency (Dubai/UAE priority)
+        if (/uae|dubai|abu dhabi|sharjah|adq|ded|دبي|الامارات|الإمارات|أبوظبي|ابوظبي|الشارقة/i.test(promptText)) {
           selectJurisdiction('uae');
-        } else if (/qatar|doha|qdb/i.test(promptText)) {
-          selectJurisdiction('qa');
-        } else if (/kuwait|kwd|kdipa/i.test(promptText)) {
-          selectJurisdiction('kw');
-        } else if (/bahrain|manama|edb/i.test(promptText)) {
-          selectJurisdiction('bh');
-        } else if (/oman|muscat|odb/i.test(promptText)) {
-          selectJurisdiction('om');
-        } else if (/egypt|cairo|alexandria|gafi/i.test(promptText)) {
-          selectJurisdiction('eg');
-        } else if (/london|uk|britain|england|pound/i.test(promptText)) {
-          selectJurisdiction('uk');
-        } else if (/europe|germany|france|euro/i.test(promptText)) {
-          selectJurisdiction('eu');
-        } else if (/us|usa|america|dollar|new york|california/i.test(promptText)) {
-          selectJurisdiction('us');
-        } else if (/global|international/i.test(promptText)) {
-          selectJurisdiction('global');
-        } else {
+          changeGlobalCurrency('AED');
+        } else if (/saudi|riyadh|jeddah|dammam|khobar|sidf|kafalah|ksa|سعودي|السعودية|الرياض|جدة|الدمام|الخبر/i.test(promptText)) {
           selectJurisdiction('sa');
+          changeGlobalCurrency('SAR');
+        } else if (/qatar|doha|قطر|الدوحة/i.test(promptText)) {
+          selectJurisdiction('qa');
+          changeGlobalCurrency('QAR');
+        } else if (/kuwait|الكويت/i.test(promptText)) {
+          selectJurisdiction('kw');
+          changeGlobalCurrency('KWD');
+        } else if (/bahrain|البحرين/i.test(promptText)) {
+          selectJurisdiction('bh');
+          changeGlobalCurrency('BHD');
+        } else if (/oman|عمان|مسقط/i.test(promptText)) {
+          selectJurisdiction('om');
+          changeGlobalCurrency('OMR');
+        } else if (/egypt|مصر|القاهرة/i.test(promptText)) {
+          selectJurisdiction('eg');
+          changeGlobalCurrency('EGP');
+        } else if (/us|usa|america|dollar|أمريكا/i.test(promptText)) {
+          selectJurisdiction('us');
+          changeGlobalCurrency('USD');
+        } else if (/london|uk|britain|بريطانيا|لندن/i.test(promptText)) {
+          selectJurisdiction('uk');
+          changeGlobalCurrency('GBP');
+        } else if (/europe|euro|أوروبا/i.test(promptText)) {
+          selectJurisdiction('eu');
+          changeGlobalCurrency('EUR');
+        } else {
+          selectJurisdiction(currentCountry ? currentCountry.id : 'uae');
         }
 
-        // Auto-detect explicit currency mentions in prompt (e.g., "in SAR", "in AED", "in EUR", "in USD", "EGP")
-        if (/\b(sar|riyal|ريال)\b/i.test(promptText)) changeGlobalCurrency('SAR');
-        else if (/\b(aed|dirham|درهم)\b/i.test(promptText)) changeGlobalCurrency('AED');
-        else if (/\b(usd|dollar|\$)\b/i.test(promptText)) changeGlobalCurrency('USD');
-        else if (/\b(eur|euro|€)\b/i.test(promptText)) changeGlobalCurrency('EUR');
-        else if (/\b(gbp|pound|£)\b/i.test(promptText)) changeGlobalCurrency('GBP');
-        else if (/\b(kwd|dinar)\b/i.test(promptText)) changeGlobalCurrency('KWD');
-        else if (/\b(egp|جنيه)\b/i.test(promptText)) changeGlobalCurrency('EGP');
+        // Explicit currency mentions
+        if (/\b(aed|dirham|درهم|درهما|دراهم)\b/i.test(promptText)) changeGlobalCurrency('AED');
+        else if (/\b(sar|riyal|ريال|ريالات|رس)\b/i.test(promptText)) changeGlobalCurrency('SAR');
+        else if (/\b(usd|dollar|دولار|\$)\b/i.test(promptText)) changeGlobalCurrency('USD');
+        else if (/\b(eur|euro|يورو|€)\b/i.test(promptText)) changeGlobalCurrency('EUR');
+        else if (/\b(gbp|pound|جنيه إسترليني|£)\b/i.test(promptText)) changeGlobalCurrency('GBP');
+        else if (/\b(kwd|dinar|دينار كويتي)\b/i.test(promptText)) changeGlobalCurrency('KWD');
+        else if (/\b(egp|جنيه مصري)\b/i.test(promptText)) changeGlobalCurrency('EGP');
 
-        // Auto-detect CAPEX if mentioned in prompt (e.g. $3M, 5M, 500k)
-        const capexMatchM = promptText.match(/\$?(\d+(?:\.\d+)?)\s*(?:m|million)/i);
-        const capexMatchK = promptText.match(/\$?(\d+(?:\.\d+)?)\s*(?:k|thousand)/i);
+        // Auto-detect CAPEX if mentioned in prompt (e.g. 2.5M, $3M, 500k)
+        const capexMatchM = promptText.match(/(\d+(?:\.\d+)?)\s*(?:m|million|مليون)/i);
+        const capexMatchK = promptText.match(/(\d+(?:\.\d+)?)\s*(?:k|thousand|ألف|الف)/i);
         if (capexMatchM) {
           const val = Math.round(parseFloat(capexMatchM[1]) * 1000000);
           setQuestionCapex(val);
@@ -1357,23 +1369,27 @@ Content-Type: application/json
 
         // Auto-detect industry margin
         const marginSelect = document.getElementById('q-margin-select');
-        if (/coffee|cafe|restaurant|burger|food|f&b|kitchen|bakery/i.test(promptText)) {
+        if (/coffee|cafe|restaurant|burger|food|f&b|kitchen|bakery|قهوة|كافيه|مطعم|مطبخ/i.test(promptText)) {
           marginSelect.value = "0.42";
-        } else if (/clinic|surgery|hospital|medical|pharma|health/i.test(promptText)) {
+        } else if (/clinic|surgery|hospital|medical|pharma|health|عيادة|مستشفى|طبي|صيدلة/i.test(promptText)) {
           marginSelect.value = "0.38";
-        } else if (/saas|software|app|cloud|ai|fintech|platform/i.test(promptText)) {
+        } else if (/saas|software|app|cloud|ai|fintech|platform|برمجيات|تقنية|سحابي|ذكاء/i.test(promptText)) {
           marginSelect.value = "0.70";
-        } else if (/logistics|cold|warehouse|delivery|fleet/i.test(promptText)) {
+        } else if (/logistics|cold|warehouse|delivery|fleet|لوجست|مستودع|تبريد|شحن/i.test(promptText)) {
           marginSelect.value = "0.28";
-        } else if (/solar|energy|factory|plant|concrete|manufacturing|industrial/i.test(promptText)) {
+        } else if (/solar|energy|factory|plant|concrete|manufacturing|industrial|طاقة|شمسية|مصنع|صناعي/i.test(promptText)) {
           marginSelect.value = "0.34";
         }
       }
 
       document.getElementById('feasibility-questions-modal').classList.remove('hidden');
 
-      // Dr. Sarah Sterling speaks intake guidance
-      speakText("Please confirm these 5 underwriting parameters so I can finalize your UNIDO feasibility model.");
+      // Dr. Sarah Sterling speaks intake guidance in appropriate language
+      if (currentLanguage === 'ar') {
+        speakText("أهلاً بك. يرجى تأكيد معايير دراسة الجدوى لنتمكن من احتساب النموذج المالي وتغطية خدمة الدين بالدرهم الإماراتي.");
+      } else {
+        speakText("Please confirm these 5 underwriting parameters so I can finalize your UNIDO feasibility model.");
+      }
     }
 
     function closeQuestionsModal() {
@@ -1467,33 +1483,57 @@ Content-Type: application/json
       const gracePeriod = parseInt(document.getElementById('q-grace-period').value, 10);
       const margin = parseFloat(document.getElementById('q-margin-select').value);
 
+      // Check if project is for Dubai/UAE
+      const isDubai = /uae|dubai|abu dhabi|sharjah|adq|ded|دبي|الإمارات|الامارات|أبوظبي/i.test(projectName + promptText) || selectedQuestionJurisdiction === 'uae';
+      if (isDubai) {
+        selectedQuestionJurisdiction = 'uae';
+        currentCountry = COUNTRIES.uae;
+        changeGlobalCurrency('AED');
+      }
+
+      // Read selected/manual currency from modal
+      const modalCurrSel = document.getElementById('q-currency-select');
+      const modalManualCode = document.getElementById('q-manual-curr-code')?.value.trim();
+      const modalManualSym = document.getElementById('q-manual-curr-sym')?.value;
+
+      if (modalCurrSel && modalCurrSel.value === 'CUSTOM' && modalManualCode) {
+        changeGlobalCurrency('CUSTOM', modalManualCode, modalManualSym);
+      } else if (!isDubai && modalCurrSel && CURRENCIES[modalCurrSel.value]) {
+        changeGlobalCurrency(modalCurrSel.value);
+      } else if (!isDubai && currentCountry && currentCountry.currency) {
+        changeGlobalCurrency(currentCountry.currency);
+      }
+
       // Determine Icon
       let icon = '⚡';
-      if (/coffee|cafe|barista/i.test(projectName + promptText)) icon = '☕';
-      else if (/burger|food|restaurant|kitchen|dine|culinary/i.test(projectName + promptText)) icon = '🍔';
-      else if (/solar|cleantech|energy|panel|renew/i.test(projectName + promptText)) icon = '☀️';
-      else if (/clinic|surgery|health|hospital|medical|pharma/i.test(projectName + promptText)) icon = '🏥';
-      else if (/saas|software|tech|ai|cloud|digital/i.test(projectName + promptText)) icon = '💻';
-      else if (/cold|logistics|warehous|freight|supply/i.test(projectName + promptText)) icon = '❄️';
-      else if (/farm|agri|greenhouse|hydro/i.test(projectName + promptText)) icon = '🌿';
-      else if (/recycl|waste|pet/i.test(projectName + promptText)) icon = '♻️';
-      else if (/hotel|resort|glamp/i.test(projectName + promptText)) icon = '🏨';
-      else if (/ev|charg/i.test(projectName + promptText)) icon = '⚡';
-      else if (/school|academy|k-12|edu/i.test(projectName + promptText)) icon = '🎓';
-      else if (/fintech|pay|bank/i.test(projectName + promptText)) icon = '💳';
-      else if (/data|gpu|center/i.test(projectName + promptText)) icon = '🤖';
+      if (/coffee|cafe|barista|قهوة|كافيه|محمصة/i.test(projectName + promptText)) icon = '☕';
+      else if (/burger|food|restaurant|kitchen|dine|culinary|مطعم|برجر|مطبخ|أغذية/i.test(projectName + promptText)) icon = '🍔';
+      else if (/solar|cleantech|energy|panel|renew|طاقة|شمسية/i.test(projectName + promptText)) icon = '☀️';
+      else if (/clinic|surgery|health|hospital|medical|pharma|عيادة|مستشفى|صحي|طبي/i.test(projectName + promptText)) icon = '🏥';
+      else if (/saas|software|tech|ai|cloud|digital|برمجيات|تقنية|سحابي/i.test(projectName + promptText)) icon = '💻';
+      else if (/cold|logistics|warehous|freight|supply|لوجست|مستودع|تبريد/i.test(projectName + promptText)) icon = '❄️';
+      else if (/farm|agri|greenhouse|hydro|زراعة|مزرعة/i.test(projectName + promptText)) icon = '🌿';
+      else if (/recycl|waste|pet|تدوير|بلاستيك/i.test(projectName + promptText)) icon = '♻️';
+      else if (/hotel|resort|glamp|فندق|منتجع/i.test(projectName + promptText)) icon = '🏨';
+      else if (/ev|charg|شحن|كهربائي/i.test(projectName + promptText)) icon = '⚡';
+      else if (/school|academy|k-12|edu|مدرسة|أكاديمية|تعليم/i.test(projectName + promptText)) icon = '🎓';
+      else if (/fintech|pay|bank|مدفوعات|مالي/i.test(projectName + promptText)) icon = '💳';
+      else if (/data|gpu|center|بيانات|سيرفر/i.test(projectName + promptText)) icon = '🤖';
 
       // Jurisdiction details
-      let jurisdictionText = '🇸🇦 Saudi Arabia (Vision 2030)';
-      if (selectedQuestionJurisdiction === 'uae') {
-        jurisdictionText = '🇦🇪 UAE / GCC Freezone';
+      let jurisdictionText = currentLanguage === 'ar' ? '🇦🇪 الإمارات / دبي (ضريبة الشركات 9%)' : '🇦🇪 UAE / Dubai (9% Corporate Tax)';
+      if (selectedQuestionJurisdiction === 'sa') {
+        jurisdictionText = currentLanguage === 'ar' ? '🇸🇦 المملكة العربية السعودية (رؤية 2030 / زكاة 2.5%)' : '🇸🇦 Saudi Arabia (Vision 2030 / 2.5% Zakat)';
+        currentFramework = 'gcc';
+      } else if (selectedQuestionJurisdiction === 'uae') {
+        jurisdictionText = currentLanguage === 'ar' ? '🇦🇪 الإمارات / دبي (ضريبة الشركات 9%)' : '🇦🇪 UAE / Dubai (9% Corporate Tax)';
         currentFramework = 'gcc';
       } else if (selectedQuestionJurisdiction === 'global') {
-        jurisdictionText = '🌐 Global UNIDO Standard';
+        jurisdictionText = currentLanguage === 'ar' ? '🌐 المعيار الدولي لليونيدو (ضريبة 20%)' : '🌐 Global UNIDO Standard (20% Tax)';
         currentFramework = 'unido';
-      } else {
-        jurisdictionText = '🇸🇦 Saudi Arabia (Vision 2030)';
-        currentFramework = 'gcc';
+      } else if (currentCountry) {
+        jurisdictionText = `${currentCountry.flag} ${currentCountry.name} (${currentCountry.desc})`;
+        currentFramework = currentCountry.framework;
       }
 
       // Financial Calculation
@@ -1520,7 +1560,10 @@ Content-Type: application/json
         debtPercent: debtPercent,
         equityPercent: 100 - debtPercent,
         gracePeriod: gracePeriod,
-        desc: `UNIDO-compliant investment appraisal for ${projectName} in ${jurisdictionText} with $${(capex/1000000).toFixed(2)}M CAPEX.`
+        currency: currentCurrency,
+        desc: currentLanguage === 'ar' 
+          ? `دراسة جدوى معتمدة لمشروع ${projectName} في ${jurisdictionText} برأس مال قدره ${formatMoneyShort(capex)}.`
+          : `UNIDO-compliant investment appraisal for ${projectName} in ${jurisdictionText} with ${formatMoneyShort(capex)} CAPEX.`
       };
 
       setTimeout(() => {
@@ -1533,7 +1576,9 @@ Content-Type: application/json
           document.getElementById('active-study-name').innerText = currentSector.name;
           document.getElementById('active-study-icon').innerText = currentSector.icon;
           document.getElementById('active-study-jurisdiction').innerText = currentSector.jurisdiction;
-          document.getElementById('active-study-desc').innerText = `Appraised initial CAPEX of ${formatMoneyShort(currentSector.capex)} with ${currentSector.debtPercent}% debt and ${currentSector.equityPercent}% equity. Minimum DSCR is ${currentSector.dscr.toFixed(2)}x.`;
+          document.getElementById('active-study-desc').innerText = currentLanguage === 'ar'
+            ? `التكلفة الاستثمارية المعتمدة ${formatMoneyShort(currentSector.capex)} بتمويل ${currentSector.debtPercent}% قروض و ${currentSector.equityPercent}% حقوق ملكية. تغطية خدمة الدين ${currentSector.dscr.toFixed(2)}x.`
+            : `Appraised initial CAPEX of ${formatMoneyShort(currentSector.capex)} with ${currentSector.debtPercent}% debt and ${currentSector.equityPercent}% equity. Minimum DSCR is ${currentSector.dscr.toFixed(2)}x.`;
         }
 
         // Recalculate statements, cockpit metrics and visualizer
@@ -1554,7 +1599,11 @@ Content-Type: application/json
         banner.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
         // Audible confirmation
-        speakText(`UNIDO feasibility study successfully compiled for ${currentSector.name}. Results are now live on your dashboard.`);
+        if (currentLanguage === 'ar') {
+          speakText(`تم بنجاح احتساب واعتماد دراسة الجدوى لمشروع ${currentSector.name} بالدرهم الإماراتي. جميع القوائم والفصول متاحة الآن.`);
+        } else {
+          speakText(`UNIDO feasibility study successfully compiled for ${currentSector.name}. Results are now live on your dashboard in ${currentCurrency.code}.`);
+        }
       }, 400);
     }
 
@@ -1977,14 +2026,168 @@ Content-Type: application/json
       recalculateAndRender();
     }
 
-    function toggleLanguage() {
-      currentLanguage = currentLanguage === 'en' ? 'ar' : 'en';
-      const label = document.getElementById('lang-label');
-      if (currentLanguage === 'ar') {
-        document.documentElement.setAttribute('dir', 'rtl');
+        /* =======================================================================
+       BILINGUAL LOCALIZATION & TRANSLATION ENGINE (ARABIC & ENGLISH)
+       ======================================================================= */
+    const I18N = {
+      en: {
+        dir: 'ltr',
+        langLabel: 'العربية',
+        heroTag: 'STEP 1: GENERATIVE FEASIBILITY ENGINE',
+        heroTitle: 'Describe Any Business Idea or Choose an Industrial Sector',
+        heroDesc: 'Enter your project parameters or select a sector. The deterministic math engine will calculate full 5-year financials, technical CAPEX, and loan covenants in under 300ms.',
+        promptPlaceholder: 'e.g., Establish a Specialty Coffee Roastery & Cafe in Dubai with 2.5M AED CAPEX and 60% bank debt financing...',
+        generateBtn: '⚡ Generate UNIDO Study',
+        sectorsTitle: 'Universal Sector Blueprints (Click to Load)',
+        sarahBadge: 'READY TO REVIEW',
+        sarahDesc: 'Senior UNIDO Feasibility Partner & Institutional Credit Underwriter. Conduct an interactive oral interview with real-time lip-sync.',
+        sarahBtn: '🎙️ Open Live Credit Committee Room',
+        dscrTitle: 'Minimum DSCR',
+        npvTitle: 'Project NPV (10.5% WACC)',
+        irrTitle: 'Equity IRR',
+        paybackTitle: 'Payback & Breakeven',
+        tabUnido: 'UNIDO 10-Chapter Dossier',
+        tabFinancials: '5-Year Financial Statements',
+        tabValuation: 'IVS 4-Pillar Valuation Suite',
+        csvBtn: 'Download Model (.CSV)',
+        pdfBtn: 'Export UNIDO Pack',
+        lineItemHead: 'Line Item',
+        rows: {
+          rev: 'Gross Operating Revenue',
+          cogs: 'Cost of Goods Sold (COGS)',
+          gp: 'Gross Operating Profit',
+          sga: 'SG&A and Operational Overhead',
+          ebitda: 'EBITDA',
+          depr: 'Depreciation (10-Yr Straight)',
+          ebit: 'Operating Profit (EBIT)',
+          debt: 'Annual Debt Service (Principal + Interest)',
+          taxGcc: 'Zakat / Tax Reserve',
+          taxUnido: 'Corporate Tax (20%)',
+          fcf: 'Net Free Cash Flow'
+        }
+      },
+      ar: {
+        dir: 'rtl',
+        langLabel: 'English',
+        heroTag: 'الخطوة 1: محرك دراسات الجدوى التوليدي',
+        heroTitle: 'صف أي فكرة استثمارية أو اختر قطاعاً صناعياً',
+        heroDesc: 'أدخل معايير مشروعك أو اختر قطاعاً معتمداً. يقوم المحرك المالي الرياضي بحساب القوائم المالية لـ 5 سنوات والتكاليف الاستثمارية ومؤشرات خدمة الدين في أقل من 300 مللي ثانية.',
+        promptPlaceholder: 'مثال: تأسيس محمصة وكافيه قهوة مختصة في دبي باستثمار 2.5 مليون درهم وتمويل بنكي 60%...',
+        generateBtn: '⚡ إنشاء دراسة الجدوى (يونيدو)',
+        sectorsTitle: 'المخططات القطاعية الشاملة (انقر للتحميل)',
+        sarahBadge: 'جاهزة للتقييم والاعتماد',
+        sarahDesc: 'كبير خبراء دراسات الجدوى والائتمان المصرفي المعتمد لليونيدو. تفضل بإجراء مقابلة صوتية تفاعلية دفاعية مع المحاكاة الفورية.',
+        sarahBtn: '🎙️ دخول غرفة لجنة الائتمان المباشرة',
+        dscrTitle: 'معيار تغطية خدمة الدين (Min DSCR)',
+        npvTitle: 'صافي القيمة الحالية (NPV)',
+        irrTitle: 'معدل العائد الداخلي (IRR)',
+        paybackTitle: 'فترة الاسترداد والتعادل',
+        tabUnido: 'ملف اليونيدو الشامل (10 فصول)',
+        tabFinancials: 'القوائم المالية لـ 5 سنوات',
+        tabValuation: 'تقييم المنشأة (معايير IVS العالمية)',
+        csvBtn: 'تحميل النموذج المالي (.CSV)',
+        pdfBtn: 'تصدير حزمة اليونيدو الرسمية',
+        lineItemHead: 'بند القائمة المالية',
+        rows: {
+          rev: 'إجمالي الإيرادات التشغيلية',
+          cogs: 'تكلفة المبيعات والمواد الخام (COGS)',
+          gp: 'إجمالي الربح التشغيلي',
+          sga: 'المصاريف العمومية والإدارية والتسويقية (SG&A)',
+          ebitda: 'الأرباح قبل الفوائد والضرائب والإهلاك (EBITDA)',
+          depr: 'مخصص الإهلاك والاستهلاك السنوي',
+          ebit: 'الربح التشغيلي قبل الفوائد والضرائب (EBIT)',
+          debt: 'خدمة الدين السنوية (الأقساط والفوائد)',
+          taxGcc: 'مخصص الزكاة الشرعية / الضريبة',
+          taxUnido: 'ضريبة الدخل على الشركات (20%)',
+          fcf: 'صافي التدفق النقدي الحر المتاح للشركاء'
+        }
+      }
+    };
+
+    function setLanguage(lang) {
+      currentLanguage = lang;
+      const dict = I18N[lang];
+      document.documentElement.setAttribute('dir', dict.dir);
+      if (lang === 'ar') {
         document.body.classList.add('arabic-mode');
-        label.innerText = 'English';
       } else {
+        document.body.classList.remove('arabic-mode');
+      }
+
+      const langLabel = document.getElementById('lang-label');
+      if (langLabel) langLabel.innerText = dict.langLabel;
+
+      const heroTag = document.getElementById('hero-step-badge');
+      if (heroTag) heroTag.innerText = dict.heroTag;
+
+      const heroTitle = document.getElementById('hero-title');
+      if (heroTitle) heroTitle.innerText = dict.heroTitle;
+
+      const heroDesc = document.getElementById('hero-desc');
+      if (heroDesc) heroDesc.innerText = dict.heroDesc;
+
+      const pInput = document.getElementById('prompt-input');
+      if (pInput) pInput.placeholder = dict.promptPlaceholder;
+
+      const genBtnText = document.getElementById('prompt-gen-btn-text');
+      if (genBtnText) genBtnText.innerText = dict.generateBtn;
+
+      const secTitle = document.getElementById('sectors-title-text');
+      if (secTitle) secTitle.innerText = dict.sectorsTitle;
+
+      const sBadge = document.getElementById('sarah-ready-badge');
+      if (sBadge) sBadge.innerText = dict.sarahBadge;
+
+      const sDesc = document.getElementById('sarah-card-desc');
+      if (sDesc) sDesc.innerText = dict.sarahDesc;
+
+      const sBtn = document.getElementById('sarah-open-room-btn');
+      if (sBtn) sBtn.innerText = dict.sarahBtn;
+
+      const dscrT = document.getElementById('cockpit-dscr-title');
+      if (dscrT) dscrT.innerText = dict.dscrTitle;
+
+      const npvT = document.getElementById('cockpit-npv-title');
+      if (npvT) npvT.innerText = dict.npvTitle;
+
+      const irrT = document.getElementById('cockpit-irr-title');
+      if (irrT) irrT.innerText = dict.irrTitle;
+
+      const pbT = document.getElementById('cockpit-payback-title');
+      if (pbT) pbT.innerText = dict.paybackTitle;
+
+      const tabU = document.getElementById('tab-btn-unido');
+      if (tabU) tabU.innerText = dict.tabUnido;
+
+      const tabF = document.getElementById('tab-btn-financials');
+      if (tabF) tabF.innerText = dict.tabFinancials;
+
+      const tabV = document.getElementById('tab-btn-valuation');
+      if (tabV) tabV.innerText = dict.tabValuation;
+
+      const csvT = document.getElementById('btn-csv-text');
+      if (csvT) csvT.innerText = dict.csvBtn;
+
+      const pdfT = document.getElementById('btn-pdf-text');
+      if (pdfT) pdfT.innerText = dict.pdfBtn;
+
+      // Update currency symbols display for language
+      if (currentCountry && currentCountry.currency === 'AED') {
+        currentCurrency.symbol = lang === 'ar' ? 'د.إ ' : 'AED ';
+      } else if (currentCountry && currentCountry.currency === 'SAR') {
+        currentCurrency.symbol = lang === 'ar' ? 'ر.س ' : 'SAR ';
+      }
+
+      // Re-render UI components
+      renderSectors();
+      recalculateAndRender();
+      renderUNIDOChapters();
+    }
+
+    function toggleLanguage() {
+      setLanguage(currentLanguage === 'en' ? 'ar' : 'en');
+    }
+ else {
         document.documentElement.setAttribute('dir', 'ltr');
         document.body.classList.remove('arabic-mode');
         label.innerText = 'العربية';
