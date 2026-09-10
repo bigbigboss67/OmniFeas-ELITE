@@ -378,8 +378,8 @@
           <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-brand-cyan/15 text-brand-cyan border border-brand-cyan/30">UNIDO Vol. III</span>
         </div>
         <div class="flex items-baseline gap-2">
-          <span id="metric-npv" class="text-3xl font-extrabold text-brand-cyan font-mono">$1.84M</span>
-          <span class="text-xs text-slate-500">USD</span>
+          <span id="metric-npv" class="text-3xl font-extrabold text-brand-cyan font-mono">AED 6.76M</span>
+          <span id="metric-currency-label" class="text-xs font-bold text-slate-400 font-mono">AED</span>
         </div>
         <p class="text-[11px] text-slate-400 mt-4">Discounted cumulative cash flows exceed initial equity threshold.</p>
       </div>
@@ -1052,8 +1052,8 @@ Content-Type: application/json
       CUSTOM: { code: 'CUSTOM', symbol: '', flag: '🌐', name: 'Custom Currency' }
     };
 
-    let currentCountry = COUNTRIES.sa;
-    let currentCurrency = CURRENCIES.SAR;
+    let currentCountry = COUNTRIES.uae;
+    let currentCurrency = CURRENCIES.AED;
 
     function formatMoney(amount, isNeg = false) {
       const sym = currentCurrency.symbol || (currentCurrency.code ? currentCurrency.code + ' ' : '');
@@ -1251,7 +1251,7 @@ Content-Type: application/json
           <div class="flex items-center justify-between w-full mb-1">
             <span class="text-base">${sec.icon}</span>
             <span class="text-[9px] font-mono font-bold ${isSelected ? 'text-brand-gold' : 'text-slate-500'}">
-              $${(sec.capex / 1000000).toFixed(1)}M
+              ${formatMoneyShort(sec.capex)}
             </span>
           </div>
           <div class="text-[11px] font-bold truncate leading-tight">${sec.name}</div>
@@ -1292,7 +1292,7 @@ Content-Type: application/json
     /* =======================================================================
        5. STEP 1: PROMPT EXECUTION & INTERACTIVE FEASIBILITY QUESTIONNAIRE
        ======================================================================= */
-    let selectedQuestionJurisdiction = 'sa';
+    let selectedQuestionJurisdiction = 'uae';
     let selectedQuestionCapex = 2500000;
     let selectedQuestionDebt = 60;
 
@@ -1543,7 +1543,11 @@ Content-Type: application/json
         // Update Avatar In-Room dialogue
         const activeText = document.getElementById('transcript-active-text');
         if (activeText) {
-          activeText.innerText = `"I have finalized the underwriting study for ${currentSector.name}. With an initial investment of $${(currentSector.capex/1000000).toFixed(2)}M and ${currentSector.debtPercent}% debt financing, the modeled Year 1 DSCR is ${currentSector.dscr.toFixed(2)}x. What sensitivity scenario shall we test?"`;
+          if (currentLanguage === 'ar') {
+            activeText.innerText = `"لقد قمت بإتمام المراجعة الائتمانية لمشروع ${currentSector.name} في ${currentSector.jurisdiction}. بإجمالي استثمار ${formatMoneyShort(currentSector.capex)} وبنسبة تمويل ${currentSector.debtPercent}%، بلغ معدل تغطية خدمة الدين ${currentSector.dscr.toFixed(2)}x. ما هو سيناريو الحساسية الذي تود اختباره؟"`;
+          } else {
+            activeText.innerText = `"I have finalized the underwriting study for ${currentSector.name}. With an initial investment of ${formatMoneyShort(currentSector.capex)} and ${currentSector.debtPercent}% debt financing, the modeled Year 1 DSCR is ${currentSector.dscr.toFixed(2)}x. What sensitivity scenario shall we test?"`;
+          }
         }
 
         // Auto-scroll down smoothly so user immediately sees the active study result
@@ -1780,7 +1784,7 @@ Content-Type: application/json
           icon: '📑',
           desc: `Project vision for ${name}, institutional sponsor profiling, and alignment with national industrial policy (${jur}).`,
           sections: [
-            { h: '1.1 Project Identity & Commercial Purpose', body: `Establishment of <strong>${name}</strong> as an institutional-grade enterprise in ${jur}. The project addresses unmet regional demand with a certified initial investment of <strong>$${formatMoneyShort(currentSector.capex)}</strong>.` },
+            { h: '1.1 Project Identity & Commercial Purpose', body: `Establishment of <strong>${name}</strong> as an institutional-grade enterprise in ${jur}. The project addresses unmet regional demand with a certified initial investment of <strong>${formatMoneyShort(currentSector.capex)}</strong>.` },
             { h: '1.2 Total Capitalization & Sponsor Equity', body: `The project is structured under an institutional <strong>${debtP}% Debt / ${eqP}% Equity</strong> capital matrix. Modeled 5-year equity IRR exceeds hurdle rates at <strong>${(currentSector.irr * 100).toFixed(1)}%</strong>.` },
             { h: '1.3 Regulatory & Policy Alignment', body: `Fully compliant with UNIDO Volumes I–III criteria, national environmental standards, and development fund underwriting criteria.` }
           ]
@@ -1790,7 +1794,7 @@ Content-Type: application/json
           icon: '📊',
           desc: `TAM, SAM, and SOM addressable market sizing, pricing power, and 5-year demand forecasts.`,
           sections: [
-            { h: '2.1 Addressable Market Sizing', body: `Total Addressable Market (TAM) for ${name} within the regional trade basin is estimated at $840M, with a Serviceable Obtainable Market (SOM) targeted at ${formatMoneyShort(currentSector.capex * 2.8)} by Year 3.` },
+            { h: '2.1 Addressable Market Sizing', body: `Total Addressable Market (TAM) for ${name} within the regional trade basin is estimated at ${formatMoneyShort(currentSector.capex * 3.5)}, with a Serviceable Obtainable Market (SOM) targeted at ${formatMoneyShort(currentSector.capex * 2.8)} by Year 3.` },
             { h: '2.2 Pricing Elasticity & Competitive Advantage', body: `Tiered pricing strategy benchmarking prime regional competitors, securing an average operating gross margin of <strong>${(currentSector.margin * 100).toFixed(0)}%</strong>.` },
             { h: '2.3 5-Year Volume Projection', body: `Commercial volume begins at 65% utilization during Year 1, ramping up to 88% by Year 3 and 94% at steady state in Year 5.` }
           ]
