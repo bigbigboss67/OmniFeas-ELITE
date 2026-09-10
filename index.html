@@ -1624,11 +1624,14 @@ Content-Type: application/json
       const dscrElem = document.getElementById('metric-dscr');
       const dscrBadge = document.getElementById('dscr-badge');
       const dscrProgress = document.getElementById('dscr-progress');
+      const irrElem = document.getElementById('metric-irr');
+      const npvElem = document.getElementById('metric-npv');
+      const paybackElem = document.getElementById('metric-payback');
 
-      dscrElem.innerText = `${adjustedDSCR}x`;
-      document.getElementById('metric-irr').innerText = `${adjustedIRR}%`;
-      document.getElementById('metric-npv').innerText = formatMoneyShort(baseNPV);
-      document.getElementById('metric-payback').innerText = `${adjustedPayback} Yrs`;
+      if (dscrElem) dscrElem.innerText = `${adjustedDSCR}x`;
+      if (irrElem) irrElem.innerText = `${adjustedIRR}%`;
+      if (npvElem) npvElem.innerText = formatMoneyShort(baseNPV);
+      if (paybackElem) paybackElem.innerText = `${adjustedPayback} Yrs`;
 
       // Update In-Room Metrics
       const roomDscr = document.getElementById('room-dscr');
@@ -1639,19 +1642,27 @@ Content-Type: application/json
 
       // DSCR Covenant Evaluation (1.35x benchmark)
       if (parseFloat(adjustedDSCR) >= 1.35) {
-        dscrBadge.className = 'px-2 py-0.5 rounded-full text-[10px] font-bold bg-brand-emerald/15 text-brand-emerald border border-brand-emerald/30';
-        dscrBadge.innerText = 'PASS (≥ 1.35x)';
-        dscrProgress.className = 'bg-brand-emerald h-full rounded-full transition-all duration-300';
-        dscrProgress.style.width = Math.min(parseFloat(adjustedDSCR) * 50, 100) + '%';
+        if (dscrBadge) {
+          dscrBadge.className = 'px-2 py-0.5 rounded-full text-[10px] font-bold bg-brand-emerald/15 text-brand-emerald border border-brand-emerald/30';
+          dscrBadge.innerText = 'PASS (≥ 1.35x)';
+        }
+        if (dscrProgress) {
+          dscrProgress.className = 'bg-brand-emerald h-full rounded-full transition-all duration-300';
+          dscrProgress.style.width = Math.min(parseFloat(adjustedDSCR) * 50, 100) + '%';
+        }
         if (roomBadge) {
           roomBadge.className = 'px-2 py-0.5 text-[10px] font-bold rounded-full bg-brand-emerald/15 text-brand-emerald border border-brand-emerald/30';
           roomBadge.innerText = 'COVENANT COMPLIANT';
         }
       } else {
-        dscrBadge.className = 'px-2 py-0.5 rounded-full text-[10px] font-bold bg-brand-rose/20 text-brand-rose border border-brand-rose/40 animate-pulse';
-        dscrBadge.innerText = 'BREACH (< 1.35x)';
-        dscrProgress.className = 'bg-brand-rose h-full rounded-full transition-all duration-300';
-        dscrProgress.style.width = Math.min(parseFloat(adjustedDSCR) * 50, 100) + '%';
+        if (dscrBadge) {
+          dscrBadge.className = 'px-2 py-0.5 rounded-full text-[10px] font-bold bg-brand-rose/20 text-brand-rose border border-brand-rose/40 animate-pulse';
+          dscrBadge.innerText = 'BREACH (< 1.35x)';
+        }
+        if (dscrProgress) {
+          dscrProgress.className = 'bg-brand-rose h-full rounded-full transition-all duration-300';
+          dscrProgress.style.width = Math.min(parseFloat(adjustedDSCR) * 50, 100) + '%';
+        }
         if (roomBadge) {
           roomBadge.className = 'px-2 py-0.5 text-[10px] font-bold rounded-full bg-brand-rose/20 text-brand-rose border border-brand-rose/40 animate-pulse';
           roomBadge.innerText = 'COVENANT BREACH';
@@ -2186,12 +2197,6 @@ Content-Type: application/json
 
     function toggleLanguage() {
       setLanguage(currentLanguage === 'en' ? 'ar' : 'en');
-    }
- else {
-        document.documentElement.setAttribute('dir', 'ltr');
-        document.body.classList.remove('arabic-mode');
-        label.innerText = 'العربية';
-      }
     }
 
     /* =======================================================================
