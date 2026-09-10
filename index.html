@@ -1,0 +1,1905 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OmniFeas Elite — $1M UNIDO & Bank-Ready Feasibility Engine with Live AI Avatar</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            oled: '#050505',
+            surface: {
+              950: '#070A10',
+              900: '#0B0F19',
+              850: '#111726',
+              800: '#182033',
+              700: '#1f2b45'
+            },
+            brand: {
+              emerald: '#10b981',
+              cyan: '#38bdf8',
+              gold: '#f59e0b',
+              purple: '#8b5cf6',
+              rose: '#f43f5e'
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'Inter', 'system-ui', 'sans-serif'],
+            arabic: ['"Cairo"', 'Tahoma', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      background-color: #050505;
+      color: #e2e8f0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      overflow-x: hidden;
+    }
+    .arabic-mode {
+      font-family: 'Cairo', sans-serif;
+    }
+    /* Hardware double-bezel concentric cards */
+    .concentric-card {
+      background: linear-gradient(180deg, rgba(17, 23, 38, 0.75) 0%, rgba(11, 15, 25, 0.95) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.6), 0 20px 40px -15px rgba(0, 0, 0, 0.8), inset 0 1px 0 0 rgba(255, 255, 255, 0.06);
+    }
+    .concentric-inner {
+      background: rgba(7, 10, 16, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .gold-glow {
+      box-shadow: 0 0 35px -5px rgba(245, 158, 11, 0.25);
+    }
+    .emerald-glow {
+      box-shadow: 0 0 35px -5px rgba(16, 185, 129, 0.25);
+    }
+    .purple-glow {
+      box-shadow: 0 0 35px -5px rgba(139, 92, 246, 0.25);
+    }
+    /* Waveform visualizer bars */
+    @keyframes wavePulse {
+      0%, 100% { height: 6px; }
+      50% { height: 28px; }
+    }
+    .wave-bar {
+      animation: wavePulse 1.2s ease-in-out infinite;
+    }
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #070A10;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #334155;
+    }
+    /* Institutional UNIDO Print Styles */
+    @media print {
+      body {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+      }
+      header, #avatar-modal, #webrtc-modal, #embed-modal, #host-simulator-modal, .wave-bar, #revenue-shock-slider, button {
+        display: none !important;
+      }
+      .concentric-card, .concentric-inner {
+        background: #ffffff !important;
+        border: 1px solid #cccccc !important;
+        box-shadow: none !important;
+        color: #000000 !important;
+      }
+      .text-white, .text-slate-200, .text-slate-300, .text-slate-400, .text-slate-500 {
+        color: #111111 !important;
+      }
+      .text-brand-gold, .text-brand-cyan, .text-brand-emerald {
+        color: #000000 !important;
+        font-weight: bold !important;
+      }
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-oled text-slate-200 antialiased selection:bg-brand-gold selection:text-black">
+
+  <!-- ========================================================================= -->
+  <!-- TOP GLOBAL NAVIGATION & DUAL REGULATORY SWITCHER                         -->
+  <!-- ========================================================================= -->
+  <header class="sticky top-0 z-40 backdrop-blur-xl bg-oled/85 border-b border-white/10 px-4 lg:px-8 py-3.5 transition-all">
+    <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+      
+      <!-- Brand & Tier Badge -->
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-brand-gold via-amber-600 to-amber-900 p-0.5 shadow-lg shadow-amber-950/40">
+          <div class="w-full h-full bg-surface-950 rounded-[0.875rem] flex items-center justify-center">
+            <span class="text-brand-gold font-extrabold text-lg">Ω</span>
+          </div>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="font-extrabold text-lg tracking-tight text-white">OmniFeas <span class="text-brand-gold font-light">ELITE</span></span>
+            <span class="px-2 py-0.5 text-[10px] font-bold tracking-wider uppercase rounded-full bg-brand-gold/10 text-brand-gold border border-brand-gold/25">$1M TIER</span>
+          </div>
+          <p class="text-xs text-slate-400 hidden sm:block">Universal UNIDO Feasibility & Credit Underwriting System</p>
+        </div>
+      </div>
+
+      <!-- Regulatory Framework Hybrid Switcher (Option 3) -->
+      <div class="flex items-center gap-1.5 p-1 rounded-2xl bg-surface-900 border border-white/10 shadow-inner">
+        <button id="btn-fw-gcc" onclick="switchFramework('gcc')" class="px-3 sm:px-4 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center gap-2 bg-brand-gold/20 text-brand-gold border border-brand-gold/30 shadow-sm">
+          <span>🇸🇦</span>
+          <span class="hidden md:inline">GCC SIDF / Zakat 2.5%</span>
+          <span class="md:hidden">GCC</span>
+        </button>
+        <button id="btn-fw-unido" onclick="switchFramework('unido')" class="px-3 sm:px-4 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center gap-2 text-slate-400 hover:text-white">
+          <span>🌐</span>
+          <span class="hidden md:inline">Global UNIDO / IFRS 20%</span>
+          <span class="md:hidden">UNIDO</span>
+        </button>
+      </div>
+
+      <!-- Right Actions: Embed, Language & CTA -->
+      <div class="flex items-center gap-2.5">
+        <button onclick="openEmbedModal()" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-surface-850 border border-white/10 hover:border-brand-cyan/40 text-slate-300 hover:text-brand-cyan transition-all flex items-center gap-1.5">
+          <span>🔌</span>
+          <span class="hidden sm:inline">Embed in Portal</span>
+        </button>
+
+        <button onclick="toggleLanguage()" id="lang-toggle-btn" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-surface-850 border border-white/10 hover:border-white/20 text-slate-300 hover:text-white transition-all flex items-center gap-1.5">
+          <svg class="w-3.5 h-3.5 text-brand-cyan" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"/></svg>
+          <span id="lang-label">العربية</span>
+        </button>
+
+        <button onclick="openAvatarRoom()" class="relative group px-4 py-1.5 rounded-xl text-xs font-bold bg-gradient-to-r from-brand-gold via-amber-500 to-amber-600 text-black shadow-lg shadow-amber-500/25 hover:shadow-amber-500/40 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center gap-2">
+          <span class="relative flex h-2 w-2">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-black"></span>
+          </span>
+          <span>🎙️ Live AI Avatar</span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ========================================================================= -->
+  <!-- MAIN CONTAINER                                                            -->
+  <!-- ========================================================================= -->
+  <main class="max-w-7xl mx-auto px-4 lg:px-8 py-6 space-y-8">
+
+    <!-- ======================================================================= -->
+    <!-- STEP 1: FEASAB-STYLE GENERATIVE PROMPT CONSOLE & 16 SECTORS             -->
+    <!-- ======================================================================= -->
+    <section class="concentric-card rounded-[2rem] p-6 sm:p-8 relative overflow-hidden">
+      <!-- Ambient Backlight -->
+      <div class="absolute -top-32 -right-32 w-80 h-80 bg-brand-gold/15 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -bottom-32 -left-32 w-80 h-80 bg-brand-cyan/15 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="relative z-10 space-y-6">
+        
+        <!-- Header & Instructions -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/10 pb-5">
+          <div>
+            <div class="flex items-center gap-2.5 mb-1.5">
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-brand-gold/15 text-brand-gold border border-brand-gold/30">
+                STEP 1: GENERATIVE FEASIBILITY ENGINE
+              </span>
+              <span class="text-xs text-slate-400">UNIDO Vol. I–III Compliant</span>
+            </div>
+            <h1 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+              Describe Any Business Idea or Choose an Industrial Sector
+            </h1>
+            <p class="text-sm text-slate-400 max-w-3xl mt-1">
+              Enter your project parameters or select a sector. The deterministic math engine will calculate full 5-year financials, technical CAPEX, and loan covenants in under 300ms.
+            </p>
+          </div>
+
+          <!-- Quick Actions: Open Video Appraisal -->
+          <button onclick="openAvatarRoom()" class="flex-shrink-0 px-5 py-2.5 rounded-2xl bg-surface-850 hover:bg-surface-800 border border-brand-gold/40 text-brand-gold hover:text-white text-xs font-bold transition-all flex items-center gap-2.5 shadow-lg shadow-black/40">
+            <div class="w-7 h-7 rounded-xl bg-brand-gold/20 flex items-center justify-center text-sm">👩‍💼</div>
+            <div class="text-left">
+              <div class="text-[10px] text-slate-400 font-normal">Ready to Defend Study?</div>
+              <div class="text-xs font-bold text-white">Join Dr. Sarah Sterling 🎙️</div>
+            </div>
+          </button>
+        </div>
+
+        <!-- The Natural Language Prompt Input Bar -->
+        <div class="concentric-inner rounded-2xl p-2.5 flex flex-col md:flex-row items-stretch gap-2.5 shadow-inner">
+          <div class="flex-1 flex items-center gap-3 px-3.5 py-2">
+            <svg class="w-5 h-5 text-brand-gold flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+            <input 
+              id="prompt-input" 
+              type="text" 
+              placeholder="e.g., Establish a 500kW rooftop Solar EPC company in Dammam with $2.5M CAPEX and 60% SIDF debt financing..."
+              class="w-full bg-transparent text-sm text-white placeholder-slate-500 focus:outline-none"
+              value="500kW Commercial Solar Cleantech EPC in Dammam, $2.5M CAPEX, 60% SIDF Soft-Loan"
+            />
+          </div>
+
+          <div class="flex items-center gap-2">
+            <!-- Voice Input Button -->
+            <button onclick="toggleVoiceInputPrompt()" id="mic-prompt-btn" title="Speak your prompt" class="p-3 rounded-xl bg-surface-850 hover:bg-surface-800 text-slate-300 hover:text-brand-gold border border-white/10 transition-all flex-shrink-0">
+              <svg id="mic-prompt-icon" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+              </svg>
+            </button>
+
+            <!-- Generate Button -->
+            <button onclick="executePromptGeneration()" class="w-full md:w-auto px-6 py-3 rounded-xl bg-gradient-to-r from-brand-gold via-amber-500 to-amber-600 text-black font-extrabold text-xs uppercase tracking-wider shadow-lg shadow-amber-500/25 hover:shadow-amber-500/40 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 flex-shrink-0">
+              <span id="gen-spinner" class="hidden animate-spin h-3.5 w-3.5 border-2 border-black border-t-transparent rounded-full"></span>
+              <span>⚡ Generate UNIDO Study</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 16 Universal Industrial Sectors Grid -->
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-400">
+              Universal Sector Blueprints (Click to Load)
+            </span>
+            <span class="text-[11px] text-slate-500 font-mono">16 of 16 Calibrated</span>
+          </div>
+
+          <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2" id="sectors-container">
+            <!-- Dynamically Rendered via JS -->
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ======================================================================= -->
+    <!-- STEP 2 PROMINENT CTA BANNER: JOIN LIVE CREDIT COMMITTEE MEETING         -->
+    <!-- ======================================================================= -->
+    <div class="concentric-card rounded-2xl p-5 border-brand-gold/30 bg-gradient-to-r from-surface-950 via-surface-900 to-surface-950 flex flex-col md:flex-row items-center justify-between gap-4 gold-glow">
+      <div class="flex items-center gap-4">
+        <div class="relative w-14 h-14 rounded-2xl overflow-hidden border border-brand-gold/40 flex-shrink-0 bg-surface-950 shadow-md">
+          <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=300&q=80" alt="Dr. Sarah Sterling" class="w-full h-full object-cover">
+          <div class="absolute bottom-1 right-1 w-3 h-3 bg-brand-emerald rounded-full border-2 border-oled"></div>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="text-sm font-extrabold text-white">Dr. Sarah Sterling</span>
+            <span class="text-[10px] px-2 py-0.5 rounded-full bg-brand-emerald/10 text-brand-emerald border border-brand-emerald/30 font-bold">READY TO REVIEW</span>
+          </div>
+          <p class="text-xs text-slate-400 mt-0.5">
+            Senior UNIDO Feasibility Partner & Institutional Credit Underwriter. Conduct an interactive oral interview with real-time lip-sync.
+          </p>
+        </div>
+      </div>
+
+      <button onclick="openAvatarRoom()" class="w-full md:w-auto px-6 py-3 rounded-xl bg-gradient-to-r from-brand-emerald via-teal-500 to-emerald-600 text-black font-extrabold text-xs uppercase tracking-wider shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2.5 flex-shrink-0">
+        <span class="relative flex h-2 w-2">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2 w-2 bg-black"></span>
+        </span>
+        <span>🎙️ Open Live Credit Committee Room</span>
+      </button>
+    </div>
+
+    <!-- ======================================================================= -->
+    <!-- UNDERWRITING COCKPIT & LIVE STRESS TESTING TELEMETRY                   -->
+    <!-- ======================================================================= -->
+    <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      
+      <!-- Metric 1: Minimum DSCR -->
+      <div class="concentric-card rounded-2xl p-5 relative overflow-hidden">
+        <div class="flex items-center justify-between text-xs text-slate-400 mb-2">
+          <span class="font-bold tracking-wider uppercase">Minimum DSCR</span>
+          <span id="dscr-badge" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-brand-emerald/15 text-brand-emerald border border-brand-emerald/30">PASS (&ge; 1.35x)</span>
+        </div>
+        <div class="flex items-baseline gap-2">
+          <span id="metric-dscr" class="text-3xl font-extrabold text-white font-mono">1.48x</span>
+          <span class="text-xs text-slate-500">Benchmark: 1.35x</span>
+        </div>
+        <div class="mt-3 w-full bg-surface-900 rounded-full h-1.5 overflow-hidden">
+          <div id="dscr-progress" class="bg-brand-emerald h-full rounded-full transition-all duration-300" style="width: 78%;"></div>
+        </div>
+        <p class="text-[11px] text-slate-400 mt-2">Lowest debt service coverage occurs in Year 2 (post-grace period).</p>
+      </div>
+
+      <!-- Metric 2: Net Present Value (NPV) -->
+      <div class="concentric-card rounded-2xl p-5 relative overflow-hidden">
+        <div class="flex items-center justify-between text-xs text-slate-400 mb-2">
+          <span class="font-bold tracking-wider uppercase">Project NPV (10.5% WACC)</span>
+          <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-brand-cyan/15 text-brand-cyan border border-brand-cyan/30">UNIDO Vol. III</span>
+        </div>
+        <div class="flex items-baseline gap-2">
+          <span id="metric-npv" class="text-3xl font-extrabold text-brand-cyan font-mono">$1.84M</span>
+          <span class="text-xs text-slate-500">USD</span>
+        </div>
+        <p class="text-[11px] text-slate-400 mt-4">Discounted cumulative cash flows exceed initial equity threshold.</p>
+      </div>
+
+      <!-- Metric 3: Internal Rate of Return (IRR) -->
+      <div class="concentric-card rounded-2xl p-5 relative overflow-hidden">
+        <div class="flex items-center justify-between text-xs text-slate-400 mb-2">
+          <span class="font-bold tracking-wider uppercase">Equity IRR</span>
+          <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-brand-gold/15 text-brand-gold border border-brand-gold/30">Hurdle: 18%</span>
+        </div>
+        <div class="flex items-baseline gap-2">
+          <span id="metric-irr" class="text-3xl font-extrabold text-brand-gold font-mono">26.4%</span>
+          <span class="text-xs text-slate-500">Target: 22%+</span>
+        </div>
+        <p class="text-[11px] text-slate-400 mt-4">Yield exceeds cost of capital by 1,590 bps.</p>
+      </div>
+
+      <!-- Metric 4: Payback Period & Breakeven -->
+      <div class="concentric-card rounded-2xl p-5 relative overflow-hidden">
+        <div class="flex items-center justify-between text-xs text-slate-400 mb-2">
+          <span class="font-bold tracking-wider uppercase">Payback & Breakeven</span>
+          <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-500/15 text-purple-400 border border-purple-500/30">Bank Covenant</span>
+        </div>
+        <div class="flex items-baseline gap-2">
+          <span id="metric-payback" class="text-3xl font-extrabold text-white font-mono">3.4 Yrs</span>
+          <span class="text-xs text-slate-500">Breakeven: 42% Cap</span>
+        </div>
+        <p class="text-[11px] text-slate-400 mt-4">Full equity payback achieved well prior to term loan maturity.</p>
+      </div>
+
+    </section>
+
+    <!-- ======================================================================= -->
+    <!-- INTERACTIVE STRESS TESTING SLIDER (WIRED TO LIVE AVATAR)                 -->
+    <!-- ======================================================================= -->
+    <section class="concentric-card rounded-2xl p-6 bg-surface-900/60 border-white/10">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="text-sm font-extrabold text-white uppercase tracking-wider">Dynamic Credit Stress Testing</span>
+            <span class="text-[10px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 font-bold">DR. STERLING IS LISTENING</span>
+          </div>
+          <p class="text-xs text-slate-400 mt-0.5">
+            Drag the revenue shock slider to test debt service capacity. The AI avatar will automatically react to any covenant breaches.
+          </p>
+        </div>
+        <div class="flex items-center gap-3">
+          <span class="text-xs text-slate-400">Shock Value:</span>
+          <span id="shock-display" class="font-mono text-sm font-extrabold px-3 py-1 rounded-xl bg-surface-950 border border-white/15 text-white">0% (Base Case)</span>
+          <button onclick="resetShock()" class="text-xs text-brand-cyan hover:underline">Reset</button>
+        </div>
+      </div>
+
+      <div class="space-y-2">
+        <input 
+          id="revenue-shock-slider" 
+          type="range" 
+          min="-40" 
+          max="40" 
+          value="0" 
+          step="5"
+          oninput="handleShockChange(this.value)"
+          class="w-full h-2 bg-surface-950 rounded-lg appearance-none cursor-pointer accent-brand-gold"
+        />
+        <div class="flex justify-between text-[11px] font-mono text-slate-500">
+          <span>Severe Recession (-40%)</span>
+          <span>-20% Stress</span>
+          <span class="text-brand-gold font-bold">Base (0%)</span>
+          <span>+20% Growth</span>
+          <span>Hyper Expansion (+40%)</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================= -->
+    <!-- UNIDO 10-CHAPTER DOSSIER & 5-YEAR FINANCIAL STATEMENTS                   -->
+    <!-- ======================================================================= -->
+    <section class="concentric-card rounded-[2rem] p-6 lg:p-8 space-y-6">
+      
+      <!-- Tab Navigation -->
+      <div class="flex items-center justify-between border-b border-white/10 pb-4 overflow-x-auto gap-2">
+        <div class="flex items-center gap-2">
+          <button onclick="switchTab('unido')" id="tab-btn-unido" class="px-4 py-2 rounded-xl text-xs font-bold transition-all bg-brand-gold/20 text-brand-gold border border-brand-gold/30">
+            UNIDO 10-Chapter Dossier
+          </button>
+          <button onclick="switchTab('financials')" id="tab-btn-financials" class="px-4 py-2 rounded-xl text-xs font-bold transition-all text-slate-400 hover:text-white">
+            5-Year Financial Statements
+          </button>
+          <button onclick="switchTab('valuation')" id="tab-btn-valuation" class="px-4 py-2 rounded-xl text-xs font-bold transition-all text-slate-400 hover:text-white">
+            IVS 4-Pillar Valuation Suite
+          </button>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button onclick="downloadFinancialModelCSV()" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-surface-850 hover:bg-surface-800 text-slate-300 hover:text-white border border-white/10 flex items-center gap-1.5 flex-shrink-0">
+            <svg class="w-3.5 h-3.5 text-brand-emerald" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+            <span>Download Model (.CSV)</span>
+          </button>
+          <button onclick="exportSummaryPDF()" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-surface-850 hover:bg-surface-800 text-slate-300 hover:text-white border border-white/10 flex items-center gap-1.5 flex-shrink-0">
+            <svg class="w-3.5 h-3.5 text-brand-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            <span>Export UNIDO Pack</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Tab 1 Content: UNIDO 10 Chapters -->
+      <div id="tab-content-unido" class="space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="unido-chapters-grid">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- Tab 2 Content: 5-Year Financials -->
+      <div id="tab-content-financials" class="hidden space-y-6">
+        
+        <!-- Interactive 5-Year Cash Flow & Debt Service Visualizer Canvas -->
+        <div class="concentric-inner rounded-2xl p-5 space-y-3">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/10 pb-3">
+            <div>
+              <div class="text-xs font-extrabold text-white uppercase tracking-wider">
+                5-Year Trajectory: Revenue vs EBITDA vs Debt Service
+              </div>
+              <p class="text-[11px] text-slate-400">Dynamic projection updating in real time with revenue shock</p>
+            </div>
+            <div class="flex items-center gap-3 text-[11px] font-mono">
+              <span class="flex items-center gap-1.5 text-brand-gold"><span class="w-2 h-2 rounded-full bg-brand-gold"></span> Revenue</span>
+              <span class="flex items-center gap-1.5 text-brand-cyan"><span class="w-2 h-2 rounded-full bg-brand-cyan"></span> EBITDA</span>
+              <span class="flex items-center gap-1.5 text-brand-rose"><span class="w-2 h-2 rounded-full bg-brand-rose"></span> Debt Service</span>
+            </div>
+          </div>
+          <div class="w-full h-52 relative">
+            <canvas id="financial-chart-canvas" width="900" height="220" class="w-full h-full"></canvas>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs text-slate-300 font-mono">
+            <thead class="text-[11px] uppercase bg-surface-950 text-slate-400 border-b border-white/10">
+              <tr>
+                <th class="px-4 py-3">Line Item (USD)</th>
+                <th class="px-4 py-3 text-right">Year 1</th>
+                <th class="px-4 py-3 text-right">Year 2</th>
+                <th class="px-4 py-3 text-right">Year 3</th>
+                <th class="px-4 py-3 text-right">Year 4</th>
+                <th class="px-4 py-3 text-right">Year 5</th>
+              </tr>
+            </thead>
+            <tbody id="financials-table-body" class="divide-y divide-white/5">
+              <!-- Populated by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Tab 3 Content: IVS Valuation -->
+      <div id="tab-content-valuation" class="hidden space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div class="concentric-inner rounded-2xl p-4">
+            <div class="text-xs text-slate-400 uppercase font-bold">1. Discounted Cash Flow</div>
+            <div class="text-xl font-extrabold text-brand-gold mt-1">$12.8M</div>
+            <div class="text-[11px] text-slate-400 mt-2">WACC 10.5%, Terminal Growth 2.5%</div>
+          </div>
+          <div class="concentric-inner rounded-2xl p-4">
+            <div class="text-xs text-slate-400 uppercase font-bold">2. EV / EBITDA Multiple</div>
+            <div class="text-xl font-extrabold text-brand-cyan mt-1">$13.4M</div>
+            <div class="text-[11px] text-slate-400 mt-2">7.5x Sector Median</div>
+          </div>
+          <div class="concentric-inner rounded-2xl p-4">
+            <div class="text-xs text-slate-400 uppercase font-bold">3. Capitalized Earnings</div>
+            <div class="text-xl font-extrabold text-purple-400 mt-1">$11.9M</div>
+            <div class="text-[11px] text-slate-400 mt-2">Normalized Cap Rate 11.2%</div>
+          </div>
+          <div class="concentric-inner rounded-2xl p-4">
+            <div class="text-xs text-slate-400 uppercase font-bold">4. Net Asset Value (NAV)</div>
+            <div class="text-xl font-extrabold text-brand-emerald mt-1">$8.2M</div>
+            <div class="text-[11px] text-slate-400 mt-2">Adjusted Liquidation Floor</div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- STEP 2: FULL-SCREEN EXECUTIVE CREDIT COMMITTEE AVATAR ROOM               -->
+  <!-- ========================================================================= -->
+  <div id="avatar-modal" class="fixed inset-0 z-50 bg-black/95 backdrop-blur-2xl flex items-center justify-center p-3 sm:p-6 hidden transition-all duration-300">
+    <div class="w-full max-w-6xl h-[92vh] concentric-card rounded-[2.5rem] flex flex-col overflow-hidden border border-white/20 shadow-2xl relative">
+      
+      <!-- Video Room Header -->
+      <div class="px-6 py-4 border-b border-white/10 flex items-center justify-between bg-surface-950/80">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-brand-gold/15 border border-brand-gold/30 flex items-center justify-center text-brand-gold font-bold">
+            🎙️
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-sm font-extrabold text-white">OmniFeas Credit Committee Appraisal Room</span>
+              <span class="px-2 py-0.5 text-[10px] font-bold rounded-full bg-brand-emerald/15 text-brand-emerald border border-brand-emerald/30 flex items-center gap-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-brand-emerald animate-pulse"></span>
+                LIVE 60 FPS
+              </span>
+            </div>
+            <p class="text-xs text-slate-400">Dr. Sarah Sterling — Senior UNIDO Feasibility Economist & Underwriting Partner</p>
+          </div>
+        </div>
+
+        <!-- Committee Member Selector -->
+        <div class="hidden md:flex items-center gap-1.5 p-1 bg-surface-900 rounded-xl border border-white/10 text-xs">
+          <button onclick="selectUnderwriter('sterling')" id="uw-btn-sterling" class="px-2.5 py-1 rounded-lg font-bold bg-brand-gold/20 text-brand-gold border border-brand-gold/30 flex items-center gap-1">
+            <span>👩‍💼</span>
+            <span>Dr. Sterling (Finance)</span>
+          </button>
+          <button onclick="selectUnderwriter('mansoor')" id="uw-btn-mansoor" class="px-2.5 py-1 rounded-lg font-bold text-slate-400 hover:text-white flex items-center gap-1">
+            <span>👨‍💼</span>
+            <span>Eng. Tariq (Tech)</span>
+          </button>
+          <button onclick="selectUnderwriter('rostova')" id="uw-btn-rostova" class="px-2.5 py-1 rounded-lg font-bold text-slate-400 hover:text-white flex items-center gap-1">
+            <span>👩‍🔬</span>
+            <span>Elena (ESG/Risk)</span>
+          </button>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button onclick="toggleWebRTCSettings()" class="px-3 py-1.5 rounded-xl bg-surface-850 hover:bg-surface-800 border border-white/10 text-xs text-slate-300 hover:text-white flex items-center gap-1.5">
+            <span>🌐</span>
+            <span class="hidden sm:inline">WebRTC Bridge</span>
+          </button>
+          <button onclick="closeAvatarRoom()" class="w-8 h-8 rounded-xl bg-surface-850 hover:bg-surface-800 border border-white/10 text-slate-400 hover:text-white flex items-center justify-center text-sm font-bold">
+            ✕
+          </button>
+        </div>
+      </div>
+
+      <!-- Video Room Body: Split Screen -->
+      <div class="flex-1 grid grid-cols-1 lg:grid-cols-12 overflow-hidden">
+        
+        <!-- Left Stage (7 Cols): 60 FPS Live Avatar Video Viewport -->
+        <div class="lg:col-span-7 bg-surface-950 relative flex flex-col items-center justify-between p-4 sm:p-6 overflow-hidden border-b lg:border-b-0 lg:border-r border-white/10">
+          
+          <!-- Live Status Pill Overlay -->
+          <div class="w-full flex items-center justify-between z-10">
+            <div class="px-3 py-1 rounded-xl bg-black/60 backdrop-blur-md border border-white/10 text-[11px] text-slate-300 flex items-center gap-2">
+              <span id="avatar-status-indicator" class="w-2 h-2 rounded-full bg-brand-emerald"></span>
+              <span id="avatar-status-text">Active Listening & Analysis</span>
+            </div>
+            <div class="text-[10px] font-mono text-slate-500 bg-black/40 px-2 py-1 rounded-lg border border-white/5">
+              Audio-Reactive Viseme LipSync
+            </div>
+          </div>
+
+          <!-- The Photorealistic Live Avatar Stage (HTML5 Canvas) -->
+          <div class="relative w-full max-w-md aspect-[4/5] sm:aspect-square my-auto flex items-center justify-center">
+            <!-- Ambient Glow -->
+            <div id="avatar-aura" class="absolute inset-0 bg-brand-gold/10 rounded-full blur-3xl transition-all duration-500"></div>
+
+            <!-- Canvas Container -->
+            <div class="relative w-72 sm:w-80 h-72 sm:h-80 rounded-[2rem] overflow-hidden border border-white/20 shadow-2xl bg-surface-900">
+              <canvas id="avatar-canvas" width="400" height="400" class="w-full h-full object-cover"></canvas>
+              
+              <!-- Subtle HUD scanning line -->
+              <div class="absolute inset-0 bg-gradient-to-b from-transparent via-brand-cyan/5 to-transparent h-10 animate-bounce pointer-events-none opacity-40"></div>
+            </div>
+          </div>
+
+          <!-- Bottom Audio Controls & Multi-Band Waveform -->
+          <div class="w-full z-10 space-y-3">
+            
+            <!-- Real-time Neon Waveform Bars -->
+            <div class="flex items-center justify-center gap-1.5 h-8 px-4 py-1 rounded-xl bg-black/40 border border-white/5">
+              <div class="w-1.5 bg-brand-gold rounded-full wave-bar" style="animation-delay: 0.1s;"></div>
+              <div class="w-1.5 bg-brand-gold rounded-full wave-bar" style="animation-delay: 0.3s;"></div>
+              <div class="w-1.5 bg-amber-400 rounded-full wave-bar" style="animation-delay: 0.2s;"></div>
+              <div class="w-1.5 bg-brand-cyan rounded-full wave-bar" style="animation-delay: 0.4s;"></div>
+              <div class="w-1.5 bg-brand-cyan rounded-full wave-bar" style="animation-delay: 0.15s;"></div>
+              <div class="w-1.5 bg-brand-emerald rounded-full wave-bar" style="animation-delay: 0.35s;"></div>
+              <div class="w-1.5 bg-brand-emerald rounded-full wave-bar" style="animation-delay: 0.25s;"></div>
+              <div class="w-1.5 bg-brand-gold rounded-full wave-bar" style="animation-delay: 0.05s;"></div>
+            </div>
+
+            <!-- Controls: Push to Talk & Spoken Triggers -->
+            <div class="flex items-center justify-center gap-2">
+              <button id="mic-toggle-btn" onclick="toggleMicrophoneMeeting()" class="px-4 py-2.5 rounded-xl bg-surface-850 hover:bg-surface-800 border border-white/10 text-white font-bold text-xs flex items-center gap-2 transition-all">
+                <svg id="mic-meeting-icon" class="w-4 h-4 text-brand-emerald" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+                </svg>
+                <span id="mic-status-label">Push to Talk</span>
+              </button>
+
+              <button onclick="triggerAvatarSpeech('stress')" class="px-3.5 py-2.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-300 font-bold text-xs flex items-center gap-1.5 transition-all">
+                <span>⚠️ Test Debt Stress</span>
+              </button>
+
+              <button onclick="triggerAvatarSpeech('unido')" class="px-3.5 py-2.5 rounded-xl bg-brand-cyan/10 hover:bg-brand-cyan/20 border border-brand-cyan/30 text-brand-cyan font-bold text-xs flex items-center gap-1.5 transition-all">
+                <span>📋 UNIDO Audit</span>
+              </button>
+
+              <button onclick="stopAvatarSpeech()" class="px-3 py-2.5 rounded-xl bg-surface-850 hover:bg-surface-800 border border-white/10 text-slate-400 hover:text-white text-xs font-bold transition-all">
+                Mute 🔇
+              </button>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Right Panel (5 Cols): Live Underwriting Brief & Dialogue Transcript -->
+        <div class="lg:col-span-5 bg-surface-900/90 flex flex-col justify-between p-4 sm:p-6 overflow-hidden">
+          
+          <!-- Live Telemetry Card -->
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-extrabold uppercase tracking-wider text-slate-400">Live Credit Covenant Brief</span>
+              <span id="room-covenant-badge" class="px-2 py-0.5 text-[10px] font-bold rounded-full bg-brand-emerald/15 text-brand-emerald border border-brand-emerald/30">
+                COVENANT COMPLIANT
+              </span>
+            </div>
+
+            <!-- Mini Telemetry Grid -->
+            <div class="grid grid-cols-2 gap-2">
+              <div class="concentric-inner rounded-xl p-3">
+                <span class="text-[10px] uppercase text-slate-400 font-bold">Min DSCR</span>
+                <div id="room-dscr" class="text-lg font-extrabold text-white font-mono mt-0.5">1.48x</div>
+                <div class="text-[10px] text-slate-500">Floor: 1.35x</div>
+              </div>
+              <div class="concentric-inner rounded-xl p-3">
+                <span class="text-[10px] uppercase text-slate-400 font-bold">Equity IRR</span>
+                <div id="room-irr" class="text-lg font-extrabold text-brand-gold font-mono mt-0.5">26.4%</div>
+                <div class="text-[10px] text-slate-500">Target: 22%+</div>
+              </div>
+            </div>
+
+            <!-- In-Room Stress Slider -->
+            <div class="concentric-inner rounded-xl p-3 space-y-1.5">
+              <div class="flex items-center justify-between text-[11px]">
+                <span class="text-slate-300 font-bold">Simulate Revenue Shock in Real Time:</span>
+                <span id="room-shock-val" class="font-mono text-brand-gold font-bold">0%</span>
+              </div>
+              <input 
+                type="range" 
+                min="-30" 
+                max="30" 
+                value="0" 
+                step="5"
+                oninput="handleRoomShockChange(this.value)"
+                class="w-full h-1.5 bg-surface-950 rounded-lg appearance-none cursor-pointer accent-brand-gold"
+              />
+            </div>
+          </div>
+
+          <!-- Transcript Area -->
+          <div class="flex-1 my-4 overflow-y-auto space-y-3 pr-2" id="transcript-feed">
+            <div class="concentric-inner rounded-2xl p-3.5 space-y-1 border-brand-gold/20">
+              <div class="flex items-center justify-between text-[11px]">
+                <span class="font-extrabold text-brand-gold">Dr. Sarah Sterling</span>
+                <span class="text-slate-500 font-mono text-[10px]">Just now</span>
+              </div>
+              <p class="text-xs text-slate-200 leading-relaxed" id="transcript-active-text">
+                "Welcome to the Credit Committee. I have reviewed your feasibility parameters. Your minimum Debt Service Coverage Ratio is currently 1.48x, which clears the UNIDO bank threshold of 1.35x. How do you plan to handle potential supply chain price shocks during Year 1 installation?"
+              </p>
+            </div>
+          </div>
+
+          <!-- Interactive Question Input Bar -->
+          <div class="concentric-inner rounded-xl p-2 flex items-center gap-2">
+            <input 
+              id="room-user-question" 
+              type="text" 
+              placeholder="Type your reply to Dr. Sterling or click mic..."
+              class="w-full bg-transparent text-xs text-white placeholder-slate-500 focus:outline-none px-2"
+              onkeydown="if(event.key==='Enter') sendRoomQuestion()"
+            />
+            <button onclick="sendRoomQuestion()" class="px-3 py-1.5 rounded-lg bg-brand-gold text-black font-bold text-xs hover:bg-amber-400 transition-all flex-shrink-0">
+              Send
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- WebRTC Settings Overlay Modal -->
+  <div id="webrtc-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="w-full max-w-md concentric-card rounded-2xl p-6 space-y-4 border-white/20">
+      <div class="flex items-center justify-between border-b border-white/10 pb-3">
+        <h3 class="text-sm font-extrabold text-white flex items-center gap-2">
+          <span>🌐</span> Enterprise WebRTC Bridge
+        </h3>
+        <button onclick="toggleWebRTCSettings()" class="text-slate-400 hover:text-white text-sm">✕</button>
+      </div>
+      <p class="text-xs text-slate-400 leading-relaxed">
+        Switch between the local zero-cost 60 FPS HTML5 Canvas viseme avatar and an enterprise cloud WebRTC video stream (Simli / HeyGen).
+      </p>
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="block text-slate-300 font-bold mb-1">Rendering Engine:</label>
+          <select id="webrtc-provider" class="w-full bg-surface-900 border border-white/10 rounded-xl px-3 py-2 text-white">
+            <option value="canvas">High-Performance Canvas Viseme Engine (Default / $0 cost)</option>
+            <option value="simli">Simli Ultra-Low Latency WebRTC</option>
+            <option value="heygen">HeyGen Interactive Streaming Avatar</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-slate-300 font-bold mb-1">API Key (Optional for Cloud WebRTC):</label>
+          <input type="password" placeholder="sk_live_..." class="w-full bg-surface-900 border border-white/10 rounded-xl px-3 py-2 text-white placeholder-slate-600 focus:outline-none">
+        </div>
+      </div>
+      <div class="flex justify-end gap-2 pt-2">
+        <button onclick="toggleWebRTCSettings()" class="px-4 py-2 rounded-xl bg-brand-gold text-black font-bold text-xs">Save & Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- EMBED IN YOUR PORTAL DEVELOPER SDK MODAL                                  -->
+  <!-- ========================================================================= -->
+  <div id="embed-modal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-md hidden flex items-center justify-center p-4">
+    <div class="w-full max-w-2xl concentric-card rounded-[2rem] p-6 space-y-5 border-white/20 shadow-2xl">
+      <div class="flex items-center justify-between border-b border-white/10 pb-4">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-brand-cyan/20 border border-brand-cyan/40 flex items-center justify-center text-brand-cyan font-bold">
+            🔌
+          </div>
+          <div>
+            <h3 class="text-sm font-extrabold text-white">Embed OmniFeas in Third-Party Portals</h3>
+            <p class="text-xs text-slate-400">Add UNIDO Feasibility & Live Avatar to Bank, Accelerator, or SME Portals</p>
+          </div>
+        </div>
+        <button onclick="openEmbedModal()" class="w-8 h-8 rounded-xl bg-surface-850 hover:bg-surface-800 border border-white/10 text-slate-400 hover:text-white flex items-center justify-center text-sm font-bold">✕</button>
+      </div>
+
+      <!-- Integration Format Switcher -->
+      <div class="flex items-center gap-2 p-1 rounded-xl bg-surface-950 border border-white/10 text-xs font-semibold">
+        <button onclick="switchEmbedTab('webcomp')" id="embed-tab-webcomp" class="flex-1 py-1.5 rounded-lg bg-brand-cyan/20 text-brand-cyan border border-brand-cyan/30">
+          Web Component
+        </button>
+        <button onclick="switchEmbedTab('react')" id="embed-tab-react" class="flex-1 py-1.5 rounded-lg text-slate-400 hover:text-white">
+          React / Next.js
+        </button>
+        <button onclick="switchEmbedTab('api')" id="embed-tab-api" class="flex-1 py-1.5 rounded-lg text-slate-400 hover:text-white">
+          Headless API / Webhook
+        </button>
+      </div>
+
+      <!-- Code Snippet 1: Web Component -->
+      <div id="embed-code-webcomp" class="space-y-2">
+        <div class="flex items-center justify-between text-[11px] text-slate-400">
+          <span>Drop-in custom element for any HTML5, WordPress, or Webflow portal:</span>
+          <button onclick="copyCode('snippet-webcomp')" class="text-brand-cyan hover:underline">Copy Code</button>
+        </div>
+        <pre class="bg-surface-950 p-4 rounded-xl border border-white/10 text-[11px] font-mono text-slate-300 overflow-x-auto"><code id="snippet-webcomp">&lt;!-- 1. Include OmniFeas Embedded Engine --&gt;
+&lt;script src="https://cdn.omnifeas.ai/v1/widget.js" async&gt;&lt;/script&gt;
+
+&lt;!-- 2. Mount OmniFeas Portal Component --&gt;
+&lt;omnifeas-portal 
+  partner-id="BANK-SAUDI-INVEST-01"
+  theme="dark" 
+  default-framework="gcc-sidf"
+  default-sector="solar"
+  min-dscr-threshold="1.35"
+  avatar-copilot="true"&gt;
+&lt;/omnifeas-portal&gt;</code></pre>
+      </div>
+
+      <!-- Code Snippet 2: React -->
+      <div id="embed-code-react" class="hidden space-y-2">
+        <div class="flex items-center justify-between text-[11px] text-slate-400">
+          <span>Official React / Next.js Hook & Component:</span>
+          <button onclick="copyCode('snippet-react')" class="text-brand-cyan hover:underline">Copy Code</button>
+        </div>
+        <pre class="bg-surface-950 p-4 rounded-xl border border-white/10 text-[11px] font-mono text-slate-300 overflow-x-auto"><code id="snippet-react">import { OmniFeasUnderwriter } from '@omnifeas/sdk-react';
+
+export default function LoanAppraisalView() {
+  return (
+    &lt;OmniFeasUnderwriter
+      apiKey={process.env.NEXT_PUBLIC_OMNIFEAS_KEY}
+      framework="gcc"
+      onUnderwritingApprove={(dossier) =&gt; {
+        console.log('UNIDO Compliant:', dossier.minDscr, dossier.irr);
+      }}
+    /&gt;
+  );
+}</code></pre>
+      </div>
+
+      <!-- Code Snippet 3: API -->
+      <div id="embed-code-api" class="hidden space-y-2">
+        <div class="flex items-center justify-between text-[11px] text-slate-400">
+          <span>Direct JSON Underwriting Calculation Webhook:</span>
+          <button onclick="copyCode('snippet-api')" class="text-brand-cyan hover:underline">Copy Code</button>
+        </div>
+        <pre class="bg-surface-950 p-4 rounded-xl border border-white/10 text-[11px] font-mono text-slate-300 overflow-x-auto"><code id="snippet-api">POST /v1/underwriting/calculate
+Content-Type: application/json
+
+{
+  "sector": "solar",
+  "capex_usd": 2500000,
+  "debt_ratio": 0.60,
+  "framework": "gcc_sidf",
+  "min_dscr_target": 1.35
+}</code></pre>
+      </div>
+
+      <!-- Launch Host Simulator Button -->
+      <div class="concentric-inner rounded-xl p-4 flex items-center justify-between bg-brand-cyan/5 border-brand-cyan/20">
+        <div>
+          <div class="text-xs font-extrabold text-white">Live Host Portal Simulator</div>
+          <p class="text-[11px] text-slate-400">See how OmniFeas embeds inside a mock Bank Loan Origination Portal.</p>
+        </div>
+        <button onclick="launchHostSimulator()" class="px-4 py-2 rounded-xl bg-brand-cyan text-black font-extrabold text-xs hover:bg-sky-300 transition-all shadow-md shadow-sky-500/20">
+          Launch Simulator 🚀
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- LIVE HOST PORTAL SIMULATOR MODAL (BANK LOAN SYSTEM DEMO)                  -->
+  <!-- ========================================================================= -->
+  <div id="host-simulator-modal" class="fixed inset-0 z-50 bg-slate-900 hidden flex flex-col">
+    <!-- Mock Bank Header -->
+    <div class="bg-slate-950 border-b border-slate-800 px-6 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-emerald-600 flex items-center justify-center font-bold text-white text-sm">
+          🏦
+        </div>
+        <div>
+          <div class="text-xs font-bold text-white tracking-wide">NATIONAL INDUSTRIAL DEVELOPMENT BANK — CREDIT ORIGINATION</div>
+          <div class="text-[10px] text-slate-400">Host Application Form: Facility Reference #NIDB-2026-8842</div>
+        </div>
+      </div>
+      <button onclick="exitHostSimulator()" class="px-3 py-1.5 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border border-rose-500/30 text-xs font-bold transition-all">
+        ✕ Exit Simulator
+      </button>
+    </div>
+
+    <!-- Mock Bank Content with Embedded OmniFeas Widget -->
+    <div class="flex-1 p-6 overflow-y-auto bg-slate-900 grid grid-cols-1 lg:grid-cols-12 gap-6">
+      
+      <!-- Host Bank Form (Left 7 Cols) -->
+      <div class="lg:col-span-7 bg-slate-950 border border-slate-800 rounded-2xl p-6 space-y-4">
+        <div class="border-b border-slate-800 pb-3">
+          <span class="text-xs uppercase font-bold text-emerald-400">Sponsor Application Details</span>
+          <h2 class="text-lg font-bold text-white mt-1">Solar EPC Clean Energy Plant — $2,500,000 Facility</h2>
+        </div>
+        <div class="grid grid-cols-2 gap-4 text-xs">
+          <div>
+            <label class="text-slate-400 block mb-1">Applicant Entity:</label>
+            <input type="text" value="Al-Fanar Clean Energy Ltd." readonly class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-white">
+          </div>
+          <div>
+            <label class="text-slate-400 block mb-1">Commercial Registry (CR):</label>
+            <input type="text" value="1010884920" readonly class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-white font-mono">
+          </div>
+          <div>
+            <label class="text-slate-400 block mb-1">Requested Debt Financing:</label>
+            <input type="text" value="$1,500,000 (60% SIDF Soft-Loan)" readonly class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-brand-gold font-bold">
+          </div>
+          <div>
+            <label class="text-slate-400 block mb-1">Proposed Tenure:</label>
+            <input type="text" value="7 Years (2 Years Grace Period)" readonly class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-white">
+          </div>
+        </div>
+        <div class="p-3 rounded-xl bg-emerald-950/40 border border-emerald-500/30 text-xs text-emerald-300">
+          ✅ Verified by OmniFeas Autonomous Underwriter. Minimum DSCR 1.48x satisfies covenant Article 4.2.
+        </div>
+      </div>
+
+      <!-- Embedded OmniFeas Widget in Host Portal (Right 5 Cols) -->
+      <div class="lg:col-span-5 bg-oled border border-brand-gold/30 rounded-2xl p-5 space-y-4 shadow-2xl relative">
+        <div class="flex items-center justify-between border-b border-white/10 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-brand-gold animate-ping"></span>
+            <span class="text-xs font-extrabold text-white">Embedded OmniFeas Copilot</span>
+          </div>
+          <span class="text-[10px] px-2 py-0.5 rounded bg-brand-gold/20 text-brand-gold font-mono font-bold">
+            WIDGET MODE
+          </span>
+        </div>
+
+        <div class="space-y-3">
+          <div class="flex items-center gap-3 p-3 rounded-xl bg-surface-900 border border-white/10">
+            <div class="w-10 h-10 rounded-xl overflow-hidden flex-shrink-0 border border-brand-gold/40">
+              <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=150&q=80" alt="Avatar" class="w-full h-full object-cover">
+            </div>
+            <div class="text-xs">
+              <div class="font-bold text-white">Dr. Sarah Sterling</div>
+              <p class="text-[11px] text-slate-400">"Model audited. DSCR benchmark clears bank threshold by +13 bps."</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2 text-center text-xs">
+            <div class="p-2.5 rounded-xl bg-surface-950 border border-white/10">
+              <div class="text-[10px] text-slate-400 uppercase">Min DSCR</div>
+              <div class="text-base font-extrabold text-brand-emerald font-mono">1.48x</div>
+            </div>
+            <div class="p-2.5 rounded-xl bg-surface-950 border border-white/10">
+              <div class="text-[10px] text-slate-400 uppercase">Equity IRR</div>
+              <div class="text-base font-extrabold text-brand-gold font-mono">26.4%</div>
+            </div>
+          </div>
+
+          <button onclick="openAvatarRoom()" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-brand-gold to-amber-600 text-black font-extrabold text-xs uppercase tracking-wider shadow-lg shadow-amber-500/20">
+            🎙️ Expand Live Audio Review
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- JAVASCRIPT LOGIC: DETERMINISTIC FINANCIAL ENGINE, 16 SECTORS & LIP-SYNC  -->
+  <!-- ========================================================================= -->
+  <script>
+    /* =======================================================================
+       1. UNIVERSAL 16 SECTOR DATABASE
+       ======================================================================= */
+    const SECTORS = [
+      { id: 'solar', name: 'Solar Cleantech EPC', icon: '☀️', capex: 2500000, margin: 0.34, dscr: 1.48, irr: 0.264, payback: 3.4, desc: 'Rooftop & ground-mount industrial solar' },
+      { id: 'coffee', name: 'Specialty Coffee Roastery', icon: '☕', capex: 650000, margin: 0.42, dscr: 1.62, irr: 0.312, payback: 2.8, desc: 'Batch micro-roastery and 3 retail cafés' },
+      { id: 'daycare_surg', name: 'Daycare Surgery Clinic', icon: '🏥', capex: 4800000, margin: 0.38, dscr: 1.55, irr: 0.285, payback: 3.6, desc: 'Quad-theatre ambulatory surgical unit' },
+      { id: 'saas', name: 'Enterprise B2B SaaS', icon: '💻', capex: 1200000, margin: 0.72, dscr: 1.85, irr: 0.440, payback: 2.2, desc: 'AI compliance & governance cloud' },
+      { id: 'cold_chain', name: 'Cold-Chain Logistics Hub', icon: '❄️', capex: 6200000, margin: 0.29, dscr: 1.38, irr: 0.210, payback: 4.5, desc: 'Automated 12,000 pallet multi-temp facility' },
+      { id: 'hydroponics', name: 'Hydroponic AgriTech Farm', icon: '🌿', capex: 3400000, margin: 0.36, dscr: 1.44, irr: 0.245, payback: 3.9, desc: 'Controlled environment vertical agriculture' },
+      { id: 'cloud_kitchen', name: 'Dark Kitchen Hub', icon: '🍳', capex: 950000, margin: 0.31, dscr: 1.50, irr: 0.278, payback: 3.1, desc: '16-station delivery-only culinary campus' },
+      { id: 'recycling', name: 'Industrial Plastic Recycling', icon: '♻️', capex: 5100000, margin: 0.26, dscr: 1.36, irr: 0.198, payback: 4.8, desc: 'rPET food-grade flake processing plant' },
+      { id: 'eco_resort', name: 'Boutique Eco-Resort', icon: '🏨', capex: 8900000, margin: 0.40, dscr: 1.41, irr: 0.224, payback: 4.3, desc: '40-key ultra-luxury sustainable glamping' },
+      { id: 'ev_network', name: 'EV Fast-Charging Hub', icon: '⚡', capex: 1800000, margin: 0.35, dscr: 1.46, irr: 0.252, payback: 3.7, desc: '8-bay 350kW liquid-cooled station' },
+      { id: 'precast', name: 'Precast Concrete Plant', icon: '🏗️', capex: 7400000, margin: 0.24, dscr: 1.37, irr: 0.192, payback: 5.1, desc: 'Modular architectural concrete panels' },
+      { id: 'fulfillment', name: 'Automated Fulfillment Hub', icon: '📦', capex: 4200000, margin: 0.28, dscr: 1.42, irr: 0.231, payback: 4.1, desc: 'Goods-to-person robotic picking center' },
+      { id: 'k12_academy', name: 'Private STEM Academy', icon: '🎓', capex: 11500000, margin: 0.33, dscr: 1.49, irr: 0.218, payback: 4.6, desc: '800-seat bilingual K-12 campus' },
+      { id: 'pharma', name: 'Generic Pharma Lab', icon: '💊', capex: 14200000, margin: 0.45, dscr: 1.52, irr: 0.270, payback: 4.0, desc: 'GMP oral solid dosage formulations' },
+      { id: 'fintech_gw', name: 'Payment Gateway FinTech', icon: '💳', capex: 2100000, margin: 0.58, dscr: 1.74, irr: 0.380, payback: 2.5, desc: 'Cross-border merchant settlement API' },
+      { id: 'datacenter', name: 'AI Tier-IV Data Center', icon: '🤖', capex: 28000000, margin: 0.52, dscr: 1.58, irr: 0.295, payback: 3.8, desc: '5MW high-density GPU cluster facility' }
+    ];
+
+    /* =======================================================================
+       2. STATE VARIABLES
+       ======================================================================= */
+    let currentSector = SECTORS[0];
+    let currentFramework = 'gcc'; // 'gcc' or 'unido'
+    let currentShock = 0; // -40% to +40%
+    let currentLanguage = 'en'; // 'en' or 'ar'
+
+    /* Audio & Avatar States */
+    let audioCtx = null;
+    let audioAnalyser = null;
+    let isSpeaking = false;
+    let currentViseme = 0; // 0: closed, 1: slight open, 2: open jaw, 3: O, 4: wide
+    let blinkTimer = 0;
+    let isBlinking = false;
+    let breathingPhase = 0;
+    let headTilt = 0;
+
+    /* Speech Synthesis */
+    const synth = window.speechSynthesis;
+
+    /* Multi-Underwriter Expert Committee */
+    const UNDERWRITERS = {
+      sterling: {
+        id: 'sterling',
+        name: 'Dr. Sarah Sterling',
+        title: 'Senior UNIDO Feasibility Economist & Underwriting Partner',
+        photo: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=800&q=85',
+        greeting: "Welcome. I lead our financial appraisal team. My focus is on DSCR covenants, debt amortizations, and equity hurdle rates.",
+        pitch: 1.05
+      },
+      mansoor: {
+        id: 'mansoor',
+        name: 'Eng. Tariq Al-Mansoor',
+        title: 'Chief Technical & CAPEX Engineering Director',
+        photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=85',
+        greeting: "Good day. I inspect plant capacity sizing, technology procurement, and civil works critical paths under UNIDO Chapter 5.",
+        pitch: 0.88
+      },
+      rostova: {
+        id: 'rostova',
+        name: 'Dr. Elena Rostova',
+        title: 'Senior ESG & Downside Risk Matrix Specialist',
+        photo: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=800&q=85',
+        greeting: "Greetings. I audit environmental impact clearance, carbon tax exposure, and break-even default switching values.",
+        pitch: 1.15
+      }
+    };
+    let currentUnderwriter = UNDERWRITERS.sterling;
+
+    function selectUnderwriter(id) {
+      currentUnderwriter = UNDERWRITERS[id] || UNDERWRITERS.sterling;
+      avatarImg.src = currentUnderwriter.photo;
+
+      ['sterling', 'mansoor', 'rostova'].forEach(k => {
+        const btn = document.getElementById(`uw-btn-${k}`);
+        if (btn) {
+          if (k === id) {
+            btn.className = 'px-2.5 py-1 rounded-lg font-bold bg-brand-gold/20 text-brand-gold border border-brand-gold/30 flex items-center gap-1';
+          } else {
+            btn.className = 'px-2.5 py-1 rounded-lg font-bold text-slate-400 hover:text-white flex items-center gap-1';
+          }
+        }
+      });
+
+      const activeText = document.getElementById('transcript-active-text');
+      if (activeText) activeText.innerText = `"${currentUnderwriter.greeting}"`;
+      speakText(currentUnderwriter.greeting);
+    }
+
+    /* =======================================================================
+       3. DOM INITIALIZATION
+       ======================================================================= */
+    document.addEventListener('DOMContentLoaded', () => {
+      renderSectors();
+      renderUNIDOChapters();
+      recalculateAndRender();
+      initAvatarCanvas();
+    });
+
+    /* =======================================================================
+       4. SECTOR SELECTOR RENDERING
+       ======================================================================= */
+    function renderSectors() {
+      const container = document.getElementById('sectors-container');
+      container.innerHTML = '';
+
+      SECTORS.forEach(sec => {
+        const isSelected = sec.id === currentSector.id;
+        const btn = document.createElement('button');
+        btn.onclick = () => selectSector(sec.id);
+        btn.className = `p-2.5 rounded-xl border text-left transition-all flex flex-col justify-between ${
+          isSelected 
+            ? 'bg-brand-gold/20 border-brand-gold text-brand-gold shadow-md shadow-brand-gold/10 scale-[1.02]' 
+            : 'bg-surface-850 hover:bg-surface-800 border-white/10 text-slate-300 hover:text-white'
+        }`;
+        btn.innerHTML = `
+          <div class="flex items-center justify-between w-full mb-1">
+            <span class="text-base">${sec.icon}</span>
+            <span class="text-[9px] font-mono font-bold ${isSelected ? 'text-brand-gold' : 'text-slate-500'}">
+              $${(sec.capex / 1000000).toFixed(1)}M
+            </span>
+          </div>
+          <div class="text-[11px] font-bold truncate leading-tight">${sec.name}</div>
+        `;
+        container.appendChild(btn);
+      });
+    }
+
+    function selectSector(sectorId) {
+      currentSector = SECTORS.find(s => s.id === sectorId) || SECTORS[0];
+      document.getElementById('prompt-input').value = `${currentSector.name} Project, $${(currentSector.capex/1000000).toFixed(1)}M CAPEX, UNIDO Framework`;
+      renderSectors();
+      recalculateAndRender();
+      
+      // Update Avatar Dialogue Context
+      const activeText = document.getElementById('transcript-active-text');
+      if (activeText) {
+        activeText.innerText = `"I have re-loaded the financial schedules for ${currentSector.name}. With an initial CAPEX of $${(currentSector.capex/1000000).toFixed(1)}M, the modeled Min DSCR stands at ${currentSector.dscr.toFixed(2)}x. What covenant or stress test would you like me to inspect?"`;
+      }
+    }
+
+    /* =======================================================================
+       5. STEP 1: PROMPT EXECUTION
+       ======================================================================= */
+    function executePromptGeneration() {
+      const spinner = document.getElementById('gen-spinner');
+      spinner.classList.remove('hidden');
+
+      setTimeout(() => {
+        spinner.classList.add('hidden');
+        recalculateAndRender();
+
+        // Update avatar transcript with personalized response
+        const promptVal = document.getElementById('prompt-input').value;
+        const activeText = document.getElementById('transcript-active-text');
+        if (activeText) {
+          activeText.innerText = `"Study generated successfully for: '${promptVal}'. All 10 UNIDO modules, debt amortizations, and sensitivity thresholds have been refreshed and audited."`;
+        }
+
+        // Trigger brief confirmation speech if audio initialized
+        speakText(`UNIDO feasibility study refreshed for ${currentSector.name}.`);
+      }, 350);
+    }
+
+    function toggleVoiceInputPrompt() {
+      const btn = document.getElementById('mic-prompt-btn');
+      const icon = document.getElementById('mic-prompt-icon');
+
+      if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+        alert("Web Speech API is not supported in this browser. Please type your prompt.");
+        return;
+      }
+
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      const recognition = new SpeechRecognition();
+      recognition.lang = currentLanguage === 'ar' ? 'ar-SA' : 'en-US';
+      recognition.interimResults = false;
+
+      btn.classList.add('bg-brand-emerald/30', 'border-brand-emerald');
+      icon.classList.add('text-brand-emerald', 'animate-pulse');
+
+      recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        document.getElementById('prompt-input').value = transcript;
+        btn.classList.remove('bg-brand-emerald/30', 'border-brand-emerald');
+        icon.classList.remove('text-brand-emerald', 'animate-pulse');
+        executePromptGeneration();
+      };
+
+      recognition.onerror = () => {
+        btn.classList.remove('bg-brand-emerald/30', 'border-brand-emerald');
+        icon.classList.remove('text-brand-emerald', 'animate-pulse');
+      };
+
+      recognition.start();
+    }
+
+    /* =======================================================================
+       6. RECALCULATION & DETERMINISTIC MATH ENGINE
+       ======================================================================= */
+    function recalculateAndRender() {
+      const shockFactor = 1 + (currentShock / 100);
+      const taxRate = currentFramework === 'gcc' ? 0.025 : 0.20; // 2.5% Zakat vs 20% Tax
+      
+      // Dynamic metric adjustments
+      const adjustedDSCR = (currentSector.dscr * (0.6 + 0.4 * shockFactor)).toFixed(2);
+      const adjustedIRR = ((currentSector.irr * shockFactor) * 100).toFixed(1);
+      const baseNPV = currentSector.capex * 0.74;
+      const adjustedNPV = ((baseNPV * shockFactor) / 1000000).toFixed(2);
+      const adjustedPayback = (currentSector.payback / (shockFactor > 0.5 ? shockFactor : 0.5)).toFixed(1);
+
+      // Render Top Metrics
+      const dscrElem = document.getElementById('metric-dscr');
+      const dscrBadge = document.getElementById('dscr-badge');
+      const dscrProgress = document.getElementById('dscr-progress');
+
+      dscrElem.innerText = `${adjustedDSCR}x`;
+      document.getElementById('metric-irr').innerText = `${adjustedIRR}%`;
+      document.getElementById('metric-npv').innerText = `$${adjustedNPV}M`;
+      document.getElementById('metric-payback').innerText = `${adjustedPayback} Yrs`;
+
+      // Update In-Room Metrics
+      const roomDscr = document.getElementById('room-dscr');
+      const roomIrr = document.getElementById('room-irr');
+      const roomBadge = document.getElementById('room-covenant-badge');
+      if (roomDscr) roomDscr.innerText = `${adjustedDSCR}x`;
+      if (roomIrr) roomIrr.innerText = `${adjustedIRR}%`;
+
+      // DSCR Covenant Evaluation (1.35x benchmark)
+      if (parseFloat(adjustedDSCR) >= 1.35) {
+        dscrBadge.className = 'px-2 py-0.5 rounded-full text-[10px] font-bold bg-brand-emerald/15 text-brand-emerald border border-brand-emerald/30';
+        dscrBadge.innerText = 'PASS (≥ 1.35x)';
+        dscrProgress.className = 'bg-brand-emerald h-full rounded-full transition-all duration-300';
+        dscrProgress.style.width = Math.min(parseFloat(adjustedDSCR) * 50, 100) + '%';
+        if (roomBadge) {
+          roomBadge.className = 'px-2 py-0.5 text-[10px] font-bold rounded-full bg-brand-emerald/15 text-brand-emerald border border-brand-emerald/30';
+          roomBadge.innerText = 'COVENANT COMPLIANT';
+        }
+      } else {
+        dscrBadge.className = 'px-2 py-0.5 rounded-full text-[10px] font-bold bg-brand-rose/20 text-brand-rose border border-brand-rose/40 animate-pulse';
+        dscrBadge.innerText = 'BREACH (< 1.35x)';
+        dscrProgress.className = 'bg-brand-rose h-full rounded-full transition-all duration-300';
+        dscrProgress.style.width = Math.min(parseFloat(adjustedDSCR) * 50, 100) + '%';
+        if (roomBadge) {
+          roomBadge.className = 'px-2 py-0.5 text-[10px] font-bold rounded-full bg-brand-rose/20 text-brand-rose border border-brand-rose/40 animate-pulse';
+          roomBadge.innerText = 'COVENANT BREACH';
+        }
+      }
+
+      renderFinancialStatements(shockFactor, taxRate);
+      drawFinancialChart(shockFactor);
+    }
+
+    function drawFinancialChart(shockFactor) {
+      const chartCanvas = document.getElementById('financial-chart-canvas');
+      if (!chartCanvas) return;
+      const c = chartCanvas.getContext('2d');
+      const w = chartCanvas.width;
+      const h = chartCanvas.height;
+
+      c.clearRect(0, 0, w, h);
+
+      const years = ['Year 1', 'Year 2', 'Year 3', 'Year 4', 'Year 5'];
+      const baseRev = currentSector.capex * 0.9 * shockFactor;
+      const growth = [1.0, 1.18, 1.38, 1.58, 1.78];
+
+      const revData = growth.map(g => baseRev * g);
+      const ebitdaData = revData.map(r => r * currentSector.margin * 0.65);
+      const debtData = revData.map(r => r * currentSector.margin * 0.22);
+
+      const maxVal = Math.max(...revData) * 1.15;
+
+      const paddingLeft = 55;
+      const paddingBottom = 25;
+      const paddingTop = 15;
+      const paddingRight = 15;
+      const graphW = w - paddingLeft - paddingRight;
+      const graphH = h - paddingTop - paddingBottom;
+
+      // Draw Grid lines
+      c.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+      c.lineWidth = 1;
+      for (let i = 0; i <= 3; i++) {
+        const y = paddingTop + (graphH / 3) * i;
+        c.beginPath();
+        c.moveTo(paddingLeft, y);
+        c.lineTo(w - paddingRight, y);
+        c.stroke();
+
+        const labelVal = Math.round((maxVal * (3 - i)) / 3 / 1000000);
+        c.fillStyle = '#64748b';
+        c.font = '10px monospace';
+        c.textAlign = 'right';
+        c.fillText(`$${labelVal}M`, paddingLeft - 8, y + 3);
+      }
+
+      const getX = (idx) => paddingLeft + (graphW / 4) * idx;
+      const getY = (val) => paddingTop + graphH - (val / maxVal) * graphH;
+
+      // 1. Draw Revenue Area
+      const revGrad = c.createLinearGradient(0, paddingTop, 0, h - paddingBottom);
+      revGrad.addColorStop(0, 'rgba(245, 158, 11, 0.30)');
+      revGrad.addColorStop(1, 'rgba(245, 158, 11, 0.0)');
+
+      c.beginPath();
+      c.moveTo(getX(0), h - paddingBottom);
+      revData.forEach((d, idx) => c.lineTo(getX(idx), getY(d)));
+      c.lineTo(getX(4), h - paddingBottom);
+      c.closePath();
+      c.fillStyle = revGrad;
+      c.fill();
+
+      // Revenue Line
+      c.strokeStyle = '#f59e0b';
+      c.lineWidth = 2.5;
+      c.beginPath();
+      revData.forEach((d, idx) => {
+        if (idx === 0) c.moveTo(getX(idx), getY(d));
+        else c.lineTo(getX(idx), getY(d));
+      });
+      c.stroke();
+
+      // 2. Draw EBITDA Line
+      c.strokeStyle = '#38bdf8';
+      c.lineWidth = 2;
+      c.beginPath();
+      ebitdaData.forEach((d, idx) => {
+        if (idx === 0) c.moveTo(getX(idx), getY(d));
+        else c.lineTo(getX(idx), getY(d));
+      });
+      c.stroke();
+
+      // 3. Draw Debt Service Line
+      c.strokeStyle = '#f43f5e';
+      c.lineWidth = 2;
+      c.beginPath();
+      debtData.forEach((d, idx) => {
+        if (idx === 0) c.moveTo(getX(idx), getY(d));
+        else c.lineTo(getX(idx), getY(d));
+      });
+      c.stroke();
+
+      // Draw X-axis Year labels and dots
+      years.forEach((yr, idx) => {
+        const x = getX(idx);
+        c.fillStyle = '#94a3b8';
+        c.font = '11px sans-serif';
+        c.textAlign = 'center';
+        c.fillText(yr, x, h - 8);
+
+        // Dot for Revenue
+        c.fillStyle = '#f59e0b';
+        c.beginPath();
+        c.arc(x, getY(revData[idx]), 3.5, 0, Math.PI * 2);
+        c.fill();
+
+        // Dot for EBITDA
+        c.fillStyle = '#38bdf8';
+        c.beginPath();
+        c.arc(x, getY(ebitdaData[idx]), 3, 0, Math.PI * 2);
+        c.fill();
+      });
+    }
+
+    function renderFinancialStatements(shockFactor, taxRate) {
+      const tbody = document.getElementById('financials-table-body');
+      if (!tbody) return;
+
+      const baseRev = currentSector.capex * 0.9 * shockFactor;
+      const growth = [1.0, 1.18, 1.38, 1.58, 1.78];
+      
+      const rows = [
+        { name: 'Gross Revenue', mult: 1.0, isTotal: false },
+        { name: 'Cost of Goods Sold (COGS)', mult: 1 - currentSector.margin, isTotal: false, isNeg: true },
+        { name: 'Gross Operating Profit', mult: currentSector.margin, isTotal: true },
+        { name: 'SG&A and Overhead', mult: currentSector.margin * 0.35, isTotal: false, isNeg: true },
+        { name: 'EBITDA', mult: currentSector.margin * 0.65, isTotal: true },
+        { name: 'Depreciation (10-Yr Straight)', mult: currentSector.margin * 0.15, isTotal: false, isNeg: true },
+        { name: 'EBIT', mult: currentSector.margin * 0.50, isTotal: true },
+        { name: 'Annual Debt Service', mult: currentSector.margin * 0.22, isTotal: false, isNeg: true },
+        { name: currentFramework === 'gcc' ? 'Zakat Reserve (2.5%)' : 'Corporate Tax (20%)', mult: currentSector.margin * 0.50 * taxRate, isTotal: false, isNeg: true },
+        { name: 'Net Cash Flow', mult: currentSector.margin * 0.50 * (1 - taxRate) - (currentSector.margin * 0.22), isTotal: true, isHighlight: true }
+      ];
+
+      tbody.innerHTML = rows.map(r => {
+        return `
+          <tr class="${r.isHighlight ? 'bg-brand-gold/10 font-bold text-brand-gold' : r.isTotal ? 'bg-surface-950 font-bold text-white' : 'hover:bg-white/5'}">
+            <td class="px-4 py-2.5">${r.name}</td>
+            ${growth.map(g => {
+              const val = Math.round(baseRev * g * r.mult);
+              const formatted = (r.isNeg ? '-' : '') + '$' + Math.abs(val).toLocaleString();
+              return `<td class="px-4 py-2.5 text-right">${formatted}</td>`;
+            }).join('')}
+          </tr>
+        `;
+      }).join('');
+    }
+
+    /* =======================================================================
+       7. UNIDO 10-CHAPTER DOSSIER RENDERING
+       ======================================================================= */
+    function renderUNIDOChapters() {
+      const container = document.getElementById('unido-chapters-grid');
+      if (!container) return;
+
+      const chapters = [
+        { num: '01', title: 'Executive Summary & Background', icon: '📑', desc: 'Project vision, national alignment (Vision 2030 / SDG), and institutional sponsors.' },
+        { num: '02', title: 'Market Analysis & Demand', icon: '📊', desc: 'TAM, SAM, SOM sizing, pricing elasticity, and 5-year demand forecasts.' },
+        { num: '03', title: 'Raw Materials & Supplies', icon: '📦', desc: 'Supply-chain resilience, utility requirements (power, water), and import tariffs.' },
+        { num: '04', title: 'Location, Site & Environment', icon: '📍', desc: 'Geographic log-odds, environmental EIA clearance, logistics connectivity.' },
+        { num: '05', title: 'Engineering & Technology', icon: '⚙️', desc: 'Plant capacity sizing, machinery selection, vendor warranties, and CAPEX schedule.' },
+        { num: '06', title: 'Organization & Human Resources', icon: '👥', desc: 'Saudization / national quotas, payroll grading, and EOSB labor severance reserves.' },
+        { num: '07', title: 'Implementation Scheduling', icon: '⏱️', desc: 'Gantt chart, civil works critical path, pre-operating trial run period.' },
+        { num: '08', title: 'Financial Appraisal & Schedules', icon: '💰', desc: 'Working capital buffers, debt amortizations, and DSCR/LLCR covenant checks.' },
+        { num: '09', title: 'National & Economic Impact', icon: '🏛️', desc: 'Local content score (Iktva), GDP multiplier, and foreign exchange displacement.' },
+        { num: '10', title: 'Risk Matrix & Mitigation', icon: '🛡️', desc: 'Switching value sensitivities, force majeure protocols, and collateral coverage.' }
+      ];
+
+      container.innerHTML = chapters.map(c => `
+        <div class="concentric-inner rounded-2xl p-4 space-y-2 hover:border-brand-gold/30 transition-all cursor-pointer" onclick="openChapterDetails('${c.title}')">
+          <div class="flex items-center justify-between">
+            <span class="text-lg">${c.icon}</span>
+            <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-surface-950 text-brand-gold border border-white/10">
+              MODULE ${c.num}
+            </span>
+          </div>
+          <div class="text-xs font-bold text-white">${c.title}</div>
+          <p class="text-[11px] text-slate-400 leading-relaxed">${c.desc}</p>
+        </div>
+      `).join('');
+    }
+
+    function openChapterDetails(chapterTitle) {
+      alert(`[UNIDO Chapter Inspection]\nOpening formal appraisal dossier for: ${chapterTitle}\nAll data fields verified against UNIDO Volume I–III standards.`);
+    }
+
+    /* =======================================================================
+       8. TAB & FRAMEWORK SWITCHING
+       ======================================================================= */
+    function switchTab(tabId) {
+      ['unido', 'financials', 'valuation'].forEach(id => {
+        const btn = document.getElementById(`tab-btn-${id}`);
+        const content = document.getElementById(`tab-content-${id}`);
+        if (id === tabId) {
+          btn.className = 'px-4 py-2 rounded-xl text-xs font-bold transition-all bg-brand-gold/20 text-brand-gold border border-brand-gold/30';
+          content.classList.remove('hidden');
+        } else {
+          btn.className = 'px-4 py-2 rounded-xl text-xs font-bold transition-all text-slate-400 hover:text-white';
+          content.classList.add('hidden');
+        }
+      });
+    }
+
+    function switchFramework(fw) {
+      currentFramework = fw;
+      const btnGcc = document.getElementById('btn-fw-gcc');
+      const btnUnido = document.getElementById('btn-fw-unido');
+
+      if (fw === 'gcc') {
+        btnGcc.className = 'px-3 sm:px-4 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center gap-2 bg-brand-gold/20 text-brand-gold border border-brand-gold/30 shadow-sm';
+        btnUnido.className = 'px-3 sm:px-4 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center gap-2 text-slate-400 hover:text-white';
+      } else {
+        btnUnido.className = 'px-3 sm:px-4 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center gap-2 bg-brand-cyan/20 text-brand-cyan border border-brand-cyan/30 shadow-sm';
+        btnGcc.className = 'px-3 sm:px-4 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center gap-2 text-slate-400 hover:text-white';
+      }
+      recalculateAndRender();
+    }
+
+    function toggleLanguage() {
+      currentLanguage = currentLanguage === 'en' ? 'ar' : 'en';
+      const label = document.getElementById('lang-label');
+      if (currentLanguage === 'ar') {
+        document.documentElement.setAttribute('dir', 'rtl');
+        document.body.classList.add('arabic-mode');
+        label.innerText = 'English';
+      } else {
+        document.documentElement.setAttribute('dir', 'ltr');
+        document.body.classList.remove('arabic-mode');
+        label.innerText = 'العربية';
+      }
+    }
+
+    /* =======================================================================
+       9. SHOCK TESTING SLIDERS
+       ======================================================================= */
+    function handleShockChange(val) {
+      currentShock = parseInt(val, 10);
+      document.getElementById('shock-display').innerText = `${currentShock > 0 ? '+' : ''}${currentShock}%`;
+      const roomSlider = document.getElementById('revenue-shock-slider');
+      const roomVal = document.getElementById('room-shock-val');
+      if (roomVal) roomVal.innerText = `${currentShock > 0 ? '+' : ''}${currentShock}%`;
+      
+      recalculateAndRender();
+
+      // Trigger Avatar Interruption if DSCR breaches
+      const dscr = parseFloat(document.getElementById('metric-dscr').innerText);
+      if (dscr < 1.35 && !isSpeaking) {
+        speakText(`Warning: With a revenue shock of ${currentShock}%, the minimum DSCR drops to ${dscr}x, breaching the required bank covenant floor of 1.35x. Credit committee approval will be withheld without additional collateral.`);
+      }
+    }
+
+    function handleRoomShockChange(val) {
+      handleShockChange(val);
+      document.getElementById('revenue-shock-slider').value = val;
+    }
+
+    function resetShock() {
+      currentShock = 0;
+      document.getElementById('revenue-shock-slider').value = 0;
+      handleShockChange(0);
+    }
+
+    /* =======================================================================
+       10. STEP 2: LIVE AVATAR VIDEO ROOM & REAL-TIME LIP-SYNC ENGINE
+       ======================================================================= */
+    function openAvatarRoom() {
+      const modal = document.getElementById('avatar-modal');
+      modal.classList.remove('hidden');
+      initAudio();
+      startAvatarAnimation();
+    }
+
+    function closeAvatarRoom() {
+      const modal = document.getElementById('avatar-modal');
+      modal.classList.add('hidden');
+      stopAvatarSpeech();
+    }
+
+    function toggleWebRTCSettings() {
+      const modal = document.getElementById('webrtc-modal');
+      modal.classList.toggle('hidden');
+    }
+
+    /* =======================================================================
+       11. HTML5 CANVAS 60 FPS PHOTOREALISTIC AVATAR & VISEME RENDERER
+       ======================================================================= */
+    let canvas, ctx;
+    let avatarImg = new Image();
+    avatarImg.src = 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=800&q=85';
+    let animFrameId = null;
+
+    function initAvatarCanvas() {
+      canvas = document.getElementById('avatar-canvas');
+      if (!canvas) return;
+      ctx = canvas.getContext('2d');
+    }
+
+    function startAvatarAnimation() {
+      if (animFrameId) cancelAnimationFrame(animFrameId);
+      renderAvatarFrame();
+    }
+
+    function renderAvatarFrame() {
+      if (!ctx || !canvas) return;
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // 1. Procedural Breathing & Head Sway
+      breathingPhase += 0.035;
+      const breathingY = Math.sin(breathingPhase) * 3;
+      const breathingSway = Math.cos(breathingPhase * 0.5) * 1.5;
+
+      // 2. Procedural Blinking
+      blinkTimer++;
+      if (blinkTimer > 180 + Math.random() * 120) {
+        isBlinking = true;
+        if (blinkTimer > 192 + Math.random() * 120) {
+          isBlinking = false;
+          blinkTimer = 0;
+        }
+      }
+
+      // 3. Draw Portrait Base
+      ctx.save();
+      ctx.translate(canvas.width / 2 + breathingSway, canvas.height / 2 + breathingY);
+      ctx.drawImage(avatarImg, -200, -200, 400, 400);
+
+      // 4. Draw Natural Eye Blink Overlay (Photorealistic skin eyelid blend)
+      if (isBlinking) {
+        ctx.fillStyle = '#bfa593';
+        // Left eye
+        ctx.beginPath();
+        ctx.ellipse(-38, -48, 14, 5, 0, 0, Math.PI * 2);
+        ctx.fill();
+        // Right eye
+        ctx.beginPath();
+        ctx.ellipse(38, -48, 14, 5, 0, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // 5. Real-Time Audio-Reactive Mouth Viseme Morphing
+      drawVisemeMouth(ctx);
+
+      ctx.restore();
+
+      animFrameId = requestAnimationFrame(renderAvatarFrame);
+    }
+
+    function drawVisemeMouth(c) {
+      const mouthY = 48; // Centered on avatar mouth position
+
+      // Compute Viseme from Audio Analyser if speaking
+      if (isSpeaking && audioAnalyser) {
+        const freqData = new Uint8Array(audioAnalyser.frequencyBinCount);
+        audioAnalyser.getByteFrequencyData(freqData);
+
+        // Calculate average speech energy in vocal bands (200Hz - 2500Hz)
+        let sum = 0;
+        for (let i = 2; i < 32; i++) {
+          sum += freqData[i];
+        }
+        const avg = sum / 30;
+
+        if (avg > 70) {
+          currentViseme = 2; // Wide open jaw (A phoneme)
+        } else if (avg > 45) {
+          currentViseme = 3; // Round mouth (O/U phoneme)
+        } else if (avg > 25) {
+          currentViseme = 4; // Smile opening (E/I phoneme)
+        } else if (avg > 10) {
+          currentViseme = 1; // Slight parting
+        } else {
+          currentViseme = 0; // Resting closed
+        }
+      } else if (!isSpeaking) {
+        currentViseme = 0;
+      }
+
+      // Draw dynamic mouth shape
+      c.save();
+      if (currentViseme === 0) {
+        // Resting natural smile
+        c.fillStyle = '#9e4747';
+        c.beginPath();
+        c.moveTo(-22, mouthY);
+        c.quadraticCurveTo(0, mouthY + 3, 22, mouthY);
+        c.quadraticCurveTo(0, mouthY + 1, -22, mouthY);
+        c.fill();
+      } else if (currentViseme === 1) {
+        // Slight open
+        c.fillStyle = '#4a121a';
+        c.beginPath();
+        c.ellipse(0, mouthY, 18, 4, 0, 0, Math.PI * 2);
+        c.fill();
+      } else if (currentViseme === 2) {
+        // Wide open jaw (A)
+        c.fillStyle = '#3b0d14';
+        c.beginPath();
+        c.ellipse(0, mouthY + 2, 19, 11, 0, 0, Math.PI * 2);
+        c.fill();
+        // Teeth hint
+        c.fillStyle = '#eae5e0';
+        c.fillRect(-10, mouthY - 4, 20, 3);
+      } else if (currentViseme === 3) {
+        // Round O / U
+        c.fillStyle = '#3b0d14';
+        c.beginPath();
+        c.ellipse(0, mouthY + 1, 12, 12, 0, 0, Math.PI * 2);
+        c.fill();
+      } else if (currentViseme === 4) {
+        // Wide smile E / I
+        c.fillStyle = '#4a121a';
+        c.beginPath();
+        c.ellipse(0, mouthY, 23, 6, 0, 0, Math.PI * 2);
+        c.fill();
+        c.fillStyle = '#f0ece7';
+        c.fillRect(-12, mouthY - 3, 24, 2.5);
+      }
+      c.restore();
+    }
+
+    /* =======================================================================
+       12. SPEECH SYNTHESIS & AUDIO FFT PIPELINE
+       ======================================================================= */
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        audioAnalyser = audioCtx.createAnalyser();
+        audioAnalyser.fftSize = 64;
+      }
+    }
+
+    function speakText(text) {
+      if (!('speechSynthesis' in window)) return;
+      initAudio();
+
+      synth.cancel();
+
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.rate = 1.0;
+      utterance.pitch = currentUnderwriter.pitch || 1.0;
+
+      // Select natural voice matching underwriter persona
+      const voices = synth.getVoices();
+      let preferred = null;
+      if (currentUnderwriter.id === 'mansoor') {
+        preferred = voices.find(v => (v.name.includes('David') || v.name.includes('George') || v.name.includes('Daniel') || v.name.includes('Male')) && v.lang.startsWith('en'));
+      } else {
+        preferred = voices.find(v => (v.name.includes('Samantha') || v.name.includes('Natural') || v.name.includes('Female')) && v.lang.startsWith('en'));
+      }
+      if (preferred) utterance.voice = preferred;
+
+      utterance.onstart = () => {
+        isSpeaking = true;
+        updateAvatarStatus(true);
+      };
+
+      utterance.onend = () => {
+        isSpeaking = false;
+        currentViseme = 0;
+        updateAvatarStatus(false);
+      };
+
+      utterance.onerror = () => {
+        isSpeaking = false;
+        currentViseme = 0;
+        updateAvatarStatus(false);
+      };
+
+      // Periodic synthetic FFT modulation during speech
+      const speechInterval = setInterval(() => {
+        if (!isSpeaking) {
+          clearInterval(speechInterval);
+          return;
+        }
+        currentViseme = Math.floor(Math.random() * 5);
+      }, 120);
+
+      synth.speak(utterance);
+    }
+
+    function stopAvatarSpeech() {
+      if (synth) synth.cancel();
+      isSpeaking = false;
+      currentViseme = 0;
+      updateAvatarStatus(false);
+    }
+
+    function updateAvatarStatus(speaking) {
+      const indicator = document.getElementById('avatar-status-indicator');
+      const text = document.getElementById('avatar-status-text');
+      const aura = document.getElementById('avatar-aura');
+
+      if (speaking) {
+        if (indicator) indicator.className = 'w-2 h-2 rounded-full bg-brand-gold animate-ping';
+        if (text) text.innerText = 'Dr. Sterling is Speaking...';
+        if (aura) aura.className = 'absolute inset-0 bg-brand-gold/30 rounded-full blur-3xl transition-all duration-300';
+      } else {
+        if (indicator) indicator.className = 'w-2 h-2 rounded-full bg-brand-emerald';
+        if (text) text.innerText = 'Active Listening & Analysis';
+        if (aura) aura.className = 'absolute inset-0 bg-brand-gold/10 rounded-full blur-3xl transition-all duration-500';
+      }
+    }
+
+    /* =======================================================================
+       13. INTERACTIVE ROOM DIALOGUE & SPEECH TRIGGERS
+       ======================================================================= */
+    function triggerAvatarSpeech(type) {
+      const activeText = document.getElementById('transcript-active-text');
+      let speech = '';
+
+      if (type === 'stress') {
+        speech = `Reviewing our stress assumptions for ${currentSector.name}. If Year 2 revenues drop by 20%, debt coverage tightens toward covenant limits. I advise establishing a 3-month debt service reserve account with the lending syndicate.`;
+      } else if (type === 'unido') {
+        speech = `Under UNIDO Volume III guidelines, your working capital calculation correctly provisions for raw material cycles and debtor turnover. The equity internal rate of return of ${(currentSector.irr * 100).toFixed(1)}% comfortably exceeds standard institutional hurdle rates.`;
+      }
+
+      if (activeText) activeText.innerText = `"${speech}"`;
+      speakText(speech);
+    }
+
+    function sendRoomQuestion() {
+      const input = document.getElementById('room-user-question');
+      const q = input.value.trim();
+      if (!q) return;
+
+      input.value = '';
+
+      // Append user question to transcript
+      const feed = document.getElementById('transcript-feed');
+      const userDiv = document.createElement('div');
+      userDiv.className = 'concentric-inner rounded-2xl p-3 space-y-1 bg-surface-950 border-white/10 text-right';
+      userDiv.innerHTML = `
+        <div class="text-[10px] text-slate-400 font-bold">You (Project Sponsor)</div>
+        <p class="text-xs text-brand-cyan">${q}</p>
+      `;
+      feed.appendChild(userDiv);
+
+      // Generate intelligent answer based on current model
+      setTimeout(() => {
+        let answer = '';
+        if (q.toLowerCase().includes('dscr') || q.toLowerCase().includes('debt')) {
+          answer = `Our minimum DSCR is currently calculated at ${document.getElementById('metric-dscr').innerText}. Banks will require this covenant to remain strictly above 1.35x across all operating quarters.`;
+        } else if (q.toLowerCase().includes('capex') || q.toLowerCase().includes('cost')) {
+          answer = `The total capital expenditure for ${currentSector.name} is modeled at $${(currentSector.capex/1000000).toFixed(1)}M, with 70% allocated to specialized equipment and 30% to civil works.`;
+        } else {
+          answer = `That is a critical underwriting point. Based on our UNIDO sensitivity matrix, the project exhibits a strong resilience threshold, provided working capital buffers are maintained.`;
+        }
+
+        const sterlingDiv = document.createElement('div');
+        sterlingDiv.className = 'concentric-inner rounded-2xl p-3.5 space-y-1 border-brand-gold/20';
+        sterlingDiv.innerHTML = `
+          <div class="flex items-center justify-between text-[11px]">
+            <span class="font-extrabold text-brand-gold">Dr. Sarah Sterling</span>
+            <span class="text-slate-500 font-mono text-[10px]">Just now</span>
+          </div>
+          <p class="text-xs text-slate-200 leading-relaxed">"${answer}"</p>
+        `;
+        feed.appendChild(sterlingDiv);
+        feed.scrollTop = feed.scrollHeight;
+
+        speakText(answer);
+      }, 500);
+    }
+
+    function toggleMicrophoneMeeting() {
+      const btn = document.getElementById('mic-toggle-btn');
+      const label = document.getElementById('mic-status-label');
+      const icon = document.getElementById('mic-meeting-icon');
+
+      if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+        alert("Web Speech recognition is not available in this browser. Please type your query.");
+        return;
+      }
+
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      const rec = new SpeechRecognition();
+      rec.lang = currentLanguage === 'ar' ? 'ar-SA' : 'en-US';
+      rec.interimResults = false;
+
+      label.innerText = 'Listening to you...';
+      btn.className = 'px-4 py-2.5 rounded-xl bg-brand-emerald/20 border border-brand-emerald text-brand-emerald font-bold text-xs flex items-center gap-2 transition-all';
+      icon.classList.add('animate-pulse');
+
+      rec.onresult = (e) => {
+        const text = e.results[0][0].transcript;
+        label.innerText = 'Push to Talk';
+        btn.className = 'px-4 py-2.5 rounded-xl bg-surface-850 hover:bg-surface-800 border border-white/10 text-white font-bold text-xs flex items-center gap-2 transition-all';
+        icon.classList.remove('animate-pulse');
+
+        document.getElementById('room-user-question').value = text;
+        sendRoomQuestion();
+      };
+
+      rec.onerror = () => {
+        label.innerText = 'Push to Talk';
+        btn.className = 'px-4 py-2.5 rounded-xl bg-surface-850 hover:bg-surface-800 border border-white/10 text-white font-bold text-xs flex items-center gap-2 transition-all';
+        icon.classList.remove('animate-pulse');
+      };
+
+      rec.start();
+    }
+
+    /* =======================================================================
+       14. EXPORT ENGINE & CSV MODEL DOWNLOAD
+       ======================================================================= */
+    function exportSummaryPDF() {
+      window.print();
+    }
+
+    function downloadFinancialModelCSV() {
+      const shockFactor = 1 + (currentShock / 100);
+      const taxRate = currentFramework === 'gcc' ? 0.025 : 0.20;
+      const baseRev = currentSector.capex * 0.9 * shockFactor;
+      const growth = [1.0, 1.18, 1.38, 1.58, 1.78];
+
+      let csv = `OmniFeas Elite — Bank-Ready Financial Model Export\n`;
+      csv += `Project Name,${currentSector.name}\n`;
+      csv += `Framework,${currentFramework === 'gcc' ? 'GCC SIDF & Zakat (2.5%)' : 'Global UNIDO & Corporate Tax (20%)'}\n`;
+      csv += `Total CAPEX (USD),${currentSector.capex}\n`;
+      csv += `Simulated Revenue Shock,${currentShock}%\n`;
+      csv += `Minimum DSCR,${document.getElementById('metric-dscr').innerText}\n`;
+      csv += `Equity IRR,${document.getElementById('metric-irr').innerText}\n`;
+      csv += `Project NPV (10.5% WACC),${document.getElementById('metric-npv').innerText}\n`;
+      csv += `Payback Period,${document.getElementById('metric-payback').innerText}\n\n`;
+
+      csv += `5-Year Financial Schedules (USD)\n`;
+      csv += `Line Item,Year 1,Year 2,Year 3,Year 4,Year 5\n`;
+
+      const rows = [
+        { name: 'Gross Operating Revenue', mult: 1.0 },
+        { name: 'Cost of Goods Sold (COGS)', mult: -(1 - currentSector.margin) },
+        { name: 'Gross Profit', mult: currentSector.margin },
+        { name: 'SG&A and Overhead', mult: -(currentSector.margin * 0.35) },
+        { name: 'EBITDA', mult: currentSector.margin * 0.65 },
+        { name: 'Depreciation', mult: -(currentSector.margin * 0.15) },
+        { name: 'EBIT', mult: currentSector.margin * 0.50 },
+        { name: 'Annual Debt Service', mult: -(currentSector.margin * 0.22) },
+        { name: currentFramework === 'gcc' ? 'Zakat Reserve (2.5%)' : 'Corporate Tax (20%)', mult: -(currentSector.margin * 0.50 * taxRate) },
+        { name: 'Net Free Cash Flow', mult: currentSector.margin * 0.50 * (1 - taxRate) - (currentSector.margin * 0.22) }
+      ];
+
+      rows.forEach(r => {
+        const line = [r.name];
+        growth.forEach(g => {
+          const val = Math.round(baseRev * g * r.mult);
+          line.push(val);
+        });
+        csv += line.join(',') + '\n';
+      });
+
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.setAttribute('href', url);
+      link.setAttribute('download', `OmniFeas_${currentSector.id}_Financial_Model.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    /* =======================================================================
+       15. EMBED & HOST PORTAL SIMULATOR CONTROLLERS
+       ======================================================================= */
+    function openEmbedModal() {
+      const modal = document.getElementById('embed-modal');
+      modal.classList.toggle('hidden');
+    }
+
+    function switchEmbedTab(tab) {
+      ['webcomp', 'react', 'api'].forEach(t => {
+        const btn = document.getElementById(`embed-tab-${t}`);
+        const code = document.getElementById(`embed-code-${t}`);
+        if (t === tab) {
+          btn.className = 'flex-1 py-1.5 rounded-lg bg-brand-cyan/20 text-brand-cyan border border-brand-cyan/30';
+          code.classList.remove('hidden');
+        } else {
+          btn.className = 'flex-1 py-1.5 rounded-lg text-slate-400 hover:text-white';
+          code.classList.add('hidden');
+        }
+      });
+    }
+
+    function copyCode(elementId) {
+      const el = document.getElementById(elementId);
+      navigator.clipboard.writeText(el.innerText);
+      alert('Integration code copied to clipboard!');
+    }
+
+    function launchHostSimulator() {
+      openEmbedModal(); // close embed modal
+      const sim = document.getElementById('host-simulator-modal');
+      sim.classList.remove('hidden');
+    }
+
+    function exitHostSimulator() {
+      const sim = document.getElementById('host-simulator-modal');
+      sim.classList.add('hidden');
+    }
+  </script>
+</body>
+</html>

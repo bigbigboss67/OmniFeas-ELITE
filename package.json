@@ -1,0 +1,10 @@
+{
+  "name": "omnifeas-elite",
+  "version": "1.0.0",
+  "private": true,
+  "description": "OmniFeas Elite — $1M UNIDO & Bank-Ready Feasibility Engine with Live AI Avatar",
+  "scripts": {
+    "dev": "npx serve .",
+    "start": "npx serve ."
+  }
+}
