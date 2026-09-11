@@ -482,6 +482,49 @@
           </button>
         </div>
 
+        
+        <!-- Friendly 3-Step Guided Tour Card (Collapsible) -->
+        <div id="quick-tour-card" class="concentric-inner rounded-2xl p-4 border-brand-cyan/25 bg-surface-900/80 flex flex-col md:flex-row md:items-center justify-between gap-4 transition-all">
+          <div class="flex items-start sm:items-center gap-3">
+            <div class="w-9 h-9 rounded-xl bg-brand-cyan/15 border border-brand-cyan/30 flex items-center justify-center text-brand-cyan text-lg flex-shrink-0">
+              💡
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="text-xs font-extrabold text-white uppercase tracking-wider">Fast-Track Feasibility Guide</span>
+                <span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-brand-emerald/15 text-brand-emerald border border-brand-emerald/30">BEGINNER FRIENDLY</span>
+              </div>
+              <p class="text-xs text-slate-300 mt-0.5">
+                <strong>Step 1:</strong> Pick any industry below or type an idea &nbsp;➔&nbsp; 
+                <strong>Step 2:</strong> Instant 5-year bank profits & loan covenants calculate in 300ms &nbsp;➔&nbsp; 
+                <strong>Step 3:</strong> Export bank study or discuss with AI avatar.
+              </p>
+            </div>
+          </div>
+          <button onclick="document.getElementById('quick-tour-card').classList.add('hidden')" class="text-[11px] font-bold text-slate-400 hover:text-white px-3 py-1 rounded-lg bg-surface-850 hover:bg-surface-800 border border-white/10 flex-shrink-0">
+            Got it ✕
+          </button>
+        </div>
+
+        <!-- 1-Click Fast Quick-Start Presets -->
+        <div class="flex flex-wrap items-center gap-2 pt-1 text-xs">
+          <span class="text-slate-400 font-bold flex items-center gap-1">
+            <span>⚡</span> <span>1-Click Express Starts:</span>
+          </span>
+          <button type="button" onclick="quickStartVenture('Specialty Coffee Roastery & Café in Dubai', 650000, 60, 'uae', 'AED')" class="px-2.5 py-1 rounded-xl bg-surface-850 hover:bg-surface-800 border border-brand-gold/30 hover:border-brand-gold text-slate-200 hover:text-white font-medium transition-all flex items-center gap-1.5 shadow-sm">
+            <span>☕</span> <span>Specialty Café (AED 650K)</span>
+          </button>
+          <button type="button" onclick="quickStartVenture('Commercial Rooftop Solar EPC in Dubai', 2500000, 60, 'uae', 'AED')" class="px-2.5 py-1 rounded-xl bg-surface-850 hover:bg-surface-800 border border-brand-gold/30 hover:border-brand-gold text-slate-200 hover:text-white font-medium transition-all flex items-center gap-1.5 shadow-sm">
+            <span>☀️</span> <span>Rooftop Solar (AED 2.5M)</span>
+          </button>
+          <button type="button" onclick="quickStartVenture('Automated Cold-Chain Logistics Hub in Riyadh', 6200000, 70, 'sa', 'SAR')" class="px-2.5 py-1 rounded-xl bg-surface-850 hover:bg-surface-800 border border-brand-cyan/30 hover:border-brand-cyan text-slate-200 hover:text-white font-medium transition-all flex items-center gap-1.5 shadow-sm">
+            <span>❄️</span> <span>Cold Logistics (SAR 6.2M)</span>
+          </button>
+          <button type="button" onclick="quickStartVenture('Enterprise B2B AI SaaS Cloud in Dubai', 1200000, 0, 'uae', 'AED')" class="px-2.5 py-1 rounded-xl bg-surface-850 hover:bg-surface-800 border border-brand-emerald/30 hover:border-brand-emerald text-slate-200 hover:text-white font-medium transition-all flex items-center gap-1.5 shadow-sm">
+            <span>💻</span> <span>AI SaaS Cloud (AED 1.2M)</span>
+          </button>
+        </div>
+
         <!-- The Natural Language Prompt Input Bar -->
         <div class="concentric-inner rounded-2xl p-2.5 flex flex-col md:flex-row items-stretch gap-2.5 shadow-inner">
           <div class="flex-1 flex items-center gap-3 px-3.5 py-2">
@@ -610,7 +653,7 @@
         <div class="mt-3 w-full bg-surface-900 rounded-full h-1.5 overflow-hidden">
           <div id="dscr-progress" class="bg-brand-emerald h-full rounded-full transition-all duration-300" style="width: 78%;"></div>
         </div>
-        <p class="text-[11px] text-slate-400 mt-2">Lowest debt service coverage occurs in Year 2 (post-grace period).</p>
+        <div class="text-[11px] text-brand-emerald font-semibold mt-2 flex items-center gap-1"><span>🛡️</span> <span>Bank Loan Safety: Banks require ≥ 1.35x to approve</span></div>
       </div>
 
       <!-- Metric 2: Net Present Value (NPV) -->
@@ -623,7 +666,7 @@
           <span id="metric-npv" class="text-3xl font-extrabold text-brand-cyan font-mono">AED 6.76M</span>
           <span id="metric-currency-label" class="text-xs font-bold text-slate-400 font-mono">AED</span>
         </div>
-        <p class="text-[11px] text-slate-400 mt-4">Discounted cumulative cash flows exceed initial equity threshold.</p>
+        <div class="text-[11px] text-brand-cyan font-semibold mt-4 flex items-center gap-1"><span>💰</span> <span>5-Year Cumulative Net Profit Generated</span></div>
       </div>
 
       <!-- Metric 3: Internal Rate of Return (IRR) -->
@@ -636,7 +679,7 @@
           <span id="metric-irr" class="text-3xl font-extrabold text-brand-gold font-mono">26.4%</span>
           <span class="text-xs text-slate-500">Target: 22%+</span>
         </div>
-        <p class="text-[11px] text-slate-400 mt-4">Yield exceeds cost of capital by 1,590 bps.</p>
+        <div class="text-[11px] text-brand-gold font-semibold mt-4 flex items-center gap-1"><span>📈</span> <span>Annual Profit Return % on Invested Capital</span></div>
       </div>
 
       <!-- Metric 4: Payback Period & Breakeven -->
@@ -649,7 +692,7 @@
           <span id="metric-payback" class="text-3xl font-extrabold text-white font-mono">3.4 Yrs</span>
           <span class="text-xs text-slate-500">Breakeven: 42% Cap</span>
         </div>
-        <p class="text-[11px] text-slate-400 mt-4">Full equity payback achieved well prior to term loan maturity.</p>
+        <div class="text-[11px] text-purple-400 font-semibold mt-4 flex items-center gap-1"><span>⏱️</span> <span>Time to 100% Recover Initial Investment</span></div>
       </div>
 
     </section>
@@ -1723,6 +1766,35 @@ Content-Type: application/json
     }
 
     /* Triggered when user confirms answers in the Questionnaire Modal */
+    
+    /* =======================================================================
+       1-CLICK EXPRESS VENTURE STARTER (ULTRA USER-FRIENDLY)
+       ======================================================================= */
+    function quickStartVenture(name, capex, debtRatio, jurisdictionKey, currencyCode) {
+      document.getElementById('prompt-input').value = `${name}, ${formatMoneyShort(capex)} CAPEX`;
+      document.getElementById('q-project-name').value = name;
+      
+      // Auto-set jurisdiction and currency
+      selectedQuestionJurisdiction = jurisdictionKey;
+      selectJurisdiction(jurisdictionKey);
+      changeGlobalCurrency(currencyCode);
+      setQuestionCapex(capex);
+      setQuestionDebt(debtRatio);
+
+      // Instantly generate and calculate without modal roadblock
+      submitFeasibilityQuestions();
+
+      // Show quick toast notification
+      const activeText = document.getElementById('transcript-active-text');
+      if (activeText) {
+        if (currentLanguage === 'ar') {
+          activeText.innerText = `"تم تحميل مشروع ${name} تلقائياً برأس مال ${formatMoneyShort(capex)} بالدرهم الإماراتي. جميع الحسابات جاهزة الآن للمراجعة."`;
+        } else {
+          activeText.innerText = `"Instant 1-click model loaded for ${name}. Modeled at ${formatMoneyShort(capex)} with ${debtRatio}% debt financing."`;
+        }
+      }
+    }
+
     function submitFeasibilityQuestions() {
       closeQuestionsModal();
 
