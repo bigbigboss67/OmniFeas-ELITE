@@ -177,50 +177,65 @@
       color: #0f172a !important;
       border-color: rgba(15, 23, 42, 0.15) !important;
     }
+    /* Additional light mode background overrides for opacity classes */
+    html:not(.dark) .bg-surface-900\/95,
+    html:not(.dark) .bg-surface-900\/90,
+    html:not(.dark) .bg-surface-900\/80 {
+      background-color: rgba(255, 255, 255, 0.96) !important;
+    }
+    html:not(.dark) .bg-surface-950\/90,
+    html:not(.dark) .bg-surface-950\/80,
+    html:not(.dark) .bg-surface-950\/70 {
+      background-color: rgba(248, 250, 252, 0.96) !important;
+    }
+    html:not(.dark) .bg-oled\/85,
+    html:not(.dark) .bg-oled\/90,
+    html:not(.dark) .bg-oled\/95 {
+      background-color: rgba(255, 255, 255, 0.95) !important;
+    }
+    html:not(.dark) .bg-black\/95 {
+      background-color: rgba(15, 23, 42, 0.5) !important;
+    }
 
-    /* 3D Parallax & Magnetic Tilt Cards */
-    .tilt-card {
-      transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, border-color 0.25s ease;
-      transform-style: preserve-3d;
-      will-change: transform;
-      position: relative;
+    /* High-Contrast Feasibility Pipeline Stepper Bar */
+    #feasibility-pipeline-bar {
+      background-color: #ffffff !important;
+      border-bottom: 1px solid #e2e8f0 !important;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
+    }
+    html.dark #feasibility-pipeline-bar {
+      background-color: #0b0f19 !important;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4) !important;
+    }
+    #feasibility-pipeline-bar .pipe-title {
+      color: #0f172a !important;
+      font-weight: 800 !important;
+    }
+    html.dark #feasibility-pipeline-bar .pipe-title {
+      color: #f8fafc !important;
+      font-weight: 800 !important;
+    }
+    #feasibility-pipeline-bar .pipe-sub {
+      color: #475569 !important;
+      font-weight: 600 !important;
+    }
+    html.dark #feasibility-pipeline-bar .pipe-sub {
+      color: #94a3b8 !important;
+      font-weight: 500 !important;
+    }
+
+    /* Clean, Calm Card Transitions (No Disorienting Tilt or Motion) */
+    .tilt-card, .concentric-card {
+      transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
     }
     .tilt-card:hover {
-      box-shadow: 0 20px 45px -12px rgba(245, 158, 11, 0.20), var(--card-shadow);
       border-color: rgba(245, 158, 11, 0.45) !important;
+      box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.08);
     }
-
-    /* Spotlight cursor follower */
-    .spotlight-card {
-      position: relative;
-      overflow: hidden;
-    }
-    .spotlight-card::before {
-      content: '';
-      position: absolute;
-      top: var(--mouse-y, -200px);
-      left: var(--mouse-x, -200px);
-      width: 250px;
-      height: 250px;
-      background: radial-gradient(circle, rgba(245, 158, 11, 0.15) 0%, transparent 70%);
-      transform: translate(-50%, -50%);
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      border-radius: 9999px;
-      z-index: 2;
-    }
-    .spotlight-card:hover::before {
-      opacity: 1;
-    }
-
-    /* Traveling Light Pulse for Logic Pipeline */
-    @keyframes pulseBeam {
-      0% { transform: translateX(-100%); }
-      100% { transform: translateX(250%); }
-    }
-    .pulse-beam {
-      animation: pulseBeam 2.2s ease-in-out infinite;
+    html.dark .tilt-card:hover {
+      border-color: rgba(245, 158, 11, 0.45) !important;
+      box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.5);
     }
 
     /* Number Rolling Ticker Effect */
@@ -357,82 +372,74 @@
   </header>
 
   <!-- ========================================================================= -->
-  <!-- INTERACTIVE FEASIBILITY LOGIC PIPELINE BAR ("FEEL LOGIC")                  -->
+  <!-- HIGH-CONTRAST FEASIBILITY LOGIC PIPELINE BAR (CLEAN & CALM)               -->
   <!-- ========================================================================= -->
-  <div class="border-b border-white/10 bg-surface-900/95 backdrop-blur-md px-4 lg:px-8 py-2.5 transition-colors sticky top-[61px] z-30 shadow-sm" id="feasibility-pipeline-bar">
+  <div class="border-b border-slate-200 dark:border-white/10 bg-white dark:bg-surface-900 px-4 lg:px-8 py-2.5 transition-colors sticky top-[61px] z-30 shadow-sm" id="feasibility-pipeline-bar">
     <div class="max-w-7xl mx-auto flex items-center justify-between overflow-x-auto gap-2 text-xs scrollbar-none">
       
       <!-- Stage 1: Idea Ingestion -->
-      <button type="button" onclick="document.getElementById('hero-section')?.scrollIntoView({behavior:'smooth'})" class="flex items-center gap-2 group cursor-pointer text-left focus:outline-none flex-shrink-0 p-1 rounded-lg hover:bg-white/5 transition-all">
-        <span class="w-6 h-6 rounded-full bg-brand-gold/20 text-brand-gold border border-brand-gold/40 flex items-center justify-center font-mono font-bold text-[11px] group-hover:scale-110 transition-transform">1</span>
+      <button type="button" onclick="document.getElementById('hero-section')?.scrollIntoView({behavior:'smooth'})" class="flex items-center gap-2 group cursor-pointer text-left focus:outline-none flex-shrink-0 p-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-white/5 transition-all">
+        <span class="w-6 h-6 rounded-full bg-amber-100 text-amber-900 border border-amber-300 dark:bg-brand-gold/20 dark:text-brand-gold dark:border-brand-gold/40 flex items-center justify-center font-mono font-bold text-[11px]">1</span>
         <div>
-          <div class="font-extrabold text-white text-[11px] group-hover:text-brand-gold transition-colors flex items-center gap-1">
+          <div class="font-extrabold text-[11px] pipe-title flex items-center gap-1.5">
             <span id="pipe-step-1-title">Concept Ingestion</span>
-            <span class="w-1.5 h-1.5 rounded-full bg-brand-emerald animate-pulse"></span>
+            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
           </div>
-          <div class="text-[9px] text-slate-400" id="pipe-step-1-sub">Prompt & 16 Sectors</div>
+          <div class="text-[10px] pipe-sub" id="pipe-step-1-sub">Prompt & 16 Sectors</div>
         </div>
       </button>
 
-      <!-- Connector Pulse 1 -->
-      <div class="hidden sm:flex items-center flex-1 max-w-[50px] h-0.5 bg-white/10 relative overflow-hidden rounded-full">
-        <div class="absolute inset-0 w-1/2 bg-gradient-to-r from-transparent via-brand-gold to-transparent pulse-beam"></div>
-      </div>
+      <!-- Connector 1 -->
+      <div class="hidden sm:block flex-1 max-w-[36px] h-0.5 bg-slate-300 dark:bg-white/15 rounded-full mx-1"></div>
 
       <!-- Stage 2: Underwriting Intake -->
-      <button type="button" onclick="openQuestionsModal(false)" class="flex items-center gap-2 group cursor-pointer text-left focus:outline-none flex-shrink-0 p-1 rounded-lg hover:bg-white/5 transition-all">
-        <span class="w-6 h-6 rounded-full bg-brand-cyan/20 text-brand-cyan border border-brand-cyan/40 flex items-center justify-center font-mono font-bold text-[11px] group-hover:scale-110 transition-transform">2</span>
+      <button type="button" onclick="openQuestionsModal(false)" class="flex items-center gap-2 group cursor-pointer text-left focus:outline-none flex-shrink-0 p-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-white/5 transition-all">
+        <span class="w-6 h-6 rounded-full bg-sky-100 text-sky-900 border border-sky-300 dark:bg-brand-cyan/20 dark:text-brand-cyan dark:border-brand-cyan/40 flex items-center justify-center font-mono font-bold text-[11px]">2</span>
         <div>
-          <div class="font-extrabold text-white text-[11px] group-hover:text-brand-cyan transition-colors" id="pipe-step-2-title">Underwriting Intake</div>
-          <div class="text-[9px] text-slate-400" id="pipe-step-2-sub">5 Parameter Calibration</div>
+          <div class="font-extrabold text-[11px] pipe-title" id="pipe-step-2-title">Underwriting Intake</div>
+          <div class="text-[10px] pipe-sub" id="pipe-step-2-sub">5 Parameter Calibration</div>
         </div>
       </button>
 
-      <!-- Connector Pulse 2 -->
-      <div class="hidden sm:flex items-center flex-1 max-w-[50px] h-0.5 bg-white/10 relative overflow-hidden rounded-full">
-        <div class="absolute inset-0 w-1/2 bg-gradient-to-r from-transparent via-brand-cyan to-transparent pulse-beam"></div>
-      </div>
+      <!-- Connector 2 -->
+      <div class="hidden sm:block flex-1 max-w-[36px] h-0.5 bg-slate-300 dark:bg-white/15 rounded-full mx-1"></div>
 
       <!-- Stage 3: Credit Cockpit -->
-      <button type="button" onclick="document.getElementById('cockpit-section')?.scrollIntoView({behavior:'smooth'})" class="flex items-center gap-2 group cursor-pointer text-left focus:outline-none flex-shrink-0 p-1 rounded-lg hover:bg-white/5 transition-all">
-        <span class="w-6 h-6 rounded-full bg-brand-emerald/20 text-brand-emerald border border-brand-emerald/40 flex items-center justify-center font-mono font-bold text-[11px] group-hover:scale-110 transition-transform">3</span>
+      <button type="button" onclick="document.getElementById('cockpit-section')?.scrollIntoView({behavior:'smooth'})" class="flex items-center gap-2 group cursor-pointer text-left focus:outline-none flex-shrink-0 p-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-white/5 transition-all">
+        <span class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-900 border border-emerald-300 dark:bg-brand-emerald/20 dark:text-brand-emerald dark:border-brand-emerald/40 flex items-center justify-center font-mono font-bold text-[11px]">3</span>
         <div>
-          <div class="font-extrabold text-white text-[11px] group-hover:text-brand-emerald transition-colors flex items-center gap-1">
+          <div class="font-extrabold text-[11px] pipe-title flex items-center gap-1.5">
             <span id="pipe-step-3-title">Credit Cockpit</span>
-            <span class="text-[9px] font-mono px-1 rounded bg-brand-emerald/15 text-brand-emerald font-bold" id="pipe-dscr-badge">1.48x</span>
+            <span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-900 border border-emerald-300 dark:bg-brand-emerald/15 dark:text-brand-emerald dark:border-brand-emerald/30 font-bold" id="pipe-dscr-badge">1.48x</span>
           </div>
-          <div class="text-[9px] text-slate-400" id="pipe-step-3-sub">DSCR & Stress Telemetry</div>
+          <div class="text-[10px] pipe-sub" id="pipe-step-3-sub">DSCR & Stress Telemetry</div>
         </div>
       </button>
 
-      <!-- Connector Pulse 3 -->
-      <div class="hidden sm:flex items-center flex-1 max-w-[50px] h-0.5 bg-white/10 relative overflow-hidden rounded-full">
-        <div class="absolute inset-0 w-1/2 bg-gradient-to-r from-transparent via-brand-emerald to-transparent pulse-beam"></div>
-      </div>
+      <!-- Connector 3 -->
+      <div class="hidden sm:block flex-1 max-w-[36px] h-0.5 bg-slate-300 dark:bg-white/15 rounded-full mx-1"></div>
 
       <!-- Stage 4: UNIDO Dossier -->
-      <button type="button" onclick="switchTab('unido'); document.getElementById('tab-btn-unido')?.scrollIntoView({behavior:'smooth'})" class="flex items-center gap-2 group cursor-pointer text-left focus:outline-none flex-shrink-0 p-1 rounded-lg hover:bg-white/5 transition-all">
-        <span class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 border border-purple-500/40 flex items-center justify-center font-mono font-bold text-[11px] group-hover:scale-110 transition-transform">4</span>
+      <button type="button" onclick="switchTab('unido'); document.getElementById('tab-btn-unido')?.scrollIntoView({behavior:'smooth'})" class="flex items-center gap-2 group cursor-pointer text-left focus:outline-none flex-shrink-0 p-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-white/5 transition-all">
+        <span class="w-6 h-6 rounded-full bg-purple-100 text-purple-900 border border-purple-300 dark:bg-purple-500/20 dark:text-purple-400 dark:border-purple-500/40 flex items-center justify-center font-mono font-bold text-[11px]">4</span>
         <div>
-          <div class="font-extrabold text-white text-[11px] group-hover:text-purple-400 transition-colors" id="pipe-step-4-title">UNIDO 10 Dossiers</div>
-          <div class="text-[9px] text-slate-400" id="pipe-step-4-sub">Volumes I–III Audit</div>
+          <div class="font-extrabold text-[11px] pipe-title" id="pipe-step-4-title">UNIDO 10 Dossiers</div>
+          <div class="text-[10px] pipe-sub" id="pipe-step-4-sub">Volumes I–III Audit</div>
         </div>
       </button>
 
-      <!-- Connector Pulse 4 -->
-      <div class="hidden sm:flex items-center flex-1 max-w-[50px] h-0.5 bg-white/10 relative overflow-hidden rounded-full">
-        <div class="absolute inset-0 w-1/2 bg-gradient-to-r from-transparent via-purple-400 to-transparent pulse-beam"></div>
-      </div>
+      <!-- Connector 4 -->
+      <div class="hidden sm:block flex-1 max-w-[36px] h-0.5 bg-slate-300 dark:bg-white/15 rounded-full mx-1"></div>
 
       <!-- Stage 5: Live Credit Committee -->
-      <button type="button" onclick="openAvatarRoom()" class="flex items-center gap-2 group cursor-pointer text-left focus:outline-none flex-shrink-0 p-1 rounded-lg hover:bg-white/5 transition-all">
-        <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 flex items-center justify-center font-mono font-bold text-[11px] group-hover:scale-110 transition-transform">5</span>
+      <button type="button" onclick="openAvatarRoom()" class="flex items-center gap-2 group cursor-pointer text-left focus:outline-none flex-shrink-0 p-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-white/5 transition-all">
+        <span class="w-6 h-6 rounded-full bg-amber-100 text-amber-900 border border-amber-300 dark:bg-amber-500/20 dark:text-amber-300 dark:border-amber-500/40 flex items-center justify-center font-mono font-bold text-[11px]">5</span>
         <div>
-          <div class="font-extrabold text-white text-[11px] group-hover:text-amber-300 transition-colors flex items-center gap-1">
+          <div class="font-extrabold text-[11px] pipe-title flex items-center gap-1.5">
             <span id="pipe-step-5-title">Live Avatar Defense</span>
-            <span class="px-1 py-0.2 rounded text-[8px] font-bold bg-brand-emerald/20 text-brand-emerald border border-brand-emerald/30">60 FPS</span>
+            <span class="px-1.5 py-0.5 rounded text-[8px] font-bold bg-emerald-100 text-emerald-900 border border-emerald-300 dark:bg-brand-emerald/20 dark:text-brand-emerald dark:border-brand-emerald/30">60 FPS</span>
           </div>
-          <div class="text-[9px] text-slate-400" id="pipe-step-5-sub">Dr. Sarah Sterling 🎙️</div>
+          <div class="text-[10px] pipe-sub" id="pipe-step-5-sub">Dr. Sarah Sterling 🎙️</div>
         </div>
       </button>
 
@@ -1974,26 +1981,10 @@ Content-Type: application/json
     }
 
     /* =======================================================================
-       3D SPOTLIGHT & PARALLAX TILT PHYSICS
+       CARD INTERACTION CONTROLLER (STABLE & CALM)
        ======================================================================= */
     function initCardTiltAndSpotlight() {
-      document.querySelectorAll('.concentric-card, .tilt-card').forEach(card => {
-        card.addEventListener('mousemove', e => {
-          const rect = card.getBoundingClientRect();
-          const x = e.clientX - rect.left;
-          const y = e.clientY - rect.top;
-          const centerX = rect.width / 2;
-          const centerY = rect.height / 2;
-          const rotateX = ((y - centerY) / centerY) * -4;
-          const rotateY = ((x - centerX) / centerX) * 4;
-          card.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateY(-2px)`;
-          card.style.setProperty('--mouse-x', `${x}px`);
-          card.style.setProperty('--mouse-y', `${y}px`);
-        });
-        card.addEventListener('mouseleave', () => {
-          card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0)';
-        });
-      });
+      // Kept clean & calm without disorienting 3D parallax tilt or spotlight flashlight
     }
 
     /* =======================================================================
