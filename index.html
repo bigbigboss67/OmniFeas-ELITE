@@ -289,82 +289,62 @@
   <!-- ========================================================================= -->
   <!-- TOP GLOBAL NAVIGATION & DUAL REGULATORY SWITCHER                         -->
   <!-- ========================================================================= -->
-  <header class="sticky top-0 z-40 backdrop-blur-xl bg-oled/85 border-b border-white/10 px-4 lg:px-8 py-3.5 transition-all">
+  <header class="sticky top-0 z-40 backdrop-blur-xl bg-white/95 dark:bg-surface-950/90 border-b border-slate-200 dark:border-white/10 px-4 lg:px-8 py-3.5 transition-all shadow-sm">
     <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
       
-      <!-- Brand & Tier Badge -->
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-brand-gold via-amber-600 to-amber-900 p-0.5 shadow-lg shadow-amber-950/40">
-          <div class="w-full h-full bg-surface-950 rounded-[0.875rem] flex items-center justify-center">
-            <span class="text-brand-gold font-extrabold text-lg">Ω</span>
-          </div>
+      <!-- Brand Logo (Feasab-Style Emerald Icon) -->
+      <div class="flex items-center gap-2.5">
+        <div class="w-9 h-9 rounded-xl bg-emerald-600 flex items-center justify-center text-white font-black text-base shadow-sm">
+          <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
         </div>
         <div>
-          <div class="flex items-center gap-2">
-            <span class="font-extrabold text-lg tracking-tight text-white">OmniFeas <span class="text-brand-gold font-light">ELITE</span></span>
-            <span class="px-2 py-0.5 text-[10px] font-bold tracking-wider uppercase rounded-full bg-brand-gold/10 text-brand-gold border border-brand-gold/25">$1M TIER</span>
-          </div>
-          <p class="text-xs text-slate-400 hidden sm:block">Universal UNIDO Feasibility & Credit Underwriting System</p>
+          <span class="font-extrabold text-xl tracking-tight text-slate-900 dark:text-white">OmniFeas<span class="text-emerald-600 dark:text-emerald-400">.ai</span></span>
         </div>
       </div>
 
-      <!-- Regulatory Framework Hybrid Switcher (Option 3) -->
-      <div class="flex items-center gap-1.5 p-1 rounded-2xl bg-surface-900 border border-white/10 shadow-inner">
-        <button id="btn-fw-gcc" onclick="switchFramework('gcc')" class="px-3 sm:px-4 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center gap-2 bg-brand-gold/20 text-brand-gold border border-brand-gold/30 shadow-sm">
-          <span>🇸🇦</span>
-          <span class="hidden md:inline">GCC SIDF / Zakat 2.5%</span>
-          <span class="md:hidden">GCC</span>
-        </button>
-        <button id="btn-fw-unido" onclick="switchFramework('unido')" class="px-3 sm:px-4 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center gap-2 text-slate-400 hover:text-white">
-          <span>🌐</span>
-          <span class="hidden md:inline">Global UNIDO / IFRS 20%</span>
-          <span class="md:hidden">UNIDO</span>
-        </button>
-      </div>
+      <!-- Center Navigation Links (Feasab-Style) -->
+      <nav class="hidden md:flex items-center gap-6 text-xs font-semibold text-slate-600 dark:text-slate-300">
+        <a href="#hero-section" class="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors" id="nav-how-it-works">How it works</a>
+        <a href="#sample-output-section" class="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors" id="nav-pricing">Sector Models</a>
+        <a href="#cockpit-section" class="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors" id="nav-insights">Feasibility Cockpit</a>
+        <a href="javascript:void(0)" onclick="openQuestionsModal(false)" class="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors" id="nav-tools">Tools</a>
+        <a href="javascript:void(0)" onclick="openAvatarRoom()" class="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors" id="nav-contact">Dr. Sarah Sterling 🎙️</a>
+      </nav>
 
-      <!-- Currency Switcher (Auto & Manual Input) -->
-      <div class="flex items-center gap-1.5 p-1 rounded-2xl bg-surface-900 border border-white/10 shadow-inner">
-        <span class="text-xs pl-2 text-brand-gold font-mono">💱</span>
-        <select id="header-currency-select" onchange="changeGlobalCurrency(this.value)" class="bg-transparent text-xs font-bold text-white focus:outline-none pr-2 py-1.5 cursor-pointer">
-          <option value="SAR" class="bg-surface-950 text-white">🇸🇦 SAR (﷼)</option>
-          <option value="AED" class="bg-surface-950 text-white">🇦🇪 AED (د.إ)</option>
-          <option value="USD" class="bg-surface-950 text-white">🇺🇸 USD ($)</option>
-          <option value="EUR" class="bg-surface-950 text-white">🇪🇺 EUR (€)</option>
-          <option value="GBP" class="bg-surface-950 text-white">🇬🇧 GBP (£)</option>
-          <option value="KWD" class="bg-surface-950 text-white">🇰🇼 KWD (د.ك)</option>
-          <option value="QAR" class="bg-surface-950 text-white">🇶🇦 QAR (ر.ق)</option>
-          <option value="BHD" class="bg-surface-950 text-white">🇧🇭 BHD (.د.ب)</option>
-          <option value="OMR" class="bg-surface-950 text-white">🇴🇲 OMR (ر.ع)</option>
-          <option value="EGP" class="bg-surface-950 text-white">🇪🇬 EGP (ج.م)</option>
-          <option value="CUSTOM" class="bg-surface-950 text-white">✏️ Custom Manual...</option>
-        </select>
-      </div>
-
-      <!-- Right Actions: Embed, Language & CTA -->
-      <div class="flex items-center gap-2.5">
+      <!-- Right Side Actions: Currency, Theme, Sign in, CTA, Arabic -->
+      <div class="flex items-center gap-2 sm:gap-2.5">
         
-        <!-- Day / Night Theme Switcher -->
-        <button onclick="toggleTheme()" id="theme-toggle-btn" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-surface-850 border border-white/10 hover:border-brand-gold/40 text-slate-300 hover:text-brand-gold transition-all flex items-center gap-1.5 shadow-sm" title="Toggle Day / Night Mode">
-          <span id="theme-icon" class="text-sm">☀️</span>
-          <span id="theme-label" class="hidden sm:inline font-bold">Day Mode</span>
+        <!-- Currency Selector -->
+        <div class="flex items-center gap-1 px-2.5 py-1 rounded-xl bg-slate-100 dark:bg-surface-900 border border-slate-200 dark:border-white/10 text-xs">
+          <select id="header-currency-select" onchange="changeGlobalCurrency(this.value)" class="bg-transparent text-xs font-bold text-slate-800 dark:text-white focus:outline-none cursor-pointer">
+            <option value="AED" class="bg-white dark:bg-surface-950 text-slate-900 dark:text-white" selected>🇦🇪 AED</option>
+            <option value="SAR" class="bg-white dark:bg-surface-950 text-slate-900 dark:text-white">🇸🇦 SAR</option>
+            <option value="USD" class="bg-white dark:bg-surface-950 text-slate-900 dark:text-white">🇺🇸 USD</option>
+            <option value="EUR" class="bg-white dark:bg-surface-950 text-slate-900 dark:text-white">🇪🇺 EUR</option>
+            <option value="CUSTOM" class="bg-white dark:bg-surface-950 text-slate-900 dark:text-white">✏️ Other</option>
+          </select>
+        </div>
+
+        <!-- Day / Night Toggle -->
+        <button onclick="toggleTheme()" id="theme-toggle-btn" class="w-8 h-8 rounded-xl bg-slate-100 dark:bg-surface-900 border border-slate-200 dark:border-white/10 text-slate-700 dark:text-slate-300 flex items-center justify-center transition-all text-xs" title="Toggle Day / Night Mode">
+          <span id="theme-icon">☀️</span>
         </button>
 
-        <button onclick="openEmbedModal()" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-surface-850 border border-white/10 hover:border-brand-cyan/40 text-slate-300 hover:text-brand-cyan transition-all flex items-center gap-1.5">
-          <span>🔌</span>
-          <span class="hidden sm:inline">Embed in Portal</span>
+        <!-- Arabic / English Language Toggle -->
+        <button onclick="toggleLanguage()" id="lang-toggle-btn" class="px-2.5 py-1.5 rounded-xl text-xs font-bold bg-slate-100 dark:bg-surface-900 border border-slate-200 dark:border-white/10 text-slate-800 dark:text-white hover:border-emerald-500 transition-all flex items-center gap-1">
+          <span id="lang-label">عربي</span>
         </button>
 
-        <button onclick="toggleLanguage()" id="lang-toggle-btn" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-surface-850 border border-white/10 hover:border-white/20 text-slate-300 hover:text-white transition-all flex items-center gap-1.5">
-          <svg class="w-3.5 h-3.5 text-brand-cyan" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"/></svg>
-          <span id="lang-label">العربية</span>
+        <!-- Feasab-Style Sign In Button -->
+        <button onclick="openQuestionsModal(false)" class="hidden sm:inline-flex px-3.5 py-1.5 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-white transition-colors" id="btn-sign-in">
+          Sign in
         </button>
 
-        <button onclick="openAvatarRoom()" class="relative group px-4 py-1.5 rounded-xl text-xs font-bold bg-gradient-to-r from-brand-gold via-amber-500 to-amber-600 text-black shadow-lg shadow-amber-500/25 hover:shadow-amber-500/40 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center gap-2">
-          <span class="relative flex h-2 w-2">
-            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-            <span class="relative inline-flex rounded-full h-2 w-2 bg-black"></span>
-          </span>
-          <span>🎙️ Live AI Avatar</span>
+        <!-- Feasab-Style Solid Emerald Action Button -->
+        <button onclick="executePromptGeneration()" class="px-4 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-md shadow-emerald-600/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center gap-1.5" id="btn-start-feasibility">
+          <span id="header-cta-text">Start Feasibility</span>
         </button>
       </div>
 
@@ -455,276 +435,113 @@
     <!-- ======================================================================= -->
     <!-- STEP 1: FEASAB-STYLE GENERATIVE PROMPT CONSOLE & 16 SECTORS             -->
     <!-- ======================================================================= -->
-    <section id="hero-section" class="concentric-card rounded-[2rem] p-6 sm:p-8 relative overflow-hidden tilt-card spotlight-card">
-      <!-- Ambient Backlight -->
-      <div class="absolute -top-32 -right-32 w-80 h-80 bg-brand-gold/15 rounded-full blur-3xl pointer-events-none"></div>
-      <div class="absolute -bottom-32 -left-32 w-80 h-80 bg-brand-cyan/15 rounded-full blur-3xl pointer-events-none"></div>
+    <!-- ======================================================================= -->
+    <!-- FEASAB.AI SINGLE-FOCUS HERO PROMPT CONSOLE                             -->
+    <!-- ======================================================================= -->
+    <section id="hero-section" class="py-16 md:py-24 max-w-4xl mx-auto px-4 text-center">
+      
+      <!-- The Feasab Prompt Chat Shell -->
+      <div class="intent-shell conv-shell relative rounded-[28px] border-2 border-emerald-500/70 dark:border-emerald-500/60 bg-white dark:bg-surface-900 shadow-xl shadow-emerald-500/5 p-5 sm:p-6 text-left transition-all focus-within:border-emerald-600 focus-within:shadow-2xl focus-within:shadow-emerald-500/10">
+        <textarea 
+          id="prompt-input" 
+          rows="3"
+          onkeydown="handlePromptKeydown(event)"
+          placeholder="Ask OmniFeas — a car workshop in Dubai"
+          class="w-full bg-transparent text-base sm:text-lg text-slate-800 dark:text-white placeholder-slate-400 focus:outline-none resize-none leading-relaxed"
+        >A car workshop in Dubai</textarea>
 
-      <div class="relative z-10 space-y-6">
-        
-        <!-- Header & Instructions -->
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/10 pb-5">
-          <div>
-            <div class="flex items-center gap-2.5 mb-1.5">
-              <span id="hero-step-badge" class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-brand-gold/15 text-brand-gold border border-brand-gold/30">
-                STEP 1: GENERATIVE FEASIBILITY ENGINE
-              </span>
-              <span class="text-xs text-slate-400">UNIDO Vol. I–III Compliant</span>
-            </div>
-            <h1 id="hero-title" class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-              Describe Any Business Idea or Choose an Industrial Sector
-            </h1>
-            <p id="hero-desc" class="text-sm text-slate-400 max-w-3xl mt-1">
-              Enter your project parameters or select a sector. The deterministic math engine will calculate full 5-year financials, technical CAPEX, and loan covenants in under 300ms.
-            </p>
+        <!-- Bottom Actions inside Shell -->
+        <div class="flex items-center justify-between pt-3">
+          <div class="flex items-center gap-2">
+            <!-- Voice Input Button -->
+            <button type="button" onclick="toggleVoiceInputPrompt()" id="mic-prompt-btn" title="Voice Input" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-surface-800 dark:hover:bg-surface-700 text-slate-600 dark:text-slate-300 flex items-center justify-center transition-all text-sm">
+              <svg id="mic-prompt-icon" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/>
+              </svg>
+            </button>
+            <span class="text-xs text-slate-400 hidden sm:inline" id="prompt-enter-hint">Press Enter to calculate</span>
           </div>
 
-          <!-- Quick Actions: Open Video Appraisal -->
-          <button onclick="openAvatarRoom()" class="flex-shrink-0 px-5 py-2.5 rounded-2xl bg-surface-850 hover:bg-surface-800 border border-brand-gold/40 text-brand-gold hover:text-white text-xs font-bold transition-all flex items-center gap-2.5 shadow-lg shadow-black/40">
-            <div class="w-7 h-7 rounded-xl bg-brand-gold/20 flex items-center justify-center text-sm">👩‍💼</div>
-            <div class="text-left">
-              <div class="text-[10px] text-slate-400 font-normal">Ready to Defend Study?</div>
-              <div class="text-xs font-bold text-white">Join Dr. Sarah Sterling 🎙️</div>
-            </div>
+          <!-- Feasab Circular Send Button -->
+          <button type="button" onclick="executePromptGeneration()" class="w-10 h-10 rounded-full bg-emerald-100 hover:bg-emerald-600 text-emerald-800 hover:text-white dark:bg-emerald-900/60 dark:text-emerald-300 dark:hover:bg-emerald-600 dark:hover:text-white flex items-center justify-center font-bold text-lg transition-all shadow-sm group" title="Calculate Feasibility">
+            <span id="gen-spinner" class="hidden animate-spin h-4 w-4 border-2 border-current border-t-transparent rounded-full"></span>
+            <span id="prompt-send-arrow" class="transition-transform group-hover:-translate-y-0.5">↑</span>
           </button>
         </div>
-
-        
-        <!-- Friendly 3-Step Guided Tour Card (Collapsible) -->
-        <div id="quick-tour-card" class="concentric-inner rounded-2xl p-4 border-brand-cyan/25 bg-surface-900/80 flex flex-col md:flex-row md:items-center justify-between gap-4 transition-all">
-          <div class="flex items-start sm:items-center gap-3">
-            <div class="w-9 h-9 rounded-xl bg-brand-cyan/15 border border-brand-cyan/30 flex items-center justify-center text-brand-cyan text-lg flex-shrink-0">
-              💡
-            </div>
-            <div>
-              <div class="flex items-center gap-2">
-                <span class="text-xs font-extrabold text-white uppercase tracking-wider">Fast-Track Feasibility Guide</span>
-                <span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-brand-emerald/15 text-brand-emerald border border-brand-emerald/30">BEGINNER FRIENDLY</span>
-              </div>
-              <p class="text-xs text-slate-300 mt-0.5">
-                <strong>Step 1:</strong> Pick any industry below or type an idea &nbsp;➔&nbsp; 
-                <strong>Step 2:</strong> Instant 5-year bank profits & loan covenants calculate in 300ms &nbsp;➔&nbsp; 
-                <strong>Step 3:</strong> Export bank study or discuss with AI avatar.
-              </p>
-            </div>
-          </div>
-          <button onclick="document.getElementById('quick-tour-card').classList.add('hidden')" class="text-[11px] font-bold text-slate-400 hover:text-white px-3 py-1 rounded-lg bg-surface-850 hover:bg-surface-800 border border-white/10 flex-shrink-0">
-            Got it ✕
-          </button>
-        </div>
-
-        <!-- 1-Click Fast Quick-Start Presets -->
-        <div class="flex flex-wrap items-center gap-2 pt-1 text-xs">
-          <span class="text-slate-400 font-bold flex items-center gap-1">
-            <span>⚡</span> <span id="quickstart-title-text">1-Click Express Starts:</span>
-          </span>
-          <button type="button" onclick="quickStartVenture('Specialty Coffee Roastery & Café in Dubai', 650000, 60, 'uae', 'AED')" class="px-2.5 py-1 rounded-xl bg-surface-850 hover:bg-surface-800 border border-brand-gold/30 hover:border-brand-gold text-slate-200 hover:text-white font-medium transition-all flex items-center gap-1.5 shadow-sm">
-            <span>☕</span> <span>Specialty Café (AED 650K)</span>
-          </button>
-          <button type="button" onclick="quickStartVenture('Commercial Rooftop Solar EPC in Dubai', 2500000, 60, 'uae', 'AED')" class="px-2.5 py-1 rounded-xl bg-surface-850 hover:bg-surface-800 border border-brand-gold/30 hover:border-brand-gold text-slate-200 hover:text-white font-medium transition-all flex items-center gap-1.5 shadow-sm">
-            <span>☀️</span> <span>Rooftop Solar (AED 2.5M)</span>
-          </button>
-          <button type="button" onclick="quickStartVenture('Automated Cold-Chain Logistics Hub in Riyadh', 6200000, 70, 'sa', 'SAR')" class="px-2.5 py-1 rounded-xl bg-surface-850 hover:bg-surface-800 border border-brand-cyan/30 hover:border-brand-cyan text-slate-200 hover:text-white font-medium transition-all flex items-center gap-1.5 shadow-sm">
-            <span>❄️</span> <span>Cold Logistics (SAR 6.2M)</span>
-          </button>
-          <button type="button" onclick="quickStartVenture('Enterprise B2B AI SaaS Cloud in Dubai', 1200000, 0, 'uae', 'AED')" class="px-2.5 py-1 rounded-xl bg-surface-850 hover:bg-surface-800 border border-brand-emerald/30 hover:border-brand-emerald text-slate-200 hover:text-white font-medium transition-all flex items-center gap-1.5 shadow-sm">
-            <span>💻</span> <span>AI SaaS Cloud (AED 1.2M)</span>
-          </button>
-        </div>
-
-        <!-- ======================================================================= -->
-        <!-- FEASAB.AI DUAL-MODE PROMPT CHAT BOX CONSOLE                            -->
-        <!-- ======================================================================= -->
-        <div class="space-y-4">
-          
-          <!-- Feasab-Style Mode Switcher Tabs -->
-          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-white/10 pb-3">
-            <div class="flex items-center gap-2 p-1 bg-surface-950/80 rounded-2xl border border-white/10 shadow-inner">
-              <button type="button" id="tab-mode-idea" onclick="togglePromptMode('idea')" 
-                      class="px-4 py-2 rounded-xl text-xs font-extrabold transition-all flex items-center gap-2 bg-gradient-to-r from-brand-gold via-amber-500 to-amber-600 text-black shadow-md">
-                <span>✦</span>
-                <span id="label-mode-idea">Idea Mode (Instant Benchmark)</span>
-              </button>
-              <button type="button" id="tab-mode-precision" onclick="togglePromptMode('precision')" 
-                      class="px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 text-slate-400 hover:text-white">
-                <span>📊</span>
-                <span id="label-mode-precision">Bank Precision Mode</span>
-              </button>
-            </div>
-
-            <div class="flex items-center gap-2 text-[11px] text-slate-400 font-medium">
-              <span class="w-2 h-2 rounded-full bg-brand-emerald animate-pulse"></span>
-              <span id="prompt-mode-desc">No financial inputs needed — deterministic UNIDO benchmark generated in 300ms</span>
-            </div>
-          </div>
-
-          <!-- The Feasab Chat Box Shell (conv-shell) -->
-          <div class="concentric-card rounded-3xl p-4 sm:p-6 border border-brand-gold/25 bg-surface-900/90 shadow-2xl space-y-4 relative">
-            
-            <!-- Natural Language Multi-line Input Area -->
-            <div class="relative">
-              <textarea 
-                id="prompt-input" 
-                rows="2"
-                onkeydown="handlePromptKeydown(event)"
-                placeholder="Ask OmniFeas — describe any business idea (e.g., A specialty coffee roastery in Downtown Dubai with 650,000 AED, or commercial solar EPC in Dammam with 60% SIDF loan)..."
-                class="w-full bg-surface-950/80 border border-white/10 rounded-2xl p-4 text-sm sm:text-base text-white placeholder-slate-500 focus:outline-none focus:border-brand-gold/60 focus:ring-1 focus:ring-brand-gold/40 resize-none transition-all leading-relaxed"
-              >Specialty Coffee Roastery & Café in Downtown Dubai, 650,000 AED CAPEX, 60% Commercial Bank Loan</textarea>
-            </div>
-
-            <!-- Core Feasibility Parameters Needed to Make the Feasibility Study -->
-            <div class="space-y-3 pt-2 border-t border-white/10">
-              <div class="flex items-center justify-between text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-                <span id="params-header-title" class="flex items-center gap-1.5 text-brand-gold">
-                  <span>⚡</span> <span>Core Feasibility Parameters (Click to Calibrate):</span>
-                </span>
-                <button type="button" onclick="openQuestionsModal(false)" id="detailed-questionnaire-btn" class="text-brand-cyan hover:underline flex items-center gap-1 normal-case font-semibold text-[11px] transition-all">
-                  <span id="detailed-questionnaire-text">⚙️ Detailed Underwriting Questionnaire</span> ➔
-                </button>
-              </div>
-
-              <!-- Parameter Chips Rows -->
-              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
-                
-                <!-- Parameter 1: Location & Local Tax Law -->
-                <div class="space-y-1.5 bg-surface-950/60 p-3 rounded-2xl border border-white/5">
-                  <span id="param-label-location" class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider flex items-center gap-1">
-                    <span>📍</span> <span>Location & Tax Law</span>
-                  </span>
-                  <div class="flex flex-wrap gap-1.5" id="chips-location">
-                    <button type="button" onclick="setPromptLocation('uae', 'AED')" data-loc="uae" class="chip-loc px-2.5 py-1 rounded-xl text-xs font-semibold border transition-all border-brand-gold bg-brand-gold/20 text-brand-gold shadow-sm">
-                      🇦🇪 Dubai (AED / 9%)
-                    </button>
-                    <button type="button" onclick="setPromptLocation('sa', 'SAR')" data-loc="sa" class="chip-loc px-2.5 py-1 rounded-xl text-xs font-semibold border transition-all border-white/10 bg-surface-850 text-slate-300 hover:text-white">
-                      🇸🇦 Riyadh (SAR / 2.5%)
-                    </button>
-                    <button type="button" onclick="setPromptLocation('global', 'USD')" data-loc="global" class="chip-loc px-2.5 py-1 rounded-xl text-xs font-semibold border transition-all border-white/10 bg-surface-850 text-slate-300 hover:text-white">
-                      🌐 Global (USD)
-                    </button>
-                  </div>
-                </div>
-
-                <!-- Parameter 2: Starting Scale (CAPEX) -->
-                <div class="space-y-1.5 bg-surface-950/60 p-3 rounded-2xl border border-white/5">
-                  <span id="param-label-scale" class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider flex items-center gap-1">
-                    <span>📊</span> <span>Initial Scale (CAPEX)</span>
-                  </span>
-                  <div class="flex flex-wrap gap-1.5" id="chips-scale">
-                    <button type="button" onclick="setPromptScale(650000)" data-scale="650000" class="chip-scale px-2.5 py-1 rounded-xl text-xs font-semibold border transition-all border-brand-gold bg-brand-gold/20 text-brand-gold shadow-sm">
-                      🌱 Small / Lean (~650K)
-                    </button>
-                    <button type="button" onclick="setPromptScale(2500000)" data-scale="2500000" class="chip-scale px-2.5 py-1 rounded-xl text-xs font-semibold border transition-all border-white/10 bg-surface-850 text-slate-300 hover:text-white">
-                      🏢 Pro / Mid (~2.5M)
-                    </button>
-                    <button type="button" onclick="setPromptScale(7500000)" data-scale="7500000" class="chip-scale px-2.5 py-1 rounded-xl text-xs font-semibold border transition-all border-white/10 bg-surface-850 text-slate-300 hover:text-white">
-                      🏭 Enterprise (~7.5M+)
-                    </button>
-                  </div>
-                </div>
-
-                <!-- Parameter 3: Financing Structure -->
-                <div class="space-y-1.5 bg-surface-950/60 p-3 rounded-2xl border border-white/5">
-                  <span id="param-label-financing" class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider flex items-center gap-1">
-                    <span>🏛️</span> <span>Financing Structure</span>
-                  </span>
-                  <div class="flex flex-wrap gap-1.5" id="chips-financing">
-                    <button type="button" onclick="setPromptFinancing(60)" data-debt="60" class="chip-debt px-2.5 py-1 rounded-xl text-xs font-semibold border transition-all border-brand-gold bg-brand-gold/20 text-brand-gold shadow-sm">
-                      🏛️ 60% Debt / 40% Eq
-                    </button>
-                    <button type="button" onclick="setPromptFinancing(0)" data-debt="0" class="chip-debt px-2.5 py-1 rounded-xl text-xs font-semibold border transition-all border-white/10 bg-surface-850 text-slate-300 hover:text-white">
-                      💼 100% Self-Funded
-                    </button>
-                    <button type="button" onclick="setPromptFinancing(70)" data-debt="70" class="chip-debt px-2.5 py-1 rounded-xl text-xs font-semibold border transition-all border-white/10 bg-surface-850 text-slate-300 hover:text-white">
-                      🤝 70% Debt
-                    </button>
-                  </div>
-                </div>
-
-                <!-- Parameter 4: Initial Team Headcount -->
-                <div class="space-y-1.5 bg-surface-950/60 p-3 rounded-2xl border border-white/5">
-                  <span id="param-label-staff" class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider flex items-center gap-1">
-                    <span>👥</span> <span>Team Headcount</span>
-                  </span>
-                  <div class="flex flex-wrap gap-1.5" id="chips-staff">
-                    <button type="button" onclick="setPromptStaff('3-5')" data-staff="3-5" class="chip-staff px-2.5 py-1 rounded-xl text-xs font-semibold border transition-all border-brand-gold bg-brand-gold/20 text-brand-gold shadow-sm">
-                      👥 3–5 Staff
-                    </button>
-                    <button type="button" onclick="setPromptStaff('10-15')" data-staff="10-15" class="chip-staff px-2.5 py-1 rounded-xl text-xs font-semibold border transition-all border-white/10 bg-surface-850 text-slate-300 hover:text-white">
-                      👥 10–15 Staff
-                    </button>
-                    <button type="button" onclick="setPromptStaff('25+')" data-staff="25+" class="chip-staff px-2.5 py-1 rounded-xl text-xs font-semibold border transition-all border-white/10 bg-surface-850 text-slate-300 hover:text-white">
-                      👥 25+ Staff
-                    </button>
-                  </div>
-                </div>
-
-              </div>
-            </div>
-
-            <!-- Footer Action Bar inside Chat Shell -->
-            <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-3 border-t border-white/10">
-              <div class="flex items-center gap-2 text-xs text-slate-400">
-                <span class="w-2 h-2 rounded-full bg-brand-gold"></span>
-                <span id="prompt-status-summary">Idea Mode: Press Enter or click Generate to calculate complete 5-year UNIDO study.</span>
-              </div>
-
-              <div class="flex items-center gap-2 self-end sm:self-auto">
-                <!-- Voice Input Button -->
-                <button type="button" onclick="toggleVoiceInputPrompt()" id="mic-prompt-btn" title="Speak your prompt" class="p-3 rounded-2xl bg-surface-850 hover:bg-surface-800 text-slate-300 hover:text-brand-gold border border-white/10 transition-all flex-shrink-0">
-                  <svg id="mic-prompt-icon" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
-                  </svg>
-                </button>
-
-                <!-- Feasab-Style Send / Generate Button -->
-                <button type="button" onclick="executePromptGeneration()" class="px-6 py-3 rounded-2xl bg-gradient-to-r from-brand-gold via-amber-500 to-amber-600 text-black font-extrabold text-xs uppercase tracking-wider shadow-lg shadow-amber-500/25 hover:shadow-amber-500/40 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2.5 flex-shrink-0">
-                  <span id="gen-spinner" class="hidden animate-spin h-3.5 w-3.5 border-2 border-black border-t-transparent rounded-full"></span>
-                  <span id="prompt-gen-btn-text">⚡ Generate Feasibility</span>
-                  <span class="w-5 h-5 rounded-full bg-black/15 flex items-center justify-center text-xs font-mono font-bold">↑</span>
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Feasab Trust Badges & Micro-Disclaimer Bar -->
-          <div class="space-y-2 pt-1">
-            <div class="flex flex-wrap items-center justify-center sm:justify-start gap-2 text-[11px] text-slate-300">
-              <span class="px-3 py-1 rounded-full bg-surface-900 border border-white/10 flex items-center gap-1.5 shadow-sm">
-                <span class="text-brand-emerald">✓</span> <span>Every figure calculated (UNIDO Vol. I–III)</span>
-              </span>
-              <span class="px-3 py-1 rounded-full bg-surface-900 border border-white/10 flex items-center gap-1.5 shadow-sm">
-                <span class="text-brand-cyan">🌐</span> <span>Real GCC tax laws (Dubai 9% / KSA 2.5%)</span>
-              </span>
-              <span class="px-3 py-1 rounded-full bg-surface-900 border border-white/10 flex items-center gap-1.5 shadow-sm">
-                <span class="text-brand-gold">⏱</span> <span>5-Year statements in &lt; 300ms</span>
-              </span>
-              <span class="px-3 py-1 rounded-full bg-surface-900 border border-white/10 flex items-center gap-1.5 shadow-sm">
-                <span>🎙️</span> <span>Live AI Avatar defense</span>
-              </span>
-            </div>
-
-            <p id="feasab-disclaimer-text" class="text-[11px] text-slate-400 text-center sm:text-left leading-relaxed">
-              <em>OmniFeas understands what you write. Every figure is deterministically computed by UNIDO math, not written — fully verified against banking loan covenants.</em>
-            </p>
-          </div>
-
-        </div>
-
-        <!-- 16 Universal Industrial Sectors Grid -->
-        <div>
-          <div class="flex items-center justify-between mb-3">
-            <span id="sectors-title-text" class="text-xs font-bold uppercase tracking-wider text-slate-400">
-              Universal Sector Blueprints (Click to Load)
-            </span>
-            <span class="text-[11px] text-slate-500 font-mono">16 of 16 Calibrated</span>
-          </div>
-
-          <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2" id="sectors-container">
-            <!-- Dynamically Rendered via JS -->
-          </div>
-        </div>
-
       </div>
+
+      <!-- Subtitle directly below box -->
+      <p class="mt-4 text-xs sm:text-sm text-slate-500 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed" id="feasab-disclaimer-text">
+        OmniFeas understands what you write. The numbers are computed, not written — check the narrative.
+      </p>
+
+      <!-- 4 Clean Trust Pills directly below -->
+      <div class="mt-6 flex flex-wrap items-center justify-center gap-2.5 sm:gap-3 text-xs text-slate-600 dark:text-slate-300">
+        <span class="px-4 py-2 rounded-full bg-white dark:bg-surface-900 border border-slate-200 dark:border-white/10 shadow-sm flex items-center gap-2 font-medium">
+          <span class="text-emerald-600 font-bold">✓</span> <span id="pill-1-text">Every figure calculated</span>
+        </span>
+        <span class="px-4 py-2 rounded-full bg-white dark:bg-surface-900 border border-slate-200 dark:border-white/10 shadow-sm flex items-center gap-2 font-medium">
+          <span>🌐</span> <span id="pill-2-text">Live web research</span>
+        </span>
+        <span class="px-4 py-2 rounded-full bg-white dark:bg-surface-900 border border-slate-200 dark:border-white/10 shadow-sm flex items-center gap-2 font-medium">
+          <span>⏱</span> <span id="pill-3-text">Ready in 10 minutes</span>
+        </span>
+        <span class="px-4 py-2 rounded-full bg-white dark:bg-surface-900 border border-slate-200 dark:border-white/10 shadow-sm flex items-center gap-2 font-medium">
+          <span>🗑</span> <span id="pill-4-text">Delete everything, anytime</span>
+        </span>
+      </div>
+
+    </section>
+
+    <!-- ======================================================================= -->
+    <!-- PROGRESSIVE DISCLOSURE: SAMPLE OUTPUT & 16 SECTOR BLUEPRINTS             -->
+    <!-- ======================================================================= -->
+    <section id="sample-output-section" class="py-6 space-y-6">
+      
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-slate-200 dark:border-white/10 pb-4">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400" id="bento-eyebrow">Sample Output</span>
+          <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white mt-1" id="bento-title">See What You Get</h2>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5" id="bento-sub">Pick an express blueprint or review the full UNIDO institutional model.</p>
+        </div>
+
+        <!-- 1-Click Fast Express Starts -->
+        <div class="flex flex-wrap items-center gap-2 text-xs">
+          <span class="text-slate-400 font-medium hidden sm:inline" id="popular-label">Popular:</span>
+          <button type="button" onclick="quickStartVenture('Specialty Coffee Roastery & Café in Dubai', 650000, 60, 'uae', 'AED')" class="px-3 py-1.5 rounded-full bg-white dark:bg-surface-850 hover:border-emerald-500 border border-slate-200 dark:border-white/10 text-slate-700 dark:text-slate-200 font-medium transition-all shadow-sm">
+            ☕ Specialty Café (AED 650K)
+          </button>
+          <button type="button" onclick="quickStartVenture('Commercial Rooftop Solar EPC in Dubai', 2500000, 60, 'uae', 'AED')" class="px-3 py-1.5 rounded-full bg-white dark:bg-surface-850 hover:border-emerald-500 border border-slate-200 dark:border-white/10 text-slate-700 dark:text-slate-200 font-medium transition-all shadow-sm">
+            ☀️ Rooftop Solar (AED 2.5M)
+          </button>
+          <button type="button" onclick="quickStartVenture('Automated Cold-Chain Logistics Hub in Riyadh', 6200000, 70, 'sa', 'SAR')" class="px-3 py-1.5 rounded-full bg-white dark:bg-surface-850 hover:border-emerald-500 border border-slate-200 dark:border-white/10 text-slate-700 dark:text-slate-200 font-medium transition-all shadow-sm">
+            ❄️ Cold Logistics (SAR 6.2M)
+          </button>
+          <button type="button" onclick="quickStartVenture('Enterprise B2B AI SaaS Cloud in Dubai', 1200000, 0, 'uae', 'AED')" class="px-3 py-1.5 rounded-full bg-white dark:bg-surface-850 hover:border-emerald-500 border border-slate-200 dark:border-white/10 text-slate-700 dark:text-slate-200 font-medium transition-all shadow-sm">
+            💻 AI SaaS Cloud (AED 1.2M)
+          </button>
+        </div>
+      </div>
+
+      <!-- 16 Universal Industrial Sectors Grid -->
+      <div>
+        <div class="flex items-center justify-between mb-3">
+          <span id="sectors-title-text" class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+            Universal Sector Blueprints (Click to Load)
+          </span>
+          <div class="flex items-center gap-3">
+            <span class="text-[11px] text-slate-400 font-mono">16 of 16 Calibrated</span>
+            <button type="button" onclick="openQuestionsModal(false)" class="text-xs text-emerald-600 dark:text-emerald-400 hover:underline font-semibold flex items-center gap-1">
+              <span>⚙️ Fine-Tune Parameters</span> ➔
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2.5" id="sectors-container">
+          <!-- Dynamically Rendered via JS -->
+        </div>
+      </div>
+
     </section>
 
     <!-- ======================================================================= -->
@@ -1689,10 +1506,10 @@ Content-Type: application/json
         const isSelected = sec.id === currentSector.id;
         const btn = document.createElement('button');
         btn.onclick = () => selectSector(sec.id);
-        btn.className = `p-2.5 rounded-xl border text-left transition-all flex flex-col justify-between tilt-card ${
+        btn.className = `p-2.5 rounded-2xl border text-left transition-all flex flex-col justify-between ${
           isSelected 
-            ? 'bg-brand-gold/20 border-brand-gold text-brand-gold shadow-md shadow-brand-gold/10 scale-[1.02]' 
-            : 'bg-surface-850 hover:bg-surface-800 border-white/10 text-slate-300 hover:text-white'
+            ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-500 text-emerald-900 dark:text-emerald-300 shadow-md scale-[1.02]' 
+            : 'bg-white dark:bg-surface-850 hover:border-emerald-500/50 border-slate-200 dark:border-white/10 text-slate-700 dark:text-slate-300 shadow-sm'
         }`;
         btn.innerHTML = `
           <div class="flex items-center justify-between w-full mb-1">
@@ -2760,8 +2577,23 @@ Content-Type: application/json
         paramLabelFinancing: '🏛️ Financing Structure',
         paramLabelStaff: '👥 Initial Team Headcount',
         promptStatusSummary: 'Idea Mode: Press Enter or click Generate to calculate complete 5-year UNIDO study.',
-        promptPlaceholder: 'Ask OmniFeas — describe any business idea (e.g., A specialty coffee roastery in Downtown Dubai with 650,000 AED, or commercial solar EPC in Dammam with 60% SIDF loan)...',
-        generateBtn: '⚡ Generate Feasibility',
+        promptPlaceholder: 'Ask OmniFeas — a car workshop in Dubai',
+        generateBtn: 'Start Feasibility',
+        headerCta: 'Start Feasibility',
+        navHowItWorks: 'How it works',
+        navPricing: 'Sector Models',
+        navInsights: 'Feasibility Cockpit',
+        navTools: 'Tools',
+        navContact: 'Dr. Sarah Sterling 🎙️',
+        bentoEyebrow: 'Sample Output',
+        bentoTitle: 'See What You Get',
+        bentoSub: 'Pick an express blueprint or review the full UNIDO institutional model.',
+        pill1: 'Every figure calculated',
+        pill2: 'Live web research',
+        pill3: 'Ready in 10 minutes',
+        pill4: 'Delete everything, anytime',
+        enterHint: 'Press Enter to calculate',
+        feasabDisclaimer: 'OmniFeas understands what you write. The numbers are computed, not written — check the narrative.',
         feasabDisclaimer: 'OmniFeas understands what you write. Every figure is deterministically computed by UNIDO math, not written — fully verified against banking loan covenants.',
         sectorsTitle: 'Universal Sector Blueprints (Click to Load)',
         sarahBadge: 'READY TO REVIEW',
@@ -2807,8 +2639,23 @@ Content-Type: application/json
         paramLabelFinancing: '🏛️ هيكل التمويل (قروض مقابل ملكية)',
         paramLabelStaff: '👥 حجم فريق العمل الأولي',
         promptStatusSummary: 'وضع الفكرة: اضغط Enter أو انقر إنشاء دراسة لحساب القوائم المالية لـ 5 سنوات فوراً.',
-        promptPlaceholder: 'اسأل أومني فيز — مثلاً: محمصة وكافيه قهوة مختصة في دبي برأس مال 650,000 درهم، أو مستودع لوجستي مبرد في الرياض...',
-        generateBtn: '⚡ إنشاء دراسة الجدوى',
+        promptPlaceholder: 'اسأل أومني فيز — ورشة سيارات في دبي',
+        generateBtn: 'ابدأ دراسة الجدوى',
+        headerCta: 'ابدأ دراسة الجدوى',
+        navHowItWorks: 'كيف يعمل',
+        navPricing: 'النماذج القطاعية',
+        navInsights: 'لوحة التحكم المالية',
+        navTools: 'الأدوات',
+        navContact: 'د. سارة ستيرلينغ 🎙️',
+        bentoEyebrow: 'عينة المخرجات',
+        bentoTitle: 'شاهد ما ستحصل عليه',
+        bentoSub: 'اختر نموذجاً قطاعياً سريعاً أو استعرض دراسة اليونيدو المعتمدة بالكامل.',
+        pill1: 'جميع الأرقام محسوبة بدقة',
+        pill2: 'بحث مباشر على الإنترنت',
+        pill3: 'جاهزة في أقل من 300 مللي ثانية',
+        pill4: 'حذف جميع البيانات في أي وقت',
+        enterHint: 'اضغط Enter للحساب الفوري',
+        feasabDisclaimer: 'أومني فيز يفهم ما تكتبه. الأرقام تُحسب رياضياً وليست مجرد نصوص توليدية — راجع البيانات المالية.',
         feasabDisclaimer: 'أومني فيز يفهم ما تكتبه. الأرقام تُحسب رياضياً وفق معايير اليونيدو وليست مجرد نصوص توليدية — معتمدة ومطابقة لمتطلبات لجان الائتمان المصرفي.',
         sectorsTitle: 'المخططات القطاعية الشاملة (انقر للتحميل)',
         sarahBadge: 'جاهزة للتقييم والاعتماد',
@@ -2899,7 +2746,40 @@ Content-Type: application/json
       if (pSummary && dict.promptStatusSummary) pSummary.innerText = dict.promptStatusSummary;
 
       const pDisclaim = document.getElementById('feasab-disclaimer-text');
-      if (pDisclaim && dict.feasabDisclaimer) pDisclaim.innerHTML = `<em>${dict.feasabDisclaimer}</em>`;
+      if (pDisclaim && dict.feasabDisclaimer) pDisclaim.innerText = dict.feasabDisclaimer;
+
+      const p1 = document.getElementById('pill-1-text');
+      if (p1 && dict.pill1) p1.innerText = dict.pill1;
+      const p2 = document.getElementById('pill-2-text');
+      if (p2 && dict.pill2) p2.innerText = dict.pill2;
+      const p3 = document.getElementById('pill-3-text');
+      if (p3 && dict.pill3) p3.innerText = dict.pill3;
+      const p4 = document.getElementById('pill-4-text');
+      if (p4 && dict.pill4) p4.innerText = dict.pill4;
+
+      const bEyebrow = document.getElementById('bento-eyebrow');
+      if (bEyebrow && dict.bentoEyebrow) bEyebrow.innerText = dict.bentoEyebrow;
+      const bTitle = document.getElementById('bento-title');
+      if (bTitle && dict.bentoTitle) bTitle.innerText = dict.bentoTitle;
+      const bSub = document.getElementById('bento-sub');
+      if (bSub && dict.bentoSub) bSub.innerText = dict.bentoSub;
+
+      const hCta = document.getElementById('header-cta-text');
+      if (hCta && dict.headerCta) hCta.innerText = dict.headerCta;
+
+      const nHow = document.getElementById('nav-how-it-works');
+      if (nHow && dict.navHowItWorks) nHow.innerText = dict.navHowItWorks;
+      const nPrice = document.getElementById('nav-pricing');
+      if (nPrice && dict.navPricing) nPrice.innerText = dict.navPricing;
+      const nIns = document.getElementById('nav-insights');
+      if (nIns && dict.navInsights) nIns.innerText = dict.navInsights;
+      const nTools = document.getElementById('nav-tools');
+      if (nTools && dict.navTools) nTools.innerText = dict.navTools;
+      const nContact = document.getElementById('nav-contact');
+      if (nContact && dict.navContact) nContact.innerText = dict.navContact;
+
+      const eHint = document.getElementById('prompt-enter-hint');
+      if (eHint && dict.enterHint) eHint.innerText = dict.enterHint;
 
       const secTitle = document.getElementById('sectors-title-text');
       if (secTitle) secTitle.innerText = dict.sectorsTitle;
