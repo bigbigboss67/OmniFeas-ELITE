@@ -418,7 +418,7 @@
       <div class="hidden sm:block flex-1 max-w-[36px] h-0.5 bg-slate-300 dark:bg-white/15 rounded-full mx-1"></div>
 
       <!-- Stage 2: Underwriting Intake -->
-      <button type="button" onclick="openQuestionsModal(false)" class="flex items-center gap-2 group cursor-pointer text-left focus:outline-none flex-shrink-0 p-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-white/5 transition-all">
+      <button id="pipe-step-2-btn" type="button" onclick="openQuestionsModal(false)" class="flex items-center gap-2 group cursor-pointer text-left focus:outline-none flex-shrink-0 p-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-white/5 transition-all">
         <span class="w-6 h-6 rounded-full bg-sky-100 text-sky-900 border border-sky-300 dark:bg-brand-cyan/20 dark:text-brand-cyan dark:border-brand-cyan/40 flex items-center justify-center font-mono font-bold text-[11px]">2</span>
         <div>
           <div class="font-extrabold text-[11px] pipe-title" id="pipe-step-2-title">Underwriting Intake</div>
@@ -694,6 +694,16 @@
       </div>
 
       <div class="flex items-center gap-2 w-full md:w-auto justify-end flex-wrap">
+        <!-- GCC / UNIDO Framework Selector Buttons -->
+        <div class="flex items-center rounded-xl p-0.5 bg-slate-100 dark:bg-surface-900 border border-slate-200 dark:border-white/10 text-xs">
+          <button id="btn-fw-gcc" onclick="switchFramework('gcc')" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 bg-brand-gold/20 text-brand-gold border border-brand-gold/30 shadow-sm">
+            <span>GCC / Vision 2030</span>
+          </button>
+          <button id="btn-fw-unido" onclick="switchFramework('unido')" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 text-slate-400 hover:text-white">
+            <span>UNIDO Vol. I–III</span>
+          </button>
+        </div>
+
         <button onclick="openQuestionsModal(true)" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-surface-850 hover:bg-surface-800 text-brand-gold border border-brand-gold/40 hover:border-brand-gold transition-all flex items-center gap-1.5 shadow-sm">
           <i data-lucide="sliders" class="w-3.5 h-3.5"></i>
           <span>Edit Parameters</span>
@@ -1792,103 +1802,128 @@ Content-Type: application/json
     let selectedQuestionDebt = 60;
 
         function openQuestionsModal(isEdit = false) {
-      const promptInput = document.getElementById('prompt-input');
-      const promptText = promptInput.value.trim() || 'Custom Business Enterprise';
-      
-      document.getElementById('q-parsed-prompt').innerText = promptText;
-
-      // Auto-detect language (Arabic)
-      if (/[\u0600-\u06FF]/.test(promptText)) {
-        setLanguage('ar');
+      // 1. Immediately show modal first so user gets instant visual response
+      const modal = document.getElementById('feasibility-questions-modal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.style.display = 'flex';
       }
 
-      if (!isEdit) {
-        let suggestedName = promptText.split(',')[0].replace(/establish|launch|create|build|open|start|إنشاء|تأسيس|إقامة|مشروع/gi, '').trim();
-        if (suggestedName.length > 50) suggestedName = suggestedName.substring(0, 50);
-        document.getElementById('q-project-name').value = suggestedName || promptText;
+      // 2. Prepopulate parameters safely with null guards
+      try {
+        const promptInput = document.getElementById('prompt-input');
+        const promptText = promptInput ? (promptInput.value.trim() || 'Custom Business Enterprise') : 'Custom Business Enterprise';
+        
+        const qParsed = document.getElementById('q-parsed-prompt');
+        if (qParsed) qParsed.innerText = promptText;
 
-        // Auto-detect country & currency (Dubai/UAE priority)
-        if (/uae|dubai|abu dhabi|sharjah|adq|ded|دبي|الامارات|الإمارات|أبوظبي|ابوظبي|الشارقة/i.test(promptText)) {
-          selectJurisdiction('uae');
-          changeGlobalCurrency('AED');
-        } else if (/saudi|riyadh|jeddah|dammam|khobar|sidf|kafalah|ksa|سعودي|السعودية|الرياض|جدة|الدمام|الخبر/i.test(promptText)) {
-          selectJurisdiction('sa');
-          changeGlobalCurrency('SAR');
-        } else if (/qatar|doha|قطر|الدوحة/i.test(promptText)) {
-          selectJurisdiction('qa');
-          changeGlobalCurrency('QAR');
-        } else if (/kuwait|الكويت/i.test(promptText)) {
-          selectJurisdiction('kw');
-          changeGlobalCurrency('KWD');
-        } else if (/bahrain|البحرين/i.test(promptText)) {
-          selectJurisdiction('bh');
-          changeGlobalCurrency('BHD');
-        } else if (/oman|عمان|مسقط/i.test(promptText)) {
-          selectJurisdiction('om');
-          changeGlobalCurrency('OMR');
-        } else if (/egypt|مصر|القاهرة/i.test(promptText)) {
-          selectJurisdiction('eg');
-          changeGlobalCurrency('EGP');
-        } else if (/us|usa|america|dollar|أمريكا/i.test(promptText)) {
-          selectJurisdiction('us');
-          changeGlobalCurrency('USD');
-        } else if (/london|uk|britain|بريطانيا|لندن/i.test(promptText)) {
-          selectJurisdiction('uk');
-          changeGlobalCurrency('GBP');
-        } else if (/europe|euro|أوروبا/i.test(promptText)) {
-          selectJurisdiction('eu');
-          changeGlobalCurrency('EUR');
-        } else {
-          selectJurisdiction(currentCountry ? currentCountry.id : 'uae');
+        // Auto-detect language (Arabic)
+        if (/[\u0600-\u06FF]/.test(promptText)) {
+          setLanguage('ar');
         }
 
-        // Explicit currency mentions
-        if (/\b(aed|dirham|درهم|درهما|دراهم)\b/i.test(promptText)) changeGlobalCurrency('AED');
-        else if (/\b(sar|riyal|ريال|ريالات|رس)\b/i.test(promptText)) changeGlobalCurrency('SAR');
-        else if (/\b(usd|dollar|دولار|\$)\b/i.test(promptText)) changeGlobalCurrency('USD');
-        else if (/\b(eur|euro|يورو|€)\b/i.test(promptText)) changeGlobalCurrency('EUR');
-        else if (/\b(gbp|pound|جنيه إسترليني|£)\b/i.test(promptText)) changeGlobalCurrency('GBP');
-        else if (/\b(kwd|dinar|دينار كويتي)\b/i.test(promptText)) changeGlobalCurrency('KWD');
-        else if (/\b(egp|جنيه مصري)\b/i.test(promptText)) changeGlobalCurrency('EGP');
+        if (!isEdit) {
+          let suggestedName = promptText.split(',')[0].replace(/establish|launch|create|build|open|start|إنشاء|تأسيس|إقامة|مشروع/gi, '').trim();
+          if (suggestedName.length > 50) suggestedName = suggestedName.substring(0, 50);
+          const qName = document.getElementById('q-project-name');
+          if (qName) qName.value = suggestedName || promptText;
 
-        // Auto-detect CAPEX if mentioned in prompt (e.g. 2.5M, $3M, 500k)
-        const capexMatchM = promptText.match(/(\d+(?:\.\d+)?)\s*(?:m|million|مليون)/i);
-        const capexMatchK = promptText.match(/(\d+(?:\.\d+)?)\s*(?:k|thousand|ألف|الف)/i);
-        if (capexMatchM) {
-          const val = Math.round(parseFloat(capexMatchM[1]) * 1000000);
-          setQuestionCapex(val);
-        } else if (capexMatchK) {
-          const val = Math.round(parseFloat(capexMatchK[1]) * 1000);
-          setQuestionCapex(val);
-        }
+          // Auto-detect country & currency (Dubai/UAE priority)
+          if (/uae|dubai|abu dhabi|sharjah|adq|ded|دبي|الامارات|الإمارات|أبوظبي|ابوظبي|الشارقة/i.test(promptText)) {
+            selectJurisdiction('uae');
+            changeGlobalCurrency('AED');
+          } else if (/saudi|riyadh|jeddah|dammam|khobar|sidf|kafalah|ksa|سعودي|السعودية|الرياض|جدة|الدمام|الخبر/i.test(promptText)) {
+            selectJurisdiction('sa');
+            changeGlobalCurrency('SAR');
+          } else if (/qatar|doha|قطر|الدوحة/i.test(promptText)) {
+            selectJurisdiction('qa');
+            changeGlobalCurrency('QAR');
+          } else if (/kuwait|الكويت/i.test(promptText)) {
+            selectJurisdiction('kw');
+            changeGlobalCurrency('KWD');
+          } else if (/bahrain|البحرين/i.test(promptText)) {
+            selectJurisdiction('bh');
+            changeGlobalCurrency('BHD');
+          } else if (/oman|عمان|مسقط/i.test(promptText)) {
+            selectJurisdiction('om');
+            changeGlobalCurrency('OMR');
+          } else if (/egypt|مصر|القاهرة/i.test(promptText)) {
+            selectJurisdiction('eg');
+            changeGlobalCurrency('EGP');
+          } else if (/us|usa|america|dollar|أمريكا/i.test(promptText)) {
+            selectJurisdiction('us');
+            changeGlobalCurrency('USD');
+          } else if (/london|uk|britain|بريطانيا|لندن/i.test(promptText)) {
+            selectJurisdiction('uk');
+            changeGlobalCurrency('GBP');
+          } else if (/europe|euro|أوروبا/i.test(promptText)) {
+            selectJurisdiction('eu');
+            changeGlobalCurrency('EUR');
+          } else {
+            selectJurisdiction(currentCountry ? currentCountry.id : 'uae');
+          }
 
-        // Auto-detect industry margin
-        const marginSelect = document.getElementById('q-margin-select');
-        if (/coffee|cafe|restaurant|burger|food|f&b|kitchen|bakery|قهوة|كافيه|مطعم|مطبخ/i.test(promptText)) {
-          marginSelect.value = "0.42";
-        } else if (/clinic|surgery|hospital|medical|pharma|health|عيادة|مستشفى|طبي|صيدلة/i.test(promptText)) {
-          marginSelect.value = "0.38";
-        } else if (/saas|software|app|cloud|ai|fintech|platform|برمجيات|تقنية|سحابي|ذكاء/i.test(promptText)) {
-          marginSelect.value = "0.70";
-        } else if (/logistics|cold|warehouse|delivery|fleet|لوجست|مستودع|تبريد|شحن/i.test(promptText)) {
-          marginSelect.value = "0.28";
-        } else if (/solar|energy|factory|plant|concrete|manufacturing|industrial|طاقة|شمسية|مصنع|صناعي/i.test(promptText)) {
-          marginSelect.value = "0.34";
+          // Explicit currency mentions
+          if (/\b(aed|dirham|درهم|درهما|دراهم)\b/i.test(promptText)) changeGlobalCurrency('AED');
+          else if (/\b(sar|riyal|ريال|ريالات|رس)\b/i.test(promptText)) changeGlobalCurrency('SAR');
+          else if (/\b(usd|dollar|دولار|\$)\b/i.test(promptText)) changeGlobalCurrency('USD');
+          else if (/\b(eur|euro|يورو|€)\b/i.test(promptText)) changeGlobalCurrency('EUR');
+          else if (/\b(gbp|pound|جنيه إسترليني|£)\b/i.test(promptText)) changeGlobalCurrency('GBP');
+          else if (/\b(kwd|dinar|دينار كويتي)\b/i.test(promptText)) changeGlobalCurrency('KWD');
+          else if (/\b(egp|جنيه مصري)\b/i.test(promptText)) changeGlobalCurrency('EGP');
+
+          // Auto-detect CAPEX if mentioned in prompt (e.g. 2.5M, $3M, 500k)
+          const capexMatchM = promptText.match(/(\d+(?:\.\d+)?)\s*(?:m|million|مليون)/i);
+          const capexMatchK = promptText.match(/(\d+(?:\.\d+)?)\s*(?:k|thousand|ألف|الف)/i);
+          if (capexMatchM) {
+            const val = Math.round(parseFloat(capexMatchM[1]) * 1000000);
+            setQuestionCapex(val);
+          } else if (capexMatchK) {
+            const val = Math.round(parseFloat(capexMatchK[1]) * 1000);
+            setQuestionCapex(val);
+          }
+
+          // Auto-detect industry margin
+          const marginSelect = document.getElementById('q-margin-select');
+          if (marginSelect) {
+            if (/coffee|cafe|restaurant|burger|food|f&b|kitchen|bakery|قهوة|كافيه|مطعم|مطبخ/i.test(promptText)) {
+              marginSelect.value = "0.42";
+            } else if (/clinic|surgery|hospital|medical|pharma|health|عيادة|مستشفى|طبي|صيدلة/i.test(promptText)) {
+              marginSelect.value = "0.38";
+            } else if (/saas|software|app|cloud|ai|fintech|platform|برمجيات|تقنية|سحابي|ذكاء/i.test(promptText)) {
+              marginSelect.value = "0.70";
+            } else if (/logistics|cold|warehouse|delivery|fleet|لوجست|مستودع|تبريد|شحن/i.test(promptText)) {
+              marginSelect.value = "0.28";
+            } else if (/solar|energy|factory|plant|concrete|manufacturing|industrial|طاقة|شمسية|مصنع|صناعي/i.test(promptText)) {
+              marginSelect.value = "0.34";
+            }
+          }
         }
+      } catch (err) {
+        console.warn('Intake questionnaire prepopulation warning:', err);
       }
 
-      document.getElementById('feasibility-questions-modal').classList.remove('hidden');
+      // Refresh Lucide icons inside modal
+      refreshLucideIcons();
 
       // Dr. Sarah Sterling speaks intake guidance in appropriate language
-      if (currentLanguage === 'ar') {
-        speakText("أهلاً بك. يرجى تأكيد معايير دراسة الجدوى لنتمكن من احتساب النموذج المالي وتغطية خدمة الدين بالدرهم الإماراتي.");
-      } else {
-        speakText("Please confirm these 5 underwriting parameters so I can finalize your UNIDO feasibility model.");
+      try {
+        if (currentLanguage === 'ar') {
+          speakText("أهلاً بك. يرجى تأكيد معايير دراسة الجدوى لنتمكن من احتساب النموذج المالي وتغطية خدمة الدين بالدرهم الإماراتي.");
+        } else {
+          speakText("Please confirm these 5 underwriting parameters so I can finalize your UNIDO feasibility model.");
+        }
+      } catch (e) {
+        console.warn('Speech synthesis non-critical:', e);
       }
     }
 
     function closeQuestionsModal() {
-      document.getElementById('feasibility-questions-modal').classList.add('hidden');
+      const modal = document.getElementById('feasibility-questions-modal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.style.display = 'none';
+      }
     }
 
     function selectJurisdiction(j) {
@@ -1909,20 +1944,26 @@ Content-Type: application/json
 
       // Update badge
       const badge = document.getElementById('q-country-badge');
-      if (badge) badge.innerText = `Auto-sets Currency: ${currentCountry.currency}`;
+      if (badge && currentCountry) badge.innerText = `Auto-sets Currency: ${currentCountry.currency}`;
 
       // Automatically switch currency to country's official currency!
-      changeGlobalCurrency(currentCountry.currency);
+      if (currentCountry && currentCountry.currency) {
+        changeGlobalCurrency(currentCountry.currency);
+      }
 
       // Auto-set framework (GCC vs UNIDO)
-      currentFramework = currentCountry.framework;
-      switchFramework(currentFramework);
+      if (currentCountry && currentCountry.framework) {
+        currentFramework = currentCountry.framework;
+        switchFramework(currentFramework);
+      }
     }
 
     function setQuestionCapex(val) {
       selectedQuestionCapex = val;
-      document.getElementById('q-capex-display').innerText = `$${val.toLocaleString()}`;
-      document.getElementById('q-capex-input').value = val;
+      const disp = document.getElementById('q-capex-display');
+      if (disp) disp.innerText = `$${val.toLocaleString()}`;
+      const inp = document.getElementById('q-capex-input');
+      if (inp) inp.value = val;
       
       document.querySelectorAll('.capex-pill').forEach(btn => {
         if (btn.innerText.includes(val >= 1000000 ? `$${(val/1000000).toFixed(1)}M`.replace('.0M', 'M') : `$${Math.round(val/1000)}K`)) {
@@ -1936,7 +1977,8 @@ Content-Type: application/json
     function handleCustomCapexInput(val) {
       const num = parseInt(val, 10) || 0;
       selectedQuestionCapex = num;
-      document.getElementById('q-capex-display').innerText = `$${num.toLocaleString()}`;
+      const disp = document.getElementById('q-capex-display');
+      if (disp) disp.innerText = `$${num.toLocaleString()}`;
       document.querySelectorAll('.capex-pill').forEach(btn => {
         btn.className = 'px-3 py-2 rounded-xl border border-white/10 bg-surface-850 hover:bg-surface-800 text-slate-300 font-mono text-xs capex-pill';
       });
@@ -2780,12 +2822,14 @@ Content-Type: application/json
       const btnGcc = document.getElementById('btn-fw-gcc');
       const btnUnido = document.getElementById('btn-fw-unido');
 
-      if (fw === 'gcc') {
-        btnGcc.className = 'px-3 sm:px-4 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center gap-2 bg-brand-gold/20 text-brand-gold border border-brand-gold/30 shadow-sm';
-        btnUnido.className = 'px-3 sm:px-4 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center gap-2 text-slate-400 hover:text-white';
-      } else {
-        btnUnido.className = 'px-3 sm:px-4 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center gap-2 bg-brand-cyan/20 text-brand-cyan border border-brand-cyan/30 shadow-sm';
-        btnGcc.className = 'px-3 sm:px-4 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center gap-2 text-slate-400 hover:text-white';
+      if (btnGcc && btnUnido) {
+        if (fw === 'gcc') {
+          btnGcc.className = 'px-3 sm:px-4 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center gap-2 bg-brand-gold/20 text-brand-gold border border-brand-gold/30 shadow-sm';
+          btnUnido.className = 'px-3 sm:px-4 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center gap-2 text-slate-400 hover:text-white';
+        } else {
+          btnUnido.className = 'px-3 sm:px-4 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center gap-2 bg-brand-cyan/20 text-brand-cyan border border-brand-cyan/30 shadow-sm';
+          btnGcc.className = 'px-3 sm:px-4 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center gap-2 text-slate-400 hover:text-white';
+        }
       }
       recalculateAndRender();
     }
@@ -3557,8 +3601,8 @@ Content-Type: application/json
   <!-- ========================================================================= -->
   <!-- MODAL: INTERACTIVE FEASIBILITY STUDY DISCOVERY & CALIBRATION             -->
   <!-- ========================================================================= -->
-  <div id="feasibility-questions-modal" class="fixed inset-0 z-50 bg-black/95 backdrop-blur-2xl flex items-center justify-center p-3 sm:p-6 hidden transition-all duration-300">
-    <div class="w-full max-w-3xl max-h-[92vh] concentric-card rounded-[2rem] flex flex-col overflow-hidden border border-brand-gold/30 shadow-2xl relative gold-glow">
+  <div id="feasibility-questions-modal" class="fixed inset-0 z-50 bg-black/95 backdrop-blur-2xl flex items-center justify-center p-3 sm:p-6 hidden transition-all duration-300" onclick="if(event.target === this) closeQuestionsModal()" style="display: none;">
+    <div class="w-full max-w-3xl max-h-[92vh] concentric-card rounded-[2rem] flex flex-col overflow-hidden border border-brand-gold/30 shadow-2xl relative gold-glow" onclick="event.stopPropagation()">
       
       <!-- Modal Header -->
       <div class="px-6 py-4 border-b border-white/10 flex items-center justify-between bg-surface-950/90">
